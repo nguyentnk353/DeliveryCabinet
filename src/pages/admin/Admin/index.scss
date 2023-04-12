@@ -1,0 +1,10 @@
+.background-layout {
+  display: flex;
+  flex-direction: row;
+  background-color: #fafafb;
+  .main-layout {
+    display: flex;
+    flex: 1 1;
+    flex-direction: column;
+  }
+}
