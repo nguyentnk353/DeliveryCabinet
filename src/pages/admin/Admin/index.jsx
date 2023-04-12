@@ -4,6 +4,7 @@ import AdminSideBar from '../components/AdminSideBar';
 import { Outlet } from 'react-router-dom';
 import './index.scss';
 import { Box } from '@mui/material';
+import Footer from '../../../components/Footer';
 
 const index = () => {
   return (
@@ -14,6 +15,7 @@ const index = () => {
       <Box sx={{ display: 'flex', flex: '1 1', flexDirection: 'column' }}>
         <AdminNavBar />
         <Outlet />
+        <Footer />
       </Box>
     </Box>
   );
