@@ -4,14 +4,16 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
-import AccountCircle from '@mui/icons-material/AccountCircle';
-import Switch from '@mui/material/Switch';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormGroup from '@mui/material/FormGroup';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import LogoutFunction from '../../../../utils/LogoutFunction';
+import {
+  NotificationsOutlined,
+  AccountCircle,
+  SettingsOutlined,
+  Search,
+} from '@mui/icons-material';
+import { InputBase } from '@mui/material';
 
 export default function index() {
   const [auth, setAuth] = React.useState(true);
@@ -30,10 +32,13 @@ export default function index() {
   };
 
   return (
-    <AppBar position='static' sx={{ bgcolor: 'white', color: 'black' }}>
+    <AppBar
+      position='static'
+      sx={{ bgcolor: 'white', color: 'black', padding: '0 24px 0 60px' }}
+    >
       <Toolbar>
         <Typography variant='h6' component='div' sx={{ flexGrow: 1 }}>
-          Photos
+          ADMIN
         </Typography>
 
         <div>
@@ -63,7 +68,6 @@ export default function index() {
             onClose={handleClose}
           >
             <MenuItem onClick={handleClose}>Profile</MenuItem>
-            <MenuItem onClick={handleClose}>My account</MenuItem>
             <MenuItem onClick={logout}>Logout</MenuItem>
           </Menu>
         </div>
