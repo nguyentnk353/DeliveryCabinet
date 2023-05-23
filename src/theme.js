@@ -6,7 +6,7 @@ const theme = createTheme({
     primary: blue,
   },
   typography: {
-    fontFamily: ['"Montserrat"', 'sans-serif'].join(','),
+    fontFamily: ['"Public Sans"', 'sans-serif'].join(','),
   },
 });
 

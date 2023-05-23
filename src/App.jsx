@@ -11,6 +11,7 @@ import Admin from './pages/admin/Admin';
 import AdminHome from './pages/admin/AdminHome';
 import AccountManagement from './pages/admin/AccountManagement';
 import StoreManagement from './pages/admin/StoreManagement';
+import CreateStore from './pages/admin/CreateStore';
 import StoreOwner from './pages/storeOwner/StoreOwner';
 import StoreOwnerHome from './pages/storeOwner/StoreOwnerHome';
 import Staff from './pages/staff/Staff';
@@ -47,6 +48,7 @@ function App() {
             <Route path='home' element={<AdminHome />} />
             <Route path='account' element={<AccountManagement />} />
             <Route path='store' element={<StoreManagement />} />
+            <Route path='new-store' element={<CreateStore />} />
           </Route>
           <Route
             path='/store-owner'
