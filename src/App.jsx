@@ -17,6 +17,7 @@ import Staff from './pages/staff/Staff';
 import StaffHome from './pages/staff/StaffHome';
 import Customer from './pages/customer/Customer';
 import CustomerHome from './pages/customer/CustomerHome';
+import StoreTypeManagement from './pages/admin/StoreTypeManagement/StoreTypeManagement';
 
 function App() {
   return (
@@ -47,6 +48,7 @@ function App() {
             <Route path='home' element={<AdminHome />} />
             <Route path='account' element={<AccountManagement />} />
             <Route path='store' element={<StoreManagement />} />
+            <Route path='storeType' element={<StoreTypeManagement />} />
           </Route>
           <Route
             path='/store-owner'
