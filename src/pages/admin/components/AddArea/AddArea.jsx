@@ -1,7 +1,7 @@
 import { Box, Button, FormHelperText, Modal, TextField, Typography } from "@mui/material";
 import React, { useState } from "react";
-import createStoreType from "../../../../services/createStoreType";
-const AddStoreType = ({ showModal, onClose }) => {
+import createArea from "../../../../services/createArea";
+const AddArea = ({ showModal, onClose }) => {
     const [input1, setInput1] = useState("");
     const [input2, setInput2] = useState("");
     const [error, setError] = useState(false);
@@ -32,7 +32,7 @@ const AddStoreType = ({ showModal, onClose }) => {
             setError(true);
         } else {
             
-          createStoreType(values)
+            createArea(values)
             .then((res) => {
                 
             })
@@ -61,7 +61,7 @@ const AddStoreType = ({ showModal, onClose }) => {
         <Modal open={showModal} onClose={onClose} error={error}>
             <Box style={modalStyle}>
                 <Typography variant='h5' sx={{ fontWeight: '700', textAlign: 'center', color: '#2196f3' }}>
-                    ADD STORE TYPE
+                    ADD NEW AREA
                 </Typography>
                 <TextField
                     label="Name"
@@ -99,4 +99,4 @@ const AddStoreType = ({ showModal, onClose }) => {
     );
 };
 
-export default AddStoreType;
+export default AddArea;

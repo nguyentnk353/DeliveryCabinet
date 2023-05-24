@@ -18,15 +18,16 @@ import {
     Tabs,
     TextField,
     Typography,
-    useTheme,
+    useTheme
 } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import { useMount } from 'ahooks';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import getStoreTypeList from '../../../services/getStoreTypeList';
-import AddStoreType from '../components/AddStoreType/AddStoreType';
+import getAreaList from '../../../services/getAreaList';
+import AddArea from '../components/AddArea/AddArea';
+
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -76,7 +77,7 @@ const rows = [
     createData('Deepti', 79, 86, 80, 88),
 ];
 
-const StoreTypeManagement = () => {
+const AreaManagement = () => {
 
     const theme = useTheme();
     const navigate = useNavigate();
@@ -101,7 +102,7 @@ const StoreTypeManagement = () => {
     const [table, setTable] = useState([]);
 
     useMount(() => {
-        getStoreTypeList()
+        getAreaList()
             .then((res) => {
                 const newTable = res.items.map((e) => e);
                 setTable(newTable);
@@ -111,7 +112,6 @@ const StoreTypeManagement = () => {
             });
     });
 
-
     const handleModalOpen = () => {
         setShowModal(true);
       };
@@ -119,20 +119,22 @@ const StoreTypeManagement = () => {
       const handleModalClose = () => {
         setShowModal(false);
       };
+
     return (
         <Box sx={{ p: '5%' }}>
             <Box sx={{
                 marginBottom: '2rem',
             }}>
-                <Grid container spacing={22} columns={16}>
+                <Grid container spacing={23} columns={16}>
                     <Grid item xs={12}>
                         <Typography variant='h5' sx={{ fontWeight: '700' }}>
-                            Store Type List
+                            Area List
                         </Typography>
                     </Grid>
                     <Grid item xs={4}>
-                    <Button variant="contained"  onClick={handleModalOpen}>Add Store Type</Button>
-                        <AddStoreType showModal={showModal} onClose={handleModalClose} />
+                        <Button variant="contained"  onClick={handleModalOpen}>Add New Area</Button>
+                        <AddArea showModal={showModal} onClose={handleModalClose} />
+                        {/* <Alert severity="success">Create Seccessfully — check it out!</Alert> */}
                     </Grid>
                 </Grid>
             </Box>
@@ -257,4 +259,4 @@ const StoreTypeManagement = () => {
     );
 };
 
-export default StoreTypeManagement;
+export default AreaManagement;
