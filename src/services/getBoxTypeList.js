@@ -1,8 +1,8 @@
 import axios from 'axios';
 // import axiosInstance from './axiosInstance';
 
-export default function getServiceTypeList(props) {
-  const url = 'https://deliver-store.tk/api/v1/serviceTypes/serviceType-paging';
+export default function getBoxTypeList(props) {
+  const url = 'https://deliver-store.tk/api/v1/boxTypes/boxType-paging';
 
   return axios
     .get(url, {

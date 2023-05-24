@@ -28,6 +28,9 @@ import getServiceTypeList from '../../../services/getServiceTypeList';
 import { useMount } from 'ahooks';
 import { useNavigate } from 'react-router-dom';
 import { blue } from '@mui/material/colors';
+import * as yup from 'yup';
+import { useFormik } from 'formik';
+import createServiceType from '../../../services/createServiceType';
 
 function createData(name, dsa, maths, dbms, networking) {
   return { name, dsa, maths, dbms, networking };
@@ -44,6 +47,10 @@ const rows = [
   createData('Mandhana', 86, 88, 88, 89),
   createData('Deepti', 79, 86, 80, 88),
 ];
+
+const validationSchema = yup.object({
+  price: yup.string('Enter box type price').required('Price is required'),
+});
 const index = () => {
   const navigate = useNavigate();
   const [value, setValue] = React.useState(0);
@@ -79,7 +86,7 @@ const index = () => {
     setpg(0);
   }
   const [table, setTable] = useState([]);
-
+  const [createSucess, setCreateSucess] = useState(false);
   // useEffect(() => {
 
   // });
@@ -92,6 +99,38 @@ const index = () => {
       .catch((err) => {
         console.log(err);
       });
+  });
+  useEffect(() => {
+    getServiceTypeList()
+      .then((res) => {
+        const newTable = res.items.map((e) => e);
+        setTable(newTable);
+        setCreateSucess(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [createSucess]);
+  const formik = useFormik({
+    initialValues: {
+      price: 0,
+      description: '',
+    },
+    validationSchema: validationSchema,
+    onSubmit: (val) => {
+      const api = {
+        price: val.price,
+        description: val.description,
+      };
+      createServiceType(api)
+        .then((res) => {
+          setCreateSucess(true);
+          handleClose();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
   });
   return (
     <Box sx={{ p: '5%' }}>
@@ -112,7 +151,12 @@ const index = () => {
           >
             ADD NEW SERVICE TYPE
           </Typography>
-          <Box component='form' sx={{ mt: 1 }}>
+          <Box
+            component='form'
+            onSubmit={formik.handleSubmit}
+            noValidate
+            sx={{ mt: 1 }}
+          >
             <Box sx={{ padding: '2rem' }}>
               <TextField
                 margin='normal'
@@ -121,10 +165,10 @@ const index = () => {
                 id='price'
                 label='Base price'
                 autoFocus
-                // value={formik.values.address}
-                // onChange={formik.handleChange}
-                // error={formik.touched.address && Boolean(formik.errors.address)}
-                // helperText={formik.touched.address && formik.errors.address}
+                value={formik.values.price}
+                onChange={formik.handleChange}
+                error={formik.touched.price && Boolean(formik.errors.price)}
+                helperText={formik.touched.price && formik.errors.price}
               />
 
               <TextField
@@ -132,11 +176,15 @@ const index = () => {
                 fullWidth
                 id='description'
                 label='Description'
-
-                // value={formik.values.address}
-                // onChange={formik.handleChange}
-                // error={formik.touched.address && Boolean(formik.errors.address)}
-                // helperText={formik.touched.address && formik.errors.address}
+                value={formik.values.description}
+                onChange={formik.handleChange}
+                error={
+                  formik.touched.description &&
+                  Boolean(formik.errors.description)
+                }
+                helperText={
+                  formik.touched.description && formik.errors.description
+                }
               />
             </Box>
             <Box
@@ -148,7 +196,9 @@ const index = () => {
                 alignItems: 'center',
               }}
             >
-              <Button variant='contained'>Add</Button>
+              <Button variant='contained' type='submit'>
+                Add
+              </Button>
               <Button variant='outlined' onClick={handleClose}>
                 Cancel
               </Button>
