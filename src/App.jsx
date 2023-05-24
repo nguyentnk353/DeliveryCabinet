@@ -9,7 +9,7 @@ import Guest from './pages/guest/Guest';
 import GuestHome from './pages/guest/GuestHome';
 import Admin from './pages/admin/Admin';
 import AdminHome from './pages/admin/AdminHome';
-import AccountManagement from './pages/admin/AccountManagement';
+import AccountManagement from './pages/admin/AccountManagement/AccountManagement';
 import StoreManagement from './pages/admin/StoreManagement';
 import BoxSizeManagement from './pages/admin/BoxSizeManagement';
 import ServiceTypeManagement from './pages/admin/ServiceTypeManagement';
@@ -20,6 +20,9 @@ import Staff from './pages/staff/Staff';
 import StaffHome from './pages/staff/StaffHome';
 import Customer from './pages/customer/Customer';
 import CustomerHome from './pages/customer/CustomerHome';
+import StoreTypeManagement from './pages/admin/StoreTypeManagement/StoreTypeManagement';
+import AreaManagement from './pages/admin/AreaManagement/AreaManagement';
+import CreateAccount from './pages/admin/CreateAccount/CreateAccount';
 
 function App() {
   return (
@@ -49,8 +52,11 @@ function App() {
           >
             <Route path='home' element={<AdminHome />} />
             <Route path='account' element={<AccountManagement />} />
+            <Route path='new-account' element={<CreateAccount />} />
             <Route path='store' element={<StoreManagement />} />
             <Route path='new-store' element={<CreateStore />} />
+            <Route path='store-type' element={<StoreTypeManagement />} />
+            <Route path='area' element={<AreaManagement />} />
             <Route path='box-size' element={<BoxSizeManagement />} />
             <Route path='service-type' element={<ServiceTypeManagement />} />
           </Route>
