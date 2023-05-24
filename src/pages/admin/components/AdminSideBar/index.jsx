@@ -49,7 +49,7 @@ const index = () => {
           <MenuItem
             active={selected === title}
             icon={icon}
-            routerLink={<Link to={to} />}
+            routerlink={<Link to={to} />}
             onClick={() => {
               setSelected(title);
               navigate(to, { replace: true });
@@ -202,7 +202,7 @@ const index = () => {
                   <Item
                     title='Box size'
                     icon={<BiCabinet />}
-                    to='/admin/account'
+                    to='/admin/box-size'
                     selected={selected}
                     setSelected={setSelected}
                   />
@@ -276,14 +276,14 @@ const index = () => {
                   <Item
                     title='Box size'
                     icon={<BiCabinet />}
-                    to='/admin/account'
+                    to='/admin/box-size'
                     selected={selected}
                     setSelected={setSelected}
                   />
                   <Item
                     title='Box type'
                     icon={<BsBox />}
-                    to='/admin/account'
+                    to='/admin/box-type'
                     selected={selected}
                     setSelected={setSelected}
                   />
