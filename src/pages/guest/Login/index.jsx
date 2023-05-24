@@ -102,7 +102,7 @@ export default function Login() {
             sx={{
               height: '580px',
               width: '1120px',
-              padding: '60px 0 40px 60px',
+              padding: '60px 0 40px 120px',
               backgroundImage: `url(${paperBg})`,
             }}
           >
@@ -112,6 +112,7 @@ export default function Login() {
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
+                  width: '400px',
                 }}
               >
                 <Box>
