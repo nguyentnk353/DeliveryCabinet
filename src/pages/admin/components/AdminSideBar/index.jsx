@@ -186,7 +186,7 @@ const index = () => {
                   <Item
                     title='Service type'
                     icon={<RoomServiceOutlined />}
-                    to='/admin/account'
+                    to='/admin/service-type'
                     selected={selected}
                     setSelected={setSelected}
                   />
@@ -265,7 +265,7 @@ const index = () => {
                   <Item
                     title='Service type'
                     icon={<RoomServiceOutlined />}
-                    to='/admin/account'
+                    to='/admin/service-type'
                     selected={selected}
                     setSelected={setSelected}
                   />

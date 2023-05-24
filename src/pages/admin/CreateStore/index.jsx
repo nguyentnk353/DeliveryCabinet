@@ -14,6 +14,8 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { AddCircleOutline, FmdGood, Person } from '@mui/icons-material';
 import { blue } from '@mui/material/colors';
+import axios from 'axios';
+import { useMount } from 'ahooks';
 
 const validationSchema = yup.object({
   loginName: yup
@@ -21,21 +23,21 @@ const validationSchema = yup.object({
     .required('Detail address is required'),
 });
 
-const provinceList = [
-  { name: 'Ha Noi', key: 1 },
-  { name: 'Ho Chi Minh', key: 2 },
-  { name: 'Khanh Hoa', key: 3 },
-];
-const districtList = [
-  { name: 'Vinh Phuc', key: 1 },
-  { name: 'Long Thanh My', key: 2 },
-  { name: 'Nha Trang', key: 3 },
-];
-const wardList = [
-  { name: 'Vinh Long', key: 1 },
-  { name: 'Xuan Oai', key: 2 },
-  { name: 'Phuoc Hoa', key: 3 },
-];
+// const provinceList = [
+//   { name: 'Ha Noi', key: 1 },
+//   { name: 'Ho Chi Minh', key: 2 },
+//   { name: 'Khanh Hoa', key: 3 },
+// ];
+// const districtList = [
+//   { name: 'Vinh Phuc', key: 1 },
+//   { name: 'Long Thanh My', key: 2 },
+//   { name: 'Nha Trang', key: 3 },
+// ];
+// const wardList = [
+//   { name: 'Vinh Long', key: 1 },
+//   { name: 'Xuan Oai', key: 2 },
+//   { name: 'Phuoc Hoa', key: 3 },
+// ];
 const ownerList = [
   { name: 'Tran Nguyen Khoi Nguyen', id: 1 },
   { name: 'Ton Trong Nghia', id: 2 },
@@ -56,6 +58,9 @@ const index = () => {
   const [district, setDistrict] = useState({ name: 'Choose district', key: 0 });
   const [ward, setWard] = useState({ name: 'Choose ward', key: 0 });
   const [owner, setOwner] = useState({ name: 'Choose owner', key: 0 });
+  const [provinceList, setProvinceList] = useState([]);
+  const [districtList, setDistrictList] = useState([]);
+  const [wardList, setWardList] = useState([]);
   const formik = useFormik({
     initialValues: {
       address: '',
@@ -66,6 +71,29 @@ const index = () => {
       console.log(values);
     },
   });
+
+  const host = 'https://provinces.open-api.vn/api/';
+  // function callAPI() {
+  //   return axios.get(host).then((res) => {
+  //     setProvinceList(res.data);
+  //   });
+  // }
+  useMount(() => {
+    return axios.get(host).then((res) => {
+      setProvinceList(res.data);
+    });
+  });
+  function callApiDistrict(api) {
+    return axios.get(api).then((res) => {
+      setDistrictList(res.data.districts);
+    });
+  }
+  function callApiWard(api) {
+    return axios.get(api).then((res) => {
+      setWardList(res.data.wards);
+    });
+  }
+  // console.log(provinceList);
   return (
     <Box sx={{ p: '5%' }}>
       <Box
@@ -120,6 +148,11 @@ const index = () => {
                 id='province'
                 options={provinceList}
                 getOptionLabel={(option) => option.name}
+                onChange={(_, e) => {
+                  setProvince(e);
+                  callApiDistrict(host + 'p/' + e.code + '?depth=2');
+                  // console.log(e);
+                }}
                 sx={{ width: '100%' }}
                 renderInput={(params) => (
                   <TextField {...params} label='Province' />
@@ -130,8 +163,10 @@ const index = () => {
                 id='district'
                 options={districtList}
                 getOptionLabel={(option) => option.name}
-                onChange={(value) => {
-                  setDistrict(value);
+                onChange={(_, e) => {
+                  setDistrict(e);
+                  // console.log(e);
+                  callApiWard(host + 'd/' + e.code + '?depth=2');
                 }}
                 sx={{ width: '100%' }}
                 renderInput={(params) => (

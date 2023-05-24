@@ -12,6 +12,7 @@ import AdminHome from './pages/admin/AdminHome';
 import AccountManagement from './pages/admin/AccountManagement';
 import StoreManagement from './pages/admin/StoreManagement';
 import BoxSizeManagement from './pages/admin/BoxSizeManagement';
+import ServiceTypeManagement from './pages/admin/ServiceTypeManagement';
 import CreateStore from './pages/admin/CreateStore';
 import StoreOwner from './pages/storeOwner/StoreOwner';
 import StoreOwnerHome from './pages/storeOwner/StoreOwnerHome';
@@ -51,6 +52,7 @@ function App() {
             <Route path='store' element={<StoreManagement />} />
             <Route path='new-store' element={<CreateStore />} />
             <Route path='box-size' element={<BoxSizeManagement />} />
+            <Route path='service-type' element={<ServiceTypeManagement />} />
           </Route>
           <Route
             path='/store-owner'
