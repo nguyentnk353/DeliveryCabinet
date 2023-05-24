@@ -19,48 +19,19 @@ import {
   Chip,
   useTheme,
   IconButton,
+  Modal,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { MoreVert, SearchOutlined } from '@mui/icons-material';
-import getStoreList from '../../../services/getStoreList';
 import { useMount } from 'ahooks';
-import { green } from '@mui/material/colors';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { blue } from '@mui/material/colors';
+import getBoxTypeList from '../../../services/getBoxTypeList';
+import * as yup from 'yup';
+import { useFormik } from 'formik';
+import createBoxType from './../../../services/createBoxType';
 
-function TabPanel(props) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role='tabpanel'
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
-    </div>
-  );
-}
-
-TabPanel.propTypes = {
-  children: PropTypes.node,
-  index: PropTypes.number.isRequired,
-  value: PropTypes.number.isRequired,
-};
-
-function a11yProps(index) {
-  return {
-    id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
-  };
-}
 function createData(name, dsa, maths, dbms, networking) {
   return { name, dsa, maths, dbms, networking };
 }
@@ -76,15 +47,29 @@ const rows = [
   createData('Mandhana', 86, 88, 88, 89),
   createData('Deepti', 79, 86, 80, 88),
 ];
-const provinceList = [
-  { name: 'HCM', key: 1 },
-  { name: 'HN', key: 2 },
-  { name: 'Khanh Hoa', key: 3 },
-];
+
+const validationSchema = yup.object({
+  name: yup.string('Enter box type name').required('Name is required'),
+  price: yup.string('Enter box type price').required('Price is required'),
+});
 const index = () => {
-  const theme = useTheme();
   const navigate = useNavigate();
   const [value, setValue] = React.useState(0);
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 700,
+    bgcolor: 'background.paper',
+    border: 'none',
+    borderRadius: '16px',
+    boxShadow: 24,
+    p: 4,
+  };
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -102,12 +87,12 @@ const index = () => {
     setpg(0);
   }
   const [table, setTable] = useState([]);
-
+  const [createSucess, setCreateSucess] = useState(false);
   // useEffect(() => {
 
   // });
   useMount(() => {
-    getStoreList()
+    getBoxTypeList()
       .then((res) => {
         const newTable = res.items.map((e) => e);
         setTable(newTable);
@@ -116,83 +101,119 @@ const index = () => {
         console.log(err);
       });
   });
-
+  useEffect(() => {
+    getBoxTypeList()
+      .then((res) => {
+        const newTable = res.items.map((e) => e);
+        setTable(newTable);
+        setCreateSucess(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  });
+  const formik = useFormik({
+    initialValues: {
+      name: '',
+      price: 0,
+    },
+    validationSchema: validationSchema,
+    onSubmit: (val) => {
+      const api = {
+        name: val.name,
+        multiplyPrice: val.price,
+      };
+      createBoxType(api)
+        .then((res) => {
+          setCreateSucess(true);
+          handleClose();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+  });
   return (
     <Box sx={{ p: '5%' }}>
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          marginBottom: '2rem',
-        }}
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby='modal-modal-title'
+        aria-describedby='modal-modal-description'
       >
-        <Typography variant='h5' sx={{ fontWeight: '700' }}>
-          Store List
-        </Typography>
-        {/* <Button
-          variant='contained'
-          onClick={() => navigate('/admin/new-store', { replace: true })}
-        >
-          + New store
-        </Button> */}
-      </Box>
-      <Paper sx={{ borderRadius: '16px' }}>
-        <Box
-          sx={{
-            borderBottom: 1,
-            borderColor: 'divider',
-            backgroundColor: '#f4f6f8',
-            borderRadius: '16px 16px 0 0',
-          }}
-        >
-          <Tabs
-            value={value}
-            onChange={handleChange}
-            aria-label='basic tabs example'
+        <Box sx={style}>
+          <Typography
+            id='modal-modal-title'
+            variant='h5'
+            component='h2'
+            textAlign='center'
+            fontWeight='bold'
+            color={blue[500]}
           >
-            <Tab label='All' {...a11yProps(0)} />
-            <Tab label='Active' {...a11yProps(1)} />
-            <Tab label='Inactive' {...a11yProps(2)} />
-          </Tabs>
+            ADD NEW BOX TYPE
+          </Typography>
+          <Box
+            component='form'
+            onSubmit={formik.handleSubmit}
+            noValidate
+            sx={{ mt: 1 }}
+          >
+            <Box sx={{ padding: '2rem', display: 'flex', gap: 2 }}>
+              <TextField
+                margin='normal'
+                // width='80%'
+                id='name'
+                label='Name'
+                autoFocus
+                value={formik.values.name}
+                onChange={formik.handleChange}
+                error={formik.touched.name && Boolean(formik.errors.name)}
+                helperText={formik.touched.name && formik.errors.name}
+              />
+              <TextField
+                margin='normal'
+                // width='20%'
+                required
+                id='price'
+                label='Price'
+                value={formik.values.price}
+                onChange={formik.handleChange}
+                error={formik.touched.price && Boolean(formik.errors.price)}
+                helperText={formik.touched.price && formik.errors.price}
+              />
+            </Box>
+            <Box
+              sx={{
+                display: 'flex',
+                gap: 1,
+                textAlign: 'center',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <Button variant='contained' type='submit'>
+                Add
+              </Button>
+              <Button variant='outlined' onClick={handleClose}>
+                Cancel
+              </Button>
+            </Box>
+          </Box>
         </Box>
+      </Modal>
+      <Box paddingBottom='3rem'>
+        <Typography variant='h6' fontWeight='bold'>
+          Service type management
+        </Typography>
+      </Box>
+
+      <Paper sx={{ p: '2%' }}>
         <Box
           sx={{
-            p: '2%',
             display: 'flex',
             justifyContent: 'space-between',
-            gap: '0.5rem',
           }}
         >
-          <Autocomplete
-            disablePortal
-            id='province'
-            options={provinceList}
-            getOptionLabel={(option) => option.name}
-            onChange={() => {
-              callApiDistrict(host + 'p/' + $('#province').val() + '?depth=2');
-            }}
-            sx={{ width: 200 }}
-            renderInput={(params) => <TextField {...params} label='Province' />}
-          />
-          <Autocomplete
-            disablePortal
-            id='district'
-            options={provinceList}
-            getOptionLabel={(option) => option.name}
-            onChange={() => {
-              callApiWard(host + 'd/' + $('#district').val() + '?depth=2');
-            }}
-            sx={{ width: 200 }}
-            renderInput={(params) => <TextField {...params} label='City' />}
-          />
-          <Autocomplete
-            disablePortal
-            id='ward'
-            options={provinceList}
-            getOptionLabel={(option) => option.name}
-            sx={{ width: 200 }}
-            renderInput={(params) => <TextField {...params} label='District' />}
-          />
           <TextField
             id='filled-search'
             placeholder='Search...'
@@ -207,17 +228,20 @@ const index = () => {
               ),
             }}
           />
-        </Box>
-        <TabPanel value={value} index={0}>
           <Box>
+            <Button variant='contained' onClick={handleOpen}>
+              + New service type
+            </Button>
+          </Box>
+        </Box>
+        <Box>
+          <Box sx={{ paddingTop: '2rem' }}>
             <TableContainer>
               <Table sx={{ minWidth: 650 }} aria-label='simple table'>
                 <TableHead sx={{ backgroundColor: '#f4f6f8' }}>
                   <TableRow>
-                    <TableCell>Id</TableCell>
-                    <TableCell>Address</TableCell>
-                    <TableCell>Description</TableCell>
-                    <TableCell>Owner</TableCell>
+                    <TableCell>Name</TableCell>
+                    <TableCell>Price</TableCell>
                     <TableCell>Status</TableCell>
                     <TableCell>Action</TableCell>
                   </TableRow>
@@ -231,11 +255,9 @@ const index = () => {
                       }}
                     >
                       <TableCell component='th' scope='row'>
-                        {row.id}
+                        {row.name}
                       </TableCell>
-                      <TableCell>{row.address}</TableCell>
-                      <TableCell>{row.description}</TableCell>
-                      <TableCell>{row.userId}</TableCell>
+                      <TableCell>{row.multiplyPrice}</TableCell>
                       <TableCell>
                         {row.isEnable ? (
                           <Chip
@@ -278,13 +300,7 @@ const index = () => {
               onRowsPerPageChange={handleChangeRowsPerPage}
             />
           </Box>
-        </TabPanel>
-        <TabPanel value={value} index={1}>
-          <Box>Table 2</Box>
-        </TabPanel>
-        <TabPanel value={value} index={2}>
-          <Box>Table 3</Box>
-        </TabPanel>
+        </Box>
       </Paper>
     </Box>
   );

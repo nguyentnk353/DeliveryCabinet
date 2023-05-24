@@ -27,7 +27,7 @@ import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import getAccountList from '../../../services/getAccountList';
-
+import CreateStore from '../CreateStore';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -81,11 +81,10 @@ const roleList = [
   { name: 'Admin', key: 1 },
   { name: 'Store Owner', key: 2 },
   { name: 'Customer', key: 3 },
-  { name: 'Staff', key: 4 }
+  { name: 'Staff', key: 4 },
 ];
 
 const AccountManagement = () => {
-
   const theme = useTheme();
   const navigate = useNavigate();
   const [value, setValue] = React.useState(0);
@@ -134,12 +133,13 @@ const AccountManagement = () => {
       });
   });
 
-
   return (
     <Box sx={{ p: '5%' }}>
-      <Box sx={{
-        marginBottom: '2rem',
-      }}>
+      <Box
+        sx={{
+          marginBottom: '2rem',
+        }}
+      >
         <Grid container spacing={19} columns={16}>
           <Grid item xs={12}>
             <Typography variant='h5' sx={{ fontWeight: '700' }}>
@@ -180,16 +180,15 @@ const AccountManagement = () => {
           sx={{
             p: '2%',
             display: 'flex',
-            justifyContent: 'space-between'
+            justifyContent: 'space-between',
           }}
         >
-
           <Autocomplete
             disablePortal
             id='role'
             options={roleList}
             getOptionLabel={(option) => option.name}
-            sx={{ width: "20%" }}
+            sx={{ width: '20%' }}
             renderInput={(params) => <TextField {...params} label='Role' />}
           />
 
@@ -231,7 +230,19 @@ const AccountManagement = () => {
                       key={row.id}
                       sx={{
                         '&:last-child td,&:last-child th': { border: 0 },
+                        '&:hover': {
+                          // color: 'gray',
+                          backgroundColor: '#f5f5f5',
+                        },
+                        cursor: 'pointer',
                       }}
+                      onClick={() =>
+                        navigate('/admin/new-store', {
+                          state: {
+                            userId: row.id,
+                          },
+                        })
+                      }
                     >
                       <TableCell>{row.fullName}</TableCell>
                       <TableCell>{row.email}</TableCell>
@@ -289,7 +300,6 @@ const AccountManagement = () => {
           <Box>Table 3</Box>
         </TabPanel>
       </Paper>
-
     </Box>
   );
 };

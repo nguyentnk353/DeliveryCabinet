@@ -179,14 +179,14 @@ const index = () => {
                   <Item
                     title='Price table'
                     icon={<RequestQuoteOutlined />}
-                    to='/admin/account'
+                    to='/admin/price-table'
                     selected={selected}
                     setSelected={setSelected}
                   />
                   <Item
                     title='Service type'
                     icon={<RoomServiceOutlined />}
-                    to='/admin/account'
+                    to='/admin/service-type'
                     selected={selected}
                     setSelected={setSelected}
                   />
@@ -209,7 +209,7 @@ const index = () => {
                   <Item
                     title='Box type'
                     icon={<BsBox />}
-                    to='/admin/account'
+                    to='/admin/box-type'
                     selected={selected}
                     setSelected={setSelected}
                   />
@@ -258,14 +258,14 @@ const index = () => {
                   <Item
                     title='Price table'
                     icon={<RequestQuoteOutlined />}
-                    to='/admin/account'
+                    to='/admin/price-table'
                     selected={selected}
                     setSelected={setSelected}
                   />
                   <Item
                     title='Service type'
                     icon={<RoomServiceOutlined />}
-                    to='/admin/account'
+                    to='/admin/service-type'
                     selected={selected}
                     setSelected={setSelected}
                   />

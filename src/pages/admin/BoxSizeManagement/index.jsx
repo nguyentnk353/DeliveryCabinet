@@ -28,6 +28,9 @@ import getBoxSizeList from '../../../services/getBoxSizeList';
 import { useMount } from 'ahooks';
 import { useNavigate } from 'react-router-dom';
 import { blue } from '@mui/material/colors';
+import * as yup from 'yup';
+import { useFormik } from 'formik';
+import createBoxSize from '../../../services/createBoxSize';
 
 function createData(name, dsa, maths, dbms, networking) {
   return { name, dsa, maths, dbms, networking };
@@ -44,6 +47,13 @@ const rows = [
   createData('Mandhana', 86, 88, 88, 89),
   createData('Deepti', 79, 86, 80, 88),
 ];
+
+const validationSchema = yup.object({
+  name: yup.string('Enter box size name').required('Name is required'),
+  length: yup.string('Enter box size length').required('Length is required'),
+  height: yup.string('Enter box size height').required('Height is required'),
+  price: yup.string('Enter box size price').required('Price is required'),
+});
 const index = () => {
   const navigate = useNavigate();
   const [value, setValue] = React.useState(0);
@@ -79,6 +89,7 @@ const index = () => {
     setpg(0);
   }
   const [table, setTable] = useState([]);
+  const [createSucess, setCreateSucess] = useState(false);
 
   // useEffect(() => {
 
@@ -93,6 +104,45 @@ const index = () => {
         console.log(err);
       });
   });
+  useEffect(() => {
+    getBoxSizeList()
+      .then((res) => {
+        const newTable = res.items.map((e) => e);
+        setTable(newTable);
+        setCreateSucess(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [createSucess]);
+  const formik = useFormik({
+    initialValues: {
+      name: '',
+      length: 0,
+      height: 0,
+      description: '',
+      price: 0,
+    },
+    validationSchema: validationSchema,
+    onSubmit: (val) => {
+      const api = {
+        name: val.name,
+        length: val.length,
+        height: val.height,
+        description: val.description,
+        multiplyPrice: val.price,
+      };
+      createBoxSize(api)
+        .then((res) => {
+          setCreateSucess(true);
+          handleClose();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+  });
+
   return (
     <Box sx={{ p: '5%' }}>
       <Modal
@@ -112,7 +162,12 @@ const index = () => {
           >
             ADD NEW BOX SIZE
           </Typography>
-          <Box component='form' sx={{ mt: 1 }}>
+          <Box
+            component='form'
+            onSubmit={formik.handleSubmit}
+            noValidate
+            sx={{ mt: 1 }}
+          >
             <Box sx={{ padding: '2rem' }}>
               <TextField
                 margin='normal'
@@ -121,10 +176,10 @@ const index = () => {
                 id='name'
                 label='Name'
                 autoFocus
-                // value={formik.values.address}
-                // onChange={formik.handleChange}
-                // error={formik.touched.address && Boolean(formik.errors.address)}
-                // helperText={formik.touched.address && formik.errors.address}
+                value={formik.values.name}
+                onChange={formik.handleChange}
+                error={formik.touched.name && Boolean(formik.errors.name)}
+                helperText={formik.touched.name && formik.errors.name}
               />
               <Box sx={{ display: 'flex', gap: 1 }}>
                 <TextField
@@ -134,10 +189,10 @@ const index = () => {
                   id='length'
                   label='Length'
                   autoFocus
-                  // value={formik.values.address}
-                  // onChange={formik.handleChange}
-                  // error={formik.touched.address && Boolean(formik.errors.address)}
-                  // helperText={formik.touched.address && formik.errors.address}
+                  value={formik.values.length}
+                  onChange={formik.handleChange}
+                  error={formik.touched.length && Boolean(formik.errors.length)}
+                  helperText={formik.touched.length && formik.errors.length}
                 />
                 <TextField
                   margin='normal'
@@ -146,10 +201,10 @@ const index = () => {
                   id='height'
                   label='Height'
                   autoFocus
-                  // value={formik.values.address}
-                  // onChange={formik.handleChange}
-                  // error={formik.touched.address && Boolean(formik.errors.address)}
-                  // helperText={formik.touched.address && formik.errors.address}
+                  value={formik.values.height}
+                  onChange={formik.handleChange}
+                  error={formik.touched.height && Boolean(formik.errors.height)}
+                  helperText={formik.touched.height && formik.errors.height}
                 />
                 <TextField
                   margin='normal'
@@ -158,21 +213,20 @@ const index = () => {
                   id='price'
                   label='Price'
                   autoFocus
-                  // value={formik.values.address}
-                  // onChange={formik.handleChange}
-                  // error={formik.touched.address && Boolean(formik.errors.address)}
-                  // helperText={formik.touched.address && formik.errors.address}
+                  value={formik.values.price}
+                  onChange={formik.handleChange}
+                  error={formik.touched.price && Boolean(formik.errors.price)}
+                  helperText={formik.touched.price && formik.errors.price}
                 />
               </Box>
               <TextField
                 margin='normal'
                 fullWidth
-                required
                 id='description'
                 label='Description'
                 autoFocus
-                // value={formik.values.address}
-                // onChange={formik.handleChange}
+                value={formik.values.description}
+                onChange={formik.handleChange}
                 // error={formik.touched.address && Boolean(formik.errors.address)}
                 // helperText={formik.touched.address && formik.errors.address}
               />
@@ -186,7 +240,9 @@ const index = () => {
                 alignItems: 'center',
               }}
             >
-              <Button variant='contained'>Add</Button>
+              <Button variant='contained' type='submit'>
+                Add
+              </Button>
               <Button variant='outlined' onClick={handleClose}>
                 Cancel
               </Button>
