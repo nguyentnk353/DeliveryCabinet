@@ -1,5 +1,5 @@
 import axios from 'axios';
-export default function adminCreateUser(props) {
+export default function postStoreType(props) {
   const url = 'https://deliver-store.tk/api/v1/storeTypes';
   console.log(props);
   return axios

@@ -27,6 +27,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import getStoreTypeList from '../../../services/getStoreTypeList';
 import AddStoreType from '../components/AddStoreType/AddStoreType';
+import TableStoreType from './components/TableStoreType';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -60,21 +61,6 @@ function a11yProps(index) {
         'aria-controls': `simple-tabpanel-${index}`,
     };
 }
-function createData(name, dsa, maths, dbms, networking) {
-    return { name, dsa, maths, dbms, networking };
-}
-
-const rows = [
-    createData('John', 80, 66, 76, 89),
-    createData('Sandeep', 82, 83, 79, 98),
-    createData('Raman', 85, 79, 80, 85),
-    createData('Saini', 75, 67, 85, 78),
-    createData('Virat', 90, 89, 84, 76),
-    createData('Rohit', 86, 83, 95, 88),
-    createData('Smriti', 92, 90, 89, 80),
-    createData('Mandhana', 86, 88, 88, 89),
-    createData('Deepti', 79, 86, 80, 88),
-];
 
 const StoreTypeManagement = () => {
 
@@ -86,31 +72,6 @@ const StoreTypeManagement = () => {
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
-
-    const [pg, setpg] = React.useState(0);
-    const [rpg, setrpg] = React.useState(5);
-
-    function handleChangePage(event, newpage) {
-        setpg(newpage);
-    }
-
-    function handleChangeRowsPerPage(event) {
-        setrpg(parseInt(event.target.value, 10));
-        setpg(0);
-    }
-    const [table, setTable] = useState([]);
-
-    useMount(() => {
-        getStoreTypeList()
-            .then((res) => {
-                const newTable = res.items.map((e) => e);
-                setTable(newTable);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    });
-
 
     const handleModalOpen = () => {
         setShowModal(true);
@@ -181,75 +142,13 @@ const StoreTypeManagement = () => {
                     />
                 </Box>
                 <TabPanel value={value} index={0}>
-                    <Box>
-                        <TableContainer>
-                            <Table sx={{ minWidth: 650 }} aria-label='simple table'>
-                                <TableHead sx={{ backgroundColor: '#f4f6f8' }}>
-                                    <TableRow>
-                                        <TableCell>Name</TableCell>
-                                        <TableCell>Description</TableCell>
-                                        <TableCell>Status</TableCell>
-                                        <TableCell>Action</TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {table.map((row) => (
-                                        <TableRow
-                                            key={row.id}
-                                            sx={{
-                                                '&:last-child td,&:last-child th': { border: 0 },
-                                            }}
-                                        >
-                                            <TableCell>{row.name}</TableCell>
-                                            <TableCell>{row.description}</TableCell>
-                                            <TableCell>
-                                                {row.isEnable ? (
-                                                    <Chip
-                                                        label='Active'
-                                                        size='small'
-                                                        sx={{
-                                                            color: '#1bcd7a',
-                                                            bgcolor: '#e5fceb',
-                                                        }}
-                                                    />
-                                                ) : (
-                                                    <Chip
-                                                        label='Inactive'
-                                                        size='small'
-                                                        sx={{
-                                                            color: '#e26e2a',
-                                                            bgcolor: '#fdf4f3',
-                                                        }}
-                                                    />
-                                                )}
-                                            </TableCell>
-                                            <TableCell>
-                                                <IconButton>
-                                                    <MoreVert />
-                                                </IconButton>
-                                            </TableCell>
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                        <Divider />
-                        <TablePagination
-                            rowsPerPageOptions={[5, 10, 25]}
-                            component='div'
-                            count={rows.length}
-                            rowsPerPage={rpg}
-                            page={pg}
-                            onPageChange={handleChangePage}
-                            onRowsPerPageChange={handleChangeRowsPerPage}
-                        />
-                    </Box>
+                    <Box><TableStoreType /></Box>
                 </TabPanel>
                 <TabPanel value={value} index={1}>
-                    <Box>Table 2</Box>
+                    <Box><TableStoreType status={true} /></Box>
                 </TabPanel>
                 <TabPanel value={value} index={2}>
-                    <Box>Table 3</Box>
+                    <Box><TableStoreType status={false} /></Box>
                 </TabPanel>
             </Paper>
 
