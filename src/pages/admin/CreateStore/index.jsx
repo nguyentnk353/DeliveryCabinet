@@ -27,42 +27,12 @@ const validationSchema = yup.object({
     .required('Detail address is required'),
 });
 
-// const provinceList = [
-//   { name: 'Ha Noi', key: 1 },
-//   { name: 'Ho Chi Minh', key: 2 },
-//   { name: 'Khanh Hoa', key: 3 },
-// ];
-// const districtList = [
-//   { name: 'Vinh Phuc', key: 1 },
-//   { name: 'Long Thanh My', key: 2 },
-//   { name: 'Nha Trang', key: 3 },
-// ];
-// const wardList = [
-//   { name: 'Vinh Long', key: 1 },
-//   { name: 'Xuan Oai', key: 2 },
-//   { name: 'Phuoc Hoa', key: 3 },
-// ];
-const ownerList = [
-  { name: 'Tran Nguyen Khoi Nguyen', id: 1 },
-  { name: 'Ton Trong Nghia', id: 2 },
-  { name: 'Le Minh Khoa', id: 3 },
-];
-// const storeTypeList = [
-//   { name: 'University', id: 1 },
-//   { name: 'Apartment', id: 3 },
-// ];
-// const areaList = [
-//   { name: 'SHTP', id: 1 },
-//   { name: 'Quan 9', id: 2 },
-// ];
-// const serviceTypeList = [{ name: 'Normal Price', id: 1 }];
 const index = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [province, setProvince] = useState({ name: 'Choose province', key: 0 });
   const [district, setDistrict] = useState({ name: 'Choose district', key: 0 });
   const [ward, setWard] = useState({ name: 'Choose ward', key: 0 });
-  const [owner, setOwner] = useState({ name: 'Choose owner', key: 0 });
   const [provinceList, setProvinceList] = useState([]);
   const [districtList, setDistrictList] = useState([]);
   const [wardList, setWardList] = useState([]);
@@ -73,7 +43,6 @@ const index = () => {
   const [area, setArea] = useState({});
   const [serviceType, setServiceType] = useState({});
 
-  // console.log(location.state.userId);
   const formik = useFormik({
     initialValues: {
       address: '',
@@ -147,7 +116,7 @@ const index = () => {
       setWardList(res.data.wards);
     });
   }
-  // console.log(provinceList);
+
   return (
     <Box sx={{ p: '5%' }}>
       <Box
@@ -208,7 +177,6 @@ const index = () => {
                 onChange={(_, e) => {
                   setProvince(e);
                   callApiDistrict(host + 'p/' + e.code + '?depth=2');
-                  // console.log(e);
                 }}
                 sx={{ width: '100%' }}
                 renderInput={(params) => (
@@ -222,7 +190,6 @@ const index = () => {
                 getOptionLabel={(option) => option.name}
                 onChange={(_, e) => {
                   setDistrict(e);
-                  // console.log(e);
                   callApiWard(host + 'd/' + e.code + '?depth=2');
                 }}
                 sx={{ width: '100%' }}

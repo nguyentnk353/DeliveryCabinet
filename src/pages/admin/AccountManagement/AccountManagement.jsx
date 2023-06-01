@@ -231,7 +231,6 @@ const AccountManagement = () => {
                       sx={{
                         '&:last-child td,&:last-child th': { border: 0 },
                         '&:hover': {
-                          // color: 'gray',
                           backgroundColor: '#f5f5f5',
                         },
                         cursor: 'pointer',

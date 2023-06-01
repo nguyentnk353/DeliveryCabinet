@@ -1,4 +1,4 @@
-import axios from 'axios';
+import { request } from '../utils/request';
 
 export default function createStore({
   province,
@@ -11,9 +11,9 @@ export default function createStore({
   serviceTypeId,
   userId,
 }) {
-  const url = 'https://deliver-store.tk/api/v1/stores';
+  const url = '/stores';
 
-  return axios
+  return request
     .post(url, {
       province: province.codename,
       city: city.codename,

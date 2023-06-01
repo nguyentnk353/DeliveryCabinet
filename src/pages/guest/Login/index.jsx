@@ -63,7 +63,7 @@ export default function Login() {
             const decoded = jwt_decode(data);
             localStorage.setItem('loginUser', JSON.stringify(decoded));
             localStorage.setItem('token', data);
-            console.log(decoded.Role);
+
             switch (decoded.Role) {
               case '1':
                 return navigate('/admin/store', { replace: true });

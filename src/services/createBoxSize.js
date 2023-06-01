@@ -1,4 +1,4 @@
-import axios from 'axios';
+import { request } from '../utils/request';
 
 export default function createBoxSize({
   name,
@@ -7,9 +7,9 @@ export default function createBoxSize({
   description,
   multiplyPrice,
 }) {
-  const url = 'https://deliver-store.tk/api/v1/boxSizes';
+  const url = '/boxSizes';
 
-  return axios
+  return request
     .post(url, {
       name: name,
       length: length,
