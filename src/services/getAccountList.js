@@ -7,8 +7,10 @@ export default function getAccountList(props) {
   return axios
     .get(url, {
       params: {
-        PageIndex: '1',
-        PageSize: '10',
+        Role: props.Role,
+        IsEnable: props.IsEnable,
+        PageIndex: props.PageIndex,
+        PageSize: props.PageSize,
       },
     })
     .then((response) => response.data)

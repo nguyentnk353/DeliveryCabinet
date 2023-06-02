@@ -3,12 +3,12 @@ import axios from 'axios';
 
 export default function getAreaList(props) {
   const url = 'https://deliver-store.tk/api/v1/areas/area-paging';
-
   return axios
     .get(url, {
       params: {
-        PageIndex: '1',
-        PageSize: '10',
+        IsEnable: props.IsEnable,
+        PageIndex: props.PageIndex,
+        PageSize: props.PageSize,
       },
     })
     .then((response) => response.data)

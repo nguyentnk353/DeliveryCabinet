@@ -33,8 +33,13 @@ export default function index() {
 
   return (
     <AppBar
-      position='static'
-      sx={{ bgcolor: 'white', color: 'black', padding: '0 24px 0 60px' }}
+      position='sticky'
+      sx={{
+        bgcolor: 'white',
+        color: 'black',
+        padding: '0 24px 0 60px',
+        zIndex: 99,
+      }}
     >
       <Toolbar>
         <Typography variant='h6' component='div' sx={{ flexGrow: 1 }}>

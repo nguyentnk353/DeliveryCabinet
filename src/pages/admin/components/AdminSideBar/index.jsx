@@ -14,7 +14,7 @@ import dlogo from '.././../../../assets/images/DeliveryLogo.png';
 import { blue } from '@mui/material/colors';
 import { Link, useNavigate } from 'react-router-dom';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
-import { BiCabinet } from 'react-icons/bi';
+import { BiCabinet, BiMenu, BiMenuAltLeft } from 'react-icons/bi';
 import { BsBox } from 'react-icons/bs';
 import './index.scss';
 
@@ -91,14 +91,14 @@ const index = () => {
           className='sidebar-toggle'
           onClick={broken ? () => toggleSidebar() : () => collapseSidebar()}
         >
-          <IoIosArrowForward />
+          <BiMenuAltLeft />
         </div>
       ) : (
         <div
           className='sidebar-toggle'
           onClick={broken ? () => toggleSidebar() : () => collapseSidebar()}
         >
-          <IoIosArrowBack />
+          <BiMenu />
         </div>
       )}
       <Sidebar backgroundColor='white'>
@@ -229,7 +229,7 @@ const index = () => {
                   <Item
                     title='Store Type'
                     icon={<StorefrontOutlined />}
-                    to='/admin/store'
+                    to='/admin/store-type'
                     selected={selected}
                     setSelected={setSelected}
                   />

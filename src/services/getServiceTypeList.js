@@ -1,10 +1,9 @@
-import axios from 'axios';
-// import axiosInstance from './axiosInstance';
+import { request } from '../utils/request';
 
 export default function getServiceTypeList(props) {
-  const url = 'https://deliver-store.tk/api/v1/serviceTypes/serviceType-paging';
+  const url = '/serviceTypes/serviceType-paging';
 
-  return axios
+  return request
     .get(url, {
       params: {
         PageIndex: '1',

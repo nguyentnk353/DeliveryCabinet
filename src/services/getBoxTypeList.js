@@ -1,14 +1,20 @@
-import axios from 'axios';
-// import axiosInstance from './axiosInstance';
+import { request } from '../utils/request';
 
-export default function getBoxTypeList(props) {
-  const url = 'https://deliver-store.tk/api/v1/boxTypes/boxType-paging';
+export default function getBoxTypeList({
+  Name,
+  PageIndex,
+  PageSize,
+  IsEnable,
+}) {
+  const url = '/boxTypes/boxType-paging';
 
-  return axios
+  return request
     .get(url, {
       params: {
-        PageIndex: '1',
-        PageSize: '10',
+        Name: Name,
+        IsEnable: IsEnable,
+        PageIndex: PageIndex,
+        PageSize: PageSize,
       },
     })
     .then((response) => response.data)

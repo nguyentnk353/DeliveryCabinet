@@ -1,9 +1,8 @@
-import axios from 'axios';
-
+import { request } from '../utils/request';
 export default function createServiceType({ price, description }) {
-  const url = 'https://deliver-store.tk/api/v1/serviceTypes';
-  console.log(description);
-  return axios
+  const url = '/serviceTypes';
+
+  return request
     .post(url, {
       price: price,
       description: description,

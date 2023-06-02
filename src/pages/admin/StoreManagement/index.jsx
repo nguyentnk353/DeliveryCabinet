@@ -22,12 +22,13 @@ import {
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { MoreVert, SearchOutlined } from '@mui/icons-material';
+import { DeleteOutline, MoreVert, SearchOutlined } from '@mui/icons-material';
 import getStoreList from '../../../services/getStoreList';
 import { useMount } from 'ahooks';
 import { green } from '@mui/material/colors';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import StoreTable from './components/StoreTable';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -61,26 +62,7 @@ function a11yProps(index) {
     'aria-controls': `simple-tabpanel-${index}`,
   };
 }
-function createData(name, dsa, maths, dbms, networking) {
-  return { name, dsa, maths, dbms, networking };
-}
 
-const rows = [
-  createData('John', 80, 66, 76, 89),
-  createData('Sandeep', 82, 83, 79, 98),
-  createData('Raman', 85, 79, 80, 85),
-  createData('Saini', 75, 67, 85, 78),
-  createData('Virat', 90, 89, 84, 76),
-  createData('Rohit', 86, 83, 95, 88),
-  createData('Smriti', 92, 90, 89, 80),
-  createData('Mandhana', 86, 88, 88, 89),
-  createData('Deepti', 79, 86, 80, 88),
-];
-const provinceList = [
-  { name: 'HCM', key: 1 },
-  { name: 'HN', key: 2 },
-  { name: 'Khanh Hoa', key: 3 },
-];
 const index = () => {
   const theme = useTheme();
   const navigate = useNavigate();
@@ -90,33 +72,31 @@ const index = () => {
     setValue(newValue);
   };
 
-  const [pg, setpg] = React.useState(0);
-  const [rpg, setrpg] = React.useState(5);
+  const [searchText, setSearchText] = useState('');
+  const [province, setProvince] = useState({ name: '', key: 0 });
+  const [district, setDistrict] = useState({ name: '', key: 0 });
+  const [ward, setWard] = useState({ name: '', key: 0 });
+  const [provinceList, setProvinceList] = useState([]);
+  const [districtList, setDistrictList] = useState([]);
+  const [wardList, setWardList] = useState([]);
 
-  function handleChangePage(event, newpage) {
-    setpg(newpage);
-  }
+  const host = 'https://provinces.open-api.vn/api/';
 
-  function handleChangeRowsPerPage(event) {
-    setrpg(parseInt(event.target.value, 10));
-    setpg(0);
-  }
-  const [table, setTable] = useState([]);
-
-  // useEffect(() => {
-
-  // });
   useMount(() => {
-    getStoreList()
-      .then((res) => {
-        const newTable = res.items.map((e) => e);
-        setTable(newTable);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    return axios.get(host).then((res) => {
+      setProvinceList(res.data);
+    });
   });
-
+  function callApiDistrict(api) {
+    return axios.get(api).then((res) => {
+      setDistrictList(res.data.districts);
+    });
+  }
+  function callApiWard(api) {
+    return axios.get(api).then((res) => {
+      setWardList(res.data.wards);
+    });
+  }
   return (
     <Box sx={{ p: '5%' }}>
       <Box
@@ -161,44 +141,60 @@ const index = () => {
             display: 'flex',
             justifyContent: 'space-between',
             gap: '0.5rem',
+            alignItems: 'center',
           }}
         >
           <Autocomplete
             disablePortal
             id='province'
+            autoFocus
             options={provinceList}
+            disableClearable
             getOptionLabel={(option) => option.name}
-            onChange={() => {
-              callApiDistrict(host + 'p/' + $('#province').val() + '?depth=2');
+            value={province}
+            onChange={(_, e) => {
+              setProvince(e);
+              callApiDistrict(host + 'p/' + e.code + '?depth=2');
             }}
-            sx={{ width: 200 }}
+            sx={{ width: '20%' }}
             renderInput={(params) => <TextField {...params} label='Province' />}
           />
           <Autocomplete
             disablePortal
             id='district'
-            options={provinceList}
+            options={districtList}
+            disableClearable
             getOptionLabel={(option) => option.name}
-            onChange={() => {
-              callApiWard(host + 'd/' + $('#district').val() + '?depth=2');
+            value={district}
+            onChange={(_, e) => {
+              setDistrict(e);
+              callApiWard(host + 'd/' + e.code + '?depth=2');
             }}
-            sx={{ width: 200 }}
-            renderInput={(params) => <TextField {...params} label='City' />}
+            sx={{ width: '20%' }}
+            renderInput={(params) => <TextField {...params} label='District' />}
           />
           <Autocomplete
             disablePortal
             id='ward'
-            options={provinceList}
+            options={wardList}
+            disableClearable
             getOptionLabel={(option) => option.name}
-            sx={{ width: 200 }}
-            renderInput={(params) => <TextField {...params} label='District' />}
+            value={ward}
+            onChange={(_, e) => {
+              setWard(e);
+            }}
+            // value={ward}
+            sx={{ width: '20%' }}
+            renderInput={(params) => <TextField {...params} label='Ward' />}
           />
           <TextField
             id='filled-search'
             placeholder='Search...'
             type='search'
             variant='outlined'
-            sx={{ width: 450 }}
+            onChange={(e) => setSearchText(e.target.value)}
+            value={searchText}
+            sx={{ width: '30%' }}
             InputProps={{
               startAdornment: (
                 <InputAdornment position='start'>
@@ -207,83 +203,50 @@ const index = () => {
               ),
             }}
           />
+          <Box>
+            <Button
+              color='error'
+              startIcon={<DeleteOutline />}
+              sx={{ marginLeft: '1rem' }}
+              onClick={() => {
+                setDistrictList([]);
+                setWardList([]);
+                setProvince({ name: '', key: 0 });
+                setDistrict({ name: '', key: 0 });
+                setWard({ name: '', key: 0 });
+                setSearchText('');
+              }}
+            >
+              Clear
+            </Button>
+          </Box>
         </Box>
         <TabPanel value={value} index={0}>
-          <Box>
-            <TableContainer>
-              <Table sx={{ minWidth: 650 }} aria-label='simple table'>
-                <TableHead sx={{ backgroundColor: '#f4f6f8' }}>
-                  <TableRow>
-                    <TableCell>Id</TableCell>
-                    <TableCell>Address</TableCell>
-                    <TableCell>Description</TableCell>
-                    <TableCell>Owner</TableCell>
-                    <TableCell>Status</TableCell>
-                    <TableCell>Action</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {table.map((row) => (
-                    <TableRow
-                      key={row.id}
-                      sx={{
-                        '&:last-child td,&:last-child th': { border: 0 },
-                      }}
-                    >
-                      <TableCell component='th' scope='row'>
-                        {row.id}
-                      </TableCell>
-                      <TableCell>{row.address}</TableCell>
-                      <TableCell>{row.description}</TableCell>
-                      <TableCell>{row.userId}</TableCell>
-                      <TableCell>
-                        {row.isEnable ? (
-                          <Chip
-                            label='Active'
-                            size='small'
-                            sx={{
-                              color: '#1bcd7a',
-                              bgcolor: '#e5fceb',
-                            }}
-                          />
-                        ) : (
-                          <Chip
-                            label='Inactive'
-                            size='small'
-                            sx={{
-                              color: '#e26e2a',
-                              bgcolor: '#fdf4f3',
-                            }}
-                          />
-                        )}
-                      </TableCell>
-                      <TableCell>
-                        <IconButton>
-                          <MoreVert />
-                        </IconButton>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-            <Divider />
-            <TablePagination
-              rowsPerPageOptions={[5, 10, 25]}
-              component='div'
-              count={rows.length}
-              rowsPerPage={rpg}
-              page={pg}
-              onPageChange={handleChangePage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-            />
-          </Box>
+          <StoreTable
+            province={province}
+            city={district}
+            district={ward}
+            search={searchText}
+            isEnable={''}
+          />
         </TabPanel>
         <TabPanel value={value} index={1}>
-          <Box>Table 2</Box>
+          <StoreTable
+            province={province}
+            city={district}
+            district={ward}
+            search={searchText}
+            isEnable={true}
+          />
         </TabPanel>
         <TabPanel value={value} index={2}>
-          <Box>Table 3</Box>
+          <StoreTable
+            province={province}
+            city={district}
+            district={ward}
+            search={searchText}
+            isEnable={false}
+          />
         </TabPanel>
       </Paper>
     </Box>

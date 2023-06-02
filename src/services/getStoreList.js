@@ -1,14 +1,26 @@
-import axios from 'axios';
-// import axiosInstance from './axiosInstance';
+import { request } from '../utils/request';
 
-export default function getStoreList(props) {
-  const url = 'https://deliver-store.tk/api/v1/stores/store-paging';
+export default function getStoreList({
+  PageIndex,
+  PageSize,
+  province,
+  city,
+  district,
+  search,
+  isEnable,
+}) {
+  const url = '/stores/store-paging';
 
-  return axios
+  return request
     .get(url, {
       params: {
-        PageIndex: '1',
-        PageSize: '10',
+        Province: province,
+        City: city,
+        District: district,
+        Address: search,
+        IsEnable: isEnable,
+        PageIndex: PageIndex + 1,
+        PageSize: PageSize,
       },
     })
     .then((response) => response.data)

@@ -16,6 +16,8 @@ import ServiceTypeManagement from './pages/admin/ServiceTypeManagement';
 import CreateStore from './pages/admin/CreateStore';
 import BoxTypeManagement from './pages/admin/BoxTypeManagement';
 import PriceTableManagement from './pages/admin/PriceTableManagement';
+import LockerManagement from './pages/admin/LockerManagement';
+import CreateLocker from './pages/admin/CreateLocker';
 import StoreOwner from './pages/storeOwner/StoreOwner';
 import StoreOwnerHome from './pages/storeOwner/StoreOwnerHome';
 import Staff from './pages/staff/Staff';
@@ -25,6 +27,7 @@ import CustomerHome from './pages/customer/CustomerHome';
 import StoreTypeManagement from './pages/admin/StoreTypeManagement/StoreTypeManagement';
 import AreaManagement from './pages/admin/AreaManagement/AreaManagement';
 import CreateAccount from './pages/admin/CreateAccount/CreateAccount';
+import TestUI from './pages/admin/TestUI/TestUI';
 
 function App() {
   return (
@@ -63,6 +66,9 @@ function App() {
             <Route path='service-type' element={<ServiceTypeManagement />} />
             <Route path='box-type' element={<BoxTypeManagement />} />
             <Route path='price-table' element={<PriceTableManagement />} />
+            <Route path='locker' element={<LockerManagement />} />
+            <Route path='new-locker' element={<CreateLocker />} />
+            <Route path='testUI' element={<TestUI />} />
           </Route>
           <Route
             path='/store-owner'

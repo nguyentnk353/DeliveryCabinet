@@ -1,9 +1,9 @@
-import axios from 'axios';
+import { request } from '../utils/request';
 
 export default function createBoxType({ name, multiplyPrice }) {
-  const url = 'https://deliver-store.tk/api/v1/boxTypes';
+  const url = '/boxTypes';
 
-  return axios
+  return request
     .post(url, {
       name: name,
       multiplyPrice: multiplyPrice,

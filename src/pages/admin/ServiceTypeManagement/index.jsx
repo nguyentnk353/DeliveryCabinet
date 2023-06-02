@@ -20,6 +20,8 @@ import {
   useTheme,
   IconButton,
   Modal,
+  Alert,
+  Snackbar,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
@@ -31,6 +33,7 @@ import { blue } from '@mui/material/colors';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import createServiceType from '../../../services/createServiceType';
+import { CloseIcon } from '@mui/icons-material/Close';
 
 function createData(name, dsa, maths, dbms, networking) {
   return { name, dsa, maths, dbms, networking };
@@ -73,6 +76,37 @@ const index = () => {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  const [notify, setNotify] = React.useState({
+    isOpen: false,
+    msg: '',
+    type: 'info',
+  });
+
+  const handleNotifyClick = () => {
+    setNotify((preState) => ({ ...preState, isOpen: true }));
+  };
+
+  const handleNotifyClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setNotify((preState) => ({ ...preState, isOpen: false }));
+  };
+
+  const action = (
+    <React.Fragment>
+      <IconButton
+        size='small'
+        aria-label='close'
+        color='inherit'
+        onClick={handleNotifyClose}
+      >
+        <CloseIcon fontSize='small' />
+      </IconButton>
+    </React.Fragment>
+  );
 
   const [pg, setpg] = React.useState(0);
   const [rpg, setrpg] = React.useState(5);
@@ -126,9 +160,20 @@ const index = () => {
         .then((res) => {
           setCreateSucess(true);
           handleClose();
+          setNotify((preState) => ({
+            ...preState,
+            isOpen: true,
+            msg: 'Service type create success',
+            type: 'success',
+          }));
         })
         .catch((err) => {
-          console.log(err);
+          setNotify((preState) => ({
+            ...preState,
+            isOpen: true,
+            msg: 'Service type create fail',
+            type: 'error',
+          }));
         });
     },
   });
@@ -212,7 +257,7 @@ const index = () => {
         </Typography>
       </Box>
 
-      <Paper sx={{ p: '2%' }}>
+      <Paper sx={{ p: '3% 5%' }}>
         <Box
           sx={{
             display: 'flex',
@@ -309,6 +354,25 @@ const index = () => {
           </Box>
         </Box>
       </Paper>
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+        open={notify.isOpen}
+        autoHideDuration={3000}
+        onClose={handleNotifyClose}
+        action={action}
+        variant={notify.type}
+      >
+        <Alert
+          severity={notify.type}
+          onClose={handleNotifyClose}
+          autoHideDuration={3000}
+        >
+          {notify.msg}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };

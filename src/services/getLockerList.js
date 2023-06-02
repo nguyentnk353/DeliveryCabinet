@@ -1,19 +1,19 @@
 import { request } from '../utils/request';
 
-export default function getBoxSizeList({
-  Name,
+export default function getLockerList({
   PageIndex,
   PageSize,
-  IsEnable,
+  search,
+  isEnable,
 }) {
-  const url = '/boxSizes/boxSize-paging';
+  const url = '/lockers/locker-paging';
 
   return request
     .get(url, {
       params: {
-        Name: Name,
-        IsEnable: IsEnable,
-        PageIndex: PageIndex,
+        Name: search,
+        IsEnable: isEnable,
+        PageIndex: PageIndex + 1,
         PageSize: PageSize,
       },
     })
