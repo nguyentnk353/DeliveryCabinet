@@ -27,6 +27,7 @@ import CustomerHome from './pages/customer/CustomerHome';
 import StoreTypeManagement from './pages/admin/StoreTypeManagement/StoreTypeManagement';
 import AreaManagement from './pages/admin/AreaManagement/AreaManagement';
 import CreateAccount from './pages/admin/CreateAccount/CreateAccount';
+import TestUI from './pages/admin/TestUI/TestUI';
 
 function App() {
   return (
@@ -67,6 +68,7 @@ function App() {
             <Route path='price-table' element={<PriceTableManagement />} />
             <Route path='locker' element={<LockerManagement />} />
             <Route path='new-locker' element={<CreateLocker />} />
+            <Route path='testUI' element={<TestUI />} />
           </Route>
           <Route
             path='/store-owner'

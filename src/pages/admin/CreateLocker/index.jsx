@@ -427,7 +427,6 @@ const index = () => {
       gridAmount: newBox.length,
       box: newBox ?? [],
     }));
-    setBoxClick(false);
   }
   const [open, setOpen] = React.useState(false);
 

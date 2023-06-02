@@ -1,6 +1,6 @@
 import { Box, Button, FormHelperText, Modal, TextField, Typography } from "@mui/material";
 import React, { useState } from "react";
-import createArea from "../../../../services/createArea";
+import createArea from "../../../../services/postArea";
 const AddArea = ({ showModal, onClose }) => {
     const [input1, setInput1] = useState("");
     const [input2, setInput2] = useState("");

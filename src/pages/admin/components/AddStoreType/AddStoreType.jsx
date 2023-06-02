@@ -1,6 +1,6 @@
 import { Box, Button, FormHelperText, Modal, TextField, Typography } from "@mui/material";
 import React, { useState } from "react";
-import createStoreType from "../../../../services/createStoreType";
+import createStoreType from "../../../../services/postStoreType";
 const AddStoreType = ({ showModal, onClose }) => {
     const [input1, setInput1] = useState("");
     const [input2, setInput2] = useState("");

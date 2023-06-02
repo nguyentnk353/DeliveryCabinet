@@ -229,7 +229,7 @@ const index = () => {
                   <Item
                     title='Store Type'
                     icon={<StorefrontOutlined />}
-                    to='/admin/store'
+                    to='/admin/store-type'
                     selected={selected}
                     setSelected={setSelected}
                   />
