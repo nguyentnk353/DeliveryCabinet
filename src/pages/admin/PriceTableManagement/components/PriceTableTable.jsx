@@ -34,6 +34,10 @@ import * as yup from 'yup';
 import updateBoxType from './../../../../services/updateBoxType';
 import getPriceTableList from './../../../../services/getPriceTableList';
 import moment from 'moment/moment';
+import deletePriceTable from './../../../../services/deletePriceTable';
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
+import updatePriceTable from './../../../../services/updatePriceTable';
 
 const validationSchema = yup.object({
   name: yup.string('Enter box size name').required('Name is required'),
@@ -95,14 +99,31 @@ const PriceTableTable = ({ searchText, createSuccess, isEnable }) => {
     id: '',
     name: '',
     status: true,
+    applyFrom: null,
+    applyTo: null,
+    mon: false,
+    tue: false,
+    wed: false,
+    thu: false,
+    fri: false,
+    sat: false,
+    sun: false,
   });
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
     formik.resetForm({
       values: {
         name: '',
-        description: '',
         status: '',
+        applyFrom: null,
+        applyTo: null,
+        mon: false,
+        tue: false,
+        wed: false,
+        thu: false,
+        fri: false,
+        sat: false,
+        sun: false,
       },
     });
     setOpen(false);
@@ -126,20 +147,42 @@ const PriceTableTable = ({ searchText, createSuccess, isEnable }) => {
     initialValues: field,
     validationSchema: validationSchema,
     onSubmit: (val) => {
+      const bi = [0, 0, 0, 0, 0, 0, 0];
+      if (val.mon === true) bi[0] = 1;
+      else bi[0] = 0;
+      if (val.tue === true) bi[1] = 1;
+      else bi[1] = 0;
+      if (val.wed === true) bi[2] = 1;
+      else bi[2] = 0;
+      if (val.thu === true) bi[3] = 1;
+      else bi[3] = 0;
+      if (val.fri === true) bi[4] = 1;
+      else bi[4] = 0;
+      if (val.sat === true) bi[5] = 1;
+      else bi[5] = 0;
+      if (val.sun === true) bi[6] = 1;
+      else bi[6] = 0;
+
       const api = {
         id: field.id,
         name: val.name,
+        applyFrom: moment(new Date(moment(val.applyFrom).format())).format(),
+        applyTo: moment(new Date(moment(val.applyTo).format())).format(),
+        dateFilter: parseInt(bi.join(''), 2),
         isEnable: field.status,
       };
-      updateBoxType(api)
+      updatePriceTable(api)
         .then((res) => {
           if (res.status == 200) {
             sendNotification({
-              msg: 'Box type update success',
+              msg: 'Price table update success',
               variant: 'success',
             });
           } else {
-            sendNotification({ msg: 'Box type update fail', variant: 'error' });
+            sendNotification({
+              msg: 'Price table update fail',
+              variant: 'error',
+            });
           }
           handleClose();
         })
@@ -150,23 +193,37 @@ const PriceTableTable = ({ searchText, createSuccess, isEnable }) => {
   });
 
   function openUpdateBoxType(row) {
+    const binary = parseInt((+row.dateFilter).toString(2)).toString();
+    const b = binary.split('').map(Number);
     setField({
       id: row.id,
       name: row.name,
       status: row.isEnable,
+      applyFrom: moment(row.applyFrom),
+      applyTo: moment(row.applyTo),
+      mon: b[0] == 1,
+      tue: b[1] == 1,
+      wed: b[2] == 1,
+      thu: b[3] == 1,
+      fri: b[4] == 1,
+      sat: b[5] == 1,
+      sun: b[6] == 1,
     });
     setOpen(true);
   }
-  function apiDeleteBoxType(id) {
-    deleteBoxType(id)
+  function apiDelete(id) {
+    deletePriceTable(id)
       .then((res) => {
         if (res.status == 200) {
           sendNotification({
-            msg: 'Box type delete success',
+            msg: 'Price table delete success',
             variant: 'success',
           });
         } else {
-          sendNotification({ msg: 'Box type delete fail', variant: 'error' });
+          sendNotification({
+            msg: 'Price table delete fail',
+            variant: 'error',
+          });
         }
       })
       .catch((err) => {
@@ -177,7 +234,13 @@ const PriceTableTable = ({ searchText, createSuccess, isEnable }) => {
   function showDateFilter(date) {
     const binary = parseInt((+date).toString(2)).toString();
     const b = binary.split('').map(Number);
-    const check = b.map((e, i) => {
+    const filter = [0, 0, 0, 0, 0, 0, 0];
+    const checkFilter = filter.map((e, i) => {
+      if (b[i]) {
+        return b[i];
+      } else return e;
+    });
+    const check = checkFilter.map((e, i) => {
       let d = i + 2;
       if (d == 8) d = 'Sun';
 
@@ -208,7 +271,7 @@ const PriceTableTable = ({ searchText, createSuccess, isEnable }) => {
               fontWeight='bold'
               color={blue[500]}
             >
-              UPDATE BOX TYPE
+              UPDATE PRICE TABLE
             </Typography>
             <Box
               component='form'
@@ -230,6 +293,7 @@ const PriceTableTable = ({ searchText, createSuccess, isEnable }) => {
                     error={formik.touched.name && Boolean(formik.errors.name)}
                     helperText={formik.touched.name && formik.errors.name}
                   />
+
                   <Box sx={{ width: '50%', paddingTop: '1%' }}>
                     <FormControl fullWidth>
                       <InputLabel id='statusLabel'>Status</InputLabel>
@@ -249,6 +313,83 @@ const PriceTableTable = ({ searchText, createSuccess, isEnable }) => {
                         <MenuItem value={false}>Inactive</MenuItem>
                       </Select>
                     </FormControl>
+                  </Box>
+                </Box>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <LocalizationProvider dateAdapter={AdapterMoment}>
+                    <DatePicker
+                      label='Apply from'
+                      id='applyFrom'
+                      name='applyFrom'
+                      required
+                      value={formik.values.applyFrom}
+                      onChange={(value) => {
+                        formik.setFieldValue('applyFrom', value);
+                      }}
+                      renderInput={(params) => <TextField {...params} />}
+                    />
+                  </LocalizationProvider>
+                  <LocalizationProvider dateAdapter={AdapterMoment}>
+                    <DatePicker
+                      label='Apply to'
+                      id='applyTo'
+                      name='applyTo'
+                      required
+                      value={formik.values.applyTo}
+                      onChange={(value) => {
+                        formik.setFieldValue('applyTo', value);
+                      }}
+                      renderInput={(params) => <TextField {...params} />}
+                    />
+                  </LocalizationProvider>
+                </Box>
+                <Box>
+                  <Typography variant='body1' fontWeight='bold'>
+                    Date apply *
+                  </Typography>
+                  <Box>
+                    <FormControlLabel
+                      control={<Checkbox checked={formik.values.mon} />}
+                      label='2'
+                      name='mon'
+                      onChange={formik.handleChange}
+                    />
+                    <FormControlLabel
+                      control={<Checkbox checked={formik.values.tue} />}
+                      label='3'
+                      name='tue'
+                      onChange={formik.handleChange}
+                    />
+                    <FormControlLabel
+                      control={<Checkbox checked={formik.values.wed} />}
+                      label='4'
+                      name='wed'
+                      onChange={formik.handleChange}
+                    />
+                    <FormControlLabel
+                      control={<Checkbox checked={formik.values.thu} />}
+                      label='5'
+                      name='thu'
+                      onChange={formik.handleChange}
+                    />
+                    <FormControlLabel
+                      control={<Checkbox checked={formik.values.fri} />}
+                      label='6'
+                      name='fri'
+                      onChange={formik.handleChange}
+                    />
+                    <FormControlLabel
+                      control={<Checkbox checked={formik.values.sat} />}
+                      label='7'
+                      name='sat'
+                      onChange={formik.handleChange}
+                    />
+                    <FormControlLabel
+                      control={<Checkbox checked={formik.values.sun} />}
+                      label='Sun'
+                      name='sun'
+                      onChange={formik.handleChange}
+                    />
                   </Box>
                 </Box>
               </Box>
@@ -336,7 +477,7 @@ const PriceTableTable = ({ searchText, createSuccess, isEnable }) => {
                     <IconButton
                       onClick={(e) => {
                         e.stopPropagation();
-                        apiDeleteBoxType(row.id);
+                        apiDelete(row.id);
                       }}
                     >
                       <DeleteForever sx={{ color: red[600] }} />
