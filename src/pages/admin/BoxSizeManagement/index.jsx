@@ -18,6 +18,7 @@ import * as yup from 'yup';
 import { useFormik } from 'formik';
 import createBoxSize from '../../../services/createBoxSize';
 import BoxSizeTable from './components/BoxSizeTable';
+import useNotification from '../../../utils/useNotification';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -54,15 +55,27 @@ function a11yProps(index) {
 
 const validationSchema = yup.object({
   name: yup.string('Enter box size name').required('Name is required'),
-  length: yup.string('Enter box size length').required('Length is required'),
-  height: yup.string('Enter box size height').required('Height is required'),
-  price: yup.string('Enter box size price').required('Price is required'),
+  length: yup
+    .number()
+    .required('Length is required')
+    .positive('Accept only positive integer > 0')
+    .integer('Accept only positive integer > 0'),
+  height: yup
+    .number()
+    .required('Height is required')
+    .positive('Accept only positive integer > 0')
+    .integer('Accept only positive integer > 0'),
+  price: yup
+    .number('Accept only positive number > 0')
+    .required('Price is required')
+    .positive('Accept only positive number > 0'),
 });
 const index = () => {
   const navigate = useNavigate();
   const [searchText, setSearchText] = useState('');
   const [value, setValue] = React.useState(0);
   const [open, setOpen] = React.useState(false);
+  const [msg, sendNotification] = useNotification();
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
     formik.resetForm({
@@ -112,13 +125,23 @@ const index = () => {
         description: val.description,
         multiplyPrice: val.price,
       };
+
       createBoxSize(api)
         .then((res) => {
-          setCreateSuccess(true);
+          if (res.status == 201) {
+            sendNotification({
+              msg: 'Box size create success',
+              variant: 'success',
+            });
+            setCreateSuccess(true);
+          } else {
+            sendNotification({ msg: 'Box size create fail', variant: 'error' });
+          }
+
           handleClose();
         })
         .catch((err) => {
-          console.log(err);
+          sendNotification({ msg: err, variant: 'error' });
         });
     },
   });
@@ -207,8 +230,6 @@ const index = () => {
                 autoFocus
                 value={formik.values.description}
                 onChange={formik.handleChange}
-                // error={formik.touched.address && Boolean(formik.errors.address)}
-                // helperText={formik.touched.address && formik.errors.address}
               />
             </Box>
             <Box

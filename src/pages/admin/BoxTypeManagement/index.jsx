@@ -33,6 +33,7 @@ import { useFormik } from 'formik';
 import createBoxType from './../../../services/createBoxType';
 import BoxSizeTable from '../BoxSizeManagement/components/BoxSizeTable';
 import BoxTypeTable from './components/BoxTypeTable';
+import useNotification from '../../../utils/useNotification';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -69,12 +70,16 @@ function a11yProps(index) {
 
 const validationSchema = yup.object({
   name: yup.string('Enter box type name').required('Name is required'),
-  price: yup.string('Enter box type price').required('Price is required'),
+  price: yup
+    .number('Accept only positive number > 0')
+    .required('Price is required')
+    .positive('Accept only positive number > 0'),
 });
 const index = () => {
   const navigate = useNavigate();
   const [value, setValue] = React.useState(0);
   const [open, setOpen] = React.useState(false);
+  const [msg, sendNotification] = useNotification();
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
     formik.resetForm({
@@ -117,11 +122,19 @@ const index = () => {
       };
       createBoxType(api)
         .then((res) => {
-          setCreateSuccess(true);
+          if (res.status == 201) {
+            sendNotification({
+              msg: 'Box type create success',
+              variant: 'success',
+            });
+            setCreateSuccess(true);
+          } else {
+            sendNotification({ msg: 'Box type create fail', variant: 'error' });
+          }
           handleClose();
         })
         .catch((err) => {
-          console.log(err);
+          sendNotification({ msg: err, variant: 'error' });
         });
     },
   });

@@ -1,17 +1,17 @@
 import { request } from '../utils/request';
 
-export default function getServiceTypeList({
-  Id,
+export default function getPriceTableList({
+  Name,
   PageIndex,
   PageSize,
   IsEnable,
 }) {
-  const url = '/serviceTypes/serviceType-paging';
+  const url = '/priceTables/priceTable-paging';
 
   return request
     .get(url, {
       params: {
-        Id: Id,
+        Name: Name,
         PageIndex: PageIndex,
         PageSize: PageSize,
         IsEnable: IsEnable,

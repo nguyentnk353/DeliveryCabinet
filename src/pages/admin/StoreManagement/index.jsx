@@ -19,6 +19,8 @@ import {
   Chip,
   useTheme,
   IconButton,
+  Snackbar,
+  Alert,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
@@ -27,8 +29,10 @@ import getStoreList from '../../../services/getStoreList';
 import { useMount } from 'ahooks';
 import { green } from '@mui/material/colors';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import StoreTable from './components/StoreTable';
+import { CloseIcon } from '@mui/icons-material/Close';
+import useNotification from '../../../utils/useNotification';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -66,7 +70,9 @@ function a11yProps(index) {
 const index = () => {
   const theme = useTheme();
   const navigate = useNavigate();
+  const location = useLocation();
   const [value, setValue] = React.useState(0);
+  const [msg, sendNotification] = useNotification();
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -83,6 +89,9 @@ const index = () => {
   const host = 'https://provinces.open-api.vn/api/';
 
   useMount(() => {
+    if (location?.state?.notifyState?.msg) {
+      sendNotification(location?.state?.notifyState);
+    }
     return axios.get(host).then((res) => {
       setProvinceList(res.data);
     });
@@ -97,6 +106,7 @@ const index = () => {
       setWardList(res.data.wards);
     });
   }
+
   return (
     <Box sx={{ p: '5%' }}>
       <Box

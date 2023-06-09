@@ -26,6 +26,7 @@ import getBoxSizeList from '../../../services/getBoxSizeList';
 import { useLocation, useNavigate } from 'react-router-dom';
 import createLocker from '../../../services/createLocker';
 import CloseIcon from '@mui/icons-material/Close';
+import { yellow } from '@mui/material/colors';
 
 const validationSchema = yup.object({
   name: yup.string('Enter locker name').required('Name of locker is required'),
@@ -40,13 +41,11 @@ const index = () => {
   const location = useLocation();
   const storeId = location.state.storeId;
   const Item = styled(Paper)(({ theme }) => ({
-    backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-    ...theme.typography.body2,
-    padding: theme.spacing(1),
+    backgroundColor: yellow[100],
     textAlign: 'center',
-    color: theme.palette.text.secondary,
     height: 'auto',
     paddingBottom: '60%',
+    paddingTop: '10%',
   }));
 
   const [boxSizeList, setBoxSizeList] = useState([]);
