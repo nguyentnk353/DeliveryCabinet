@@ -61,7 +61,7 @@ const index = () => {
     validationSchema: validationSchema,
     onSubmit: (values) => {
       const api = {
-        id: location.state.storeInfo.id,
+        id: location?.state?.storeInfo?.id,
         province: province.name,
         city: district.name,
         district: ward.name,
@@ -71,7 +71,7 @@ const index = () => {
         areaId: area.id,
         serviceTypeId: serviceType.id,
         isEnable: status,
-        userId: location.state.storeInfo.userId,
+        userId: location?.state?.storeInfo?.userId,
       };
 
       updateStore(api)
@@ -108,6 +108,13 @@ const index = () => {
       PageIndex: 1,
       PageSize: 1000,
     };
+
+    const apiService = {
+      Id: '',
+      PageIndex: 1,
+      PageSize: 100,
+      IsEnable: true,
+    };
     getStoreTypeList(api)
       .then((res) => {
         const newList = res.items.map((e) => e);
@@ -124,7 +131,8 @@ const index = () => {
       .catch((err) => {
         console.log(err);
       });
-    getServiceTypeList()
+
+    getServiceTypeList(apiService)
       .then((res) => {
         const newList = res.items.map((e) => e);
         setServiceTypeList(newList);

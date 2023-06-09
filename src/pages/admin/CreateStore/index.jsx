@@ -78,7 +78,18 @@ const index = () => {
   //   });
   // }
   useMount(() => {
-    getStoreTypeList()
+    const api = {
+      PageIndex: 1,
+      PageSize: 100,
+      IsEnable: true,
+    };
+    const apiService = {
+      Id: '',
+      PageIndex: 1,
+      PageSize: 100,
+      IsEnable: true,
+    };
+    getStoreTypeList(api)
       .then((res) => {
         const newList = res.items.map((e) => e);
         setStoreTypeList(newList);
@@ -86,7 +97,7 @@ const index = () => {
       .catch((err) => {
         console.log(err);
       });
-    getAreaList()
+    getAreaList(api)
       .then((res) => {
         const newList = res.items.map((e) => e);
         setAreaList(newList);
@@ -94,7 +105,7 @@ const index = () => {
       .catch((err) => {
         console.log(err);
       });
-    getServiceTypeList()
+    getServiceTypeList(apiService)
       .then((res) => {
         const newList = res.items.map((e) => e);
         setServiceTypeList(newList);
