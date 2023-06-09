@@ -73,7 +73,9 @@ function a11yProps(index) {
   };
 }
 
-const validationSchema = yup.object({});
+const validationSchema = yup.object({
+  name: yup.string('Enter price table name').required('Name is required'),
+});
 const index = () => {
   const navigate = useNavigate();
   const [value, setValue] = React.useState(0);
@@ -141,8 +143,8 @@ const index = () => {
 
       const api = {
         name: val.name,
-        applyFrom: moment(val.applyFrom).format(),
-        applyTo: moment(val.applyTo).format(),
+        applyFrom: moment(new Date(moment(val.applyFrom).format())).format(),
+        applyTo: moment(new Date(moment(val.applyTo).format())).format(),
         dateFilter: parseInt(bi.join(''), 2),
       };
 
@@ -196,18 +198,14 @@ const index = () => {
               <TextField
                 margin='normal'
                 fullWidth
+                required
                 id='name'
                 label='Name'
                 autoFocus
-                value={formik.values.description}
+                value={formik.values.name}
                 onChange={formik.handleChange}
-                error={
-                  formik.touched.description &&
-                  Boolean(formik.errors.description)
-                }
-                helperText={
-                  formik.touched.description && formik.errors.description
-                }
+                error={formik.touched.name && Boolean(formik.errors.name)}
+                helperText={formik.touched.name && formik.errors.name}
               />
               <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                 <LocalizationProvider dateAdapter={AdapterMoment}>
@@ -215,6 +213,7 @@ const index = () => {
                     label='Apply from'
                     id='applyFrom'
                     name='applyFrom'
+                    required
                     value={formik.values.applyFrom}
                     onChange={(value) => {
                       formik.setFieldValue('applyFrom', value);
@@ -227,6 +226,7 @@ const index = () => {
                     label='Apply to'
                     id='applyTo'
                     name='applyTo'
+                    required
                     value={formik.values.applyTo}
                     onChange={(value) => {
                       formik.setFieldValue('applyTo', value);
