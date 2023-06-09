@@ -12,34 +12,39 @@ import {
   useTheme,
   IconButton,
   Modal,
-  Typography,
-  TextField,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
   Button,
+  TextField,
+  MenuItem,
+  Select,
+  InputLabel,
+  FormControl,
+  Typography,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useMount } from 'ahooks';
-import getBoxSizeList from './../../../../services/getBoxSizeList';
 import { DeleteForever, Edit, MoreVert } from '@mui/icons-material';
+import getBoxTypeList from './../../../../services/getBoxTypeList';
+import useNotification from '../../../../utils/useNotification';
 import { blue, red } from '@mui/material/colors';
-import deleteBoxSize from '../../../../services/deleteBoxSize';
+import deleteBoxType from './../../../../services/deleteBoxType';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import updateBoxSize from './../../../../services/updateBoxSize';
-import useNotification from '../../../../utils/useNotification';
+import updateBoxType from './../../../../services/updateBoxType';
+import getServiceTypeList from './../../../../services/getServiceTypeList';
+import updateServiceType from '../../../../services/updateServiceType';
+import deleteServiceType from '../../../../services/deleteServiceType';
 
 const validationSchema = yup.object({
-  name: yup.string('Enter box size name').required('Name is required'),
+  price: yup
+    .number('Accept only positive number > 0')
+    .required('Price is required')
+    .positive('Accept only positive number > 0'),
 });
 
-const BoxSizeTable = ({ searchText, createSuccess, isEnable }) => {
+const ServiceTypeTable = ({ searchText, createSuccess, isEnable }) => {
   const [pg, setpg] = React.useState(0);
   const [rpg, setrpg] = React.useState(5);
   const [msg, sendNotification] = useNotification();
-
   function handleChangePage(event, newpage) {
     setpg(newpage);
   }
@@ -53,12 +58,13 @@ const BoxSizeTable = ({ searchText, createSuccess, isEnable }) => {
 
   useMount(() => {
     const api = {
-      Name: searchText,
+      Id: searchText,
       PageIndex: pg + 1,
       PageSize: rpg,
       IsEnable: isEnable,
     };
-    getBoxSizeList(api)
+
+    getServiceTypeList(api)
       .then((res) => {
         const newTable = res.items.map((e) => e);
         setTable(newTable);
@@ -70,12 +76,12 @@ const BoxSizeTable = ({ searchText, createSuccess, isEnable }) => {
   });
   useEffect(() => {
     const api = {
-      Name: searchText,
+      Id: searchText,
       PageIndex: pg + 1,
       PageSize: rpg,
       IsEnable: isEnable,
     };
-    getBoxSizeList(api)
+    getServiceTypeList(api)
       .then((res) => {
         const newTable = res.items.map((e) => e);
         setTable(newTable);
@@ -83,17 +89,15 @@ const BoxSizeTable = ({ searchText, createSuccess, isEnable }) => {
         createSuccess = false;
       })
       .catch((err) => {
-        sendNotification({ msg: err, variant: 'error' });
+        console.log(err);
       });
   }, [createSuccess, pg, rpg, searchText, msg]);
-
   const [open, setOpen] = React.useState(false);
 
   const [field, setField] = React.useState({
     id: '',
     name: '',
     status: true,
-    description: '',
   });
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
@@ -120,10 +124,6 @@ const BoxSizeTable = ({ searchText, createSuccess, isEnable }) => {
     p: 4,
   };
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
-
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: field,
@@ -131,19 +131,22 @@ const BoxSizeTable = ({ searchText, createSuccess, isEnable }) => {
     onSubmit: (val) => {
       const api = {
         id: field.id,
-        name: val.name,
+        price: val.price,
         description: val.description,
         isEnable: field.status,
       };
-      updateBoxSize(api)
+      updateServiceType(api)
         .then((res) => {
           if (res.status == 200) {
             sendNotification({
-              msg: 'Box size update success',
+              msg: 'Service type update success',
               variant: 'success',
             });
           } else {
-            sendNotification({ msg: 'Box size update fail', variant: 'error' });
+            sendNotification({
+              msg: 'Service type update fail',
+              variant: 'error',
+            });
           }
           handleClose();
         })
@@ -153,25 +156,28 @@ const BoxSizeTable = ({ searchText, createSuccess, isEnable }) => {
     },
   });
 
-  function openUpdateBoxSize(row) {
+  function openUpdate(row) {
     setField({
       id: row.id,
-      name: row.name,
-      status: row.isEnable,
+      price: row.price,
       description: row.description,
+      status: row.isEnable,
     });
     setOpen(true);
   }
-  function apiDeleteBoxSize(id) {
-    deleteBoxSize(id)
+  function apiDelete(id) {
+    deleteServiceType(id)
       .then((res) => {
         if (res.status == 200) {
           sendNotification({
-            msg: 'Box size delete success',
+            msg: 'Service type delete success',
             variant: 'success',
           });
         } else {
-          sendNotification({ msg: 'Box size delete fail', variant: 'error' });
+          sendNotification({
+            msg: 'Service type delete fail',
+            variant: 'error',
+          });
         }
       })
       .catch((err) => {
@@ -196,7 +202,7 @@ const BoxSizeTable = ({ searchText, createSuccess, isEnable }) => {
               fontWeight='bold'
               color={blue[500]}
             >
-              UPDATE BOX SIZE
+              UPDATE SERVICE TYPE
             </Typography>
             <Box
               component='form'
@@ -208,17 +214,18 @@ const BoxSizeTable = ({ searchText, createSuccess, isEnable }) => {
                 <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
                   <TextField
                     margin='normal'
-                    fullWidth
+                    width='40%'
                     required
-                    id='name'
-                    label='Name'
+                    id='price'
+                    label='Base price'
                     autoFocus
-                    value={formik.values.name}
+                    value={formik.values.price}
                     onChange={formik.handleChange}
-                    error={formik.touched.name && Boolean(formik.errors.name)}
-                    helperText={formik.touched.name && formik.errors.name}
+                    error={formik.touched.price && Boolean(formik.errors.price)}
+                    helperText={formik.touched.price && formik.errors.price}
                   />
-                  <Box sx={{ width: '50%', paddingTop: '1%' }}>
+
+                  <Box sx={{ width: '40%', paddingTop: '1%' }}>
                     <FormControl fullWidth>
                       <InputLabel id='statusLabel'>Status</InputLabel>
                       <Select
@@ -244,9 +251,15 @@ const BoxSizeTable = ({ searchText, createSuccess, isEnable }) => {
                   fullWidth
                   id='description'
                   label='Description'
-                  autoFocus
                   value={formik.values.description}
                   onChange={formik.handleChange}
+                  error={
+                    formik.touched.description &&
+                    Boolean(formik.errors.description)
+                  }
+                  helperText={
+                    formik.touched.description && formik.errors.description
+                  }
                 />
               </Box>
               <Box
@@ -273,10 +286,8 @@ const BoxSizeTable = ({ searchText, createSuccess, isEnable }) => {
         <Table sx={{ minWidth: 650 }} aria-label='simple table'>
           <TableHead sx={{ backgroundColor: '#f4f6f8' }}>
             <TableRow>
-              <TableCell>Name</TableCell>
-              <TableCell>Length</TableCell>
-              <TableCell>Height</TableCell>
-              <TableCell>Price</TableCell>
+              <TableCell>Id</TableCell>
+              <TableCell>Base price</TableCell>
               <TableCell>Description</TableCell>
               <TableCell>Status</TableCell>
               <TableCell>Action</TableCell>
@@ -291,11 +302,9 @@ const BoxSizeTable = ({ searchText, createSuccess, isEnable }) => {
                 }}
               >
                 <TableCell component='th' scope='row'>
-                  {row.name}
+                  {row.id}
                 </TableCell>
-                <TableCell>{row.length}</TableCell>
-                <TableCell>{row.height}</TableCell>
-                <TableCell>{row.multiplyPrice}</TableCell>
+                <TableCell>{row.price}</TableCell>
                 <TableCell>{row.description}</TableCell>
                 <TableCell>
                   {row.isEnable ? (
@@ -323,7 +332,7 @@ const BoxSizeTable = ({ searchText, createSuccess, isEnable }) => {
                     <IconButton
                       onClick={(e) => {
                         e.stopPropagation();
-                        openUpdateBoxSize(row);
+                        openUpdate(row);
                       }}
                     >
                       <Edit sx={{ color: blue[500] }} />
@@ -331,7 +340,7 @@ const BoxSizeTable = ({ searchText, createSuccess, isEnable }) => {
                     <IconButton
                       onClick={(e) => {
                         e.stopPropagation();
-                        apiDeleteBoxSize(row.id);
+                        apiDelete(row.id);
                       }}
                     >
                       <DeleteForever sx={{ color: red[600] }} />
@@ -357,4 +366,4 @@ const BoxSizeTable = ({ searchText, createSuccess, isEnable }) => {
   );
 };
 
-export default BoxSizeTable;
+export default ServiceTypeTable;

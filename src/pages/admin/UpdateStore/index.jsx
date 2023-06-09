@@ -1,9 +1,15 @@
 import {
+  Alert,
   Autocomplete,
   Box,
   Button,
   Divider,
+  FormControl,
+  InputLabel,
+  MenuItem,
   Paper,
+  Select,
+  Snackbar,
   TextField,
   Typography,
 } from '@mui/material';
@@ -16,10 +22,12 @@ import { AddCircleOutline, FmdGood, Person } from '@mui/icons-material';
 import { blue } from '@mui/material/colors';
 import axios from 'axios';
 import { useMount } from 'ahooks';
-import getAreaList from './../../../services/getAreaList';
+import getAreaList from '../../../services/getAreaList';
 import getStoreTypeList from '../../../services/getStoreTypeList';
-import getServiceTypeList from './../../../services/getServiceTypeList';
+import getServiceTypeList from '../../../services/getServiceTypeList';
 import createStore from '../../../services/createStore';
+import updateStore from '../../../services/updateStore';
+import useNotification from '../../../utils/useNotification';
 
 const validationSchema = yup.object({
   address: yup
@@ -42,43 +50,65 @@ const index = () => {
   const [storeType, setStoreType] = useState({});
   const [area, setArea] = useState({});
   const [serviceType, setServiceType] = useState({});
+  const [status, setStatus] = useState(location?.state?.storeInfo?.isEnable);
+  const [msg, sendNotification] = useNotification();
 
   const formik = useFormik({
     initialValues: {
-      address: '',
-      description: '',
+      address: location?.state?.storeInfo?.address,
+      description: location?.state?.storeInfo?.description,
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
       const api = {
-        province: province,
-        city: district,
-        district: ward,
+        id: location.state.storeInfo.id,
+        province: province.name,
+        city: district.name,
+        district: ward.name,
         address: values.address,
         description: values.description,
         storeTypeId: storeType.id,
         areaId: area.id,
         serviceTypeId: serviceType.id,
-        userId: location.state.userId,
+        isEnable: status,
+        userId: location.state.storeInfo.userId,
       };
-      createStore(api)
+
+      updateStore(api)
         .then((res) => {
-          console.log(res);
+          if (res.status == 200) {
+            navigate('/admin/store', {
+              state: {
+                notifyState: {
+                  msg: 'Store update success',
+                  variant: 'success',
+                },
+              },
+            });
+          } else {
+            sendNotification({ msg: 'Store update fail', variant: 'error' });
+          }
         })
         .catch((err) => {
-          console.log(err);
+          setNotify((preState) => ({
+            ...preState,
+            isOpen: true,
+            msg: err,
+            type: 'error',
+          }));
         });
     },
   });
 
   const host = 'https://provinces.open-api.vn/api/';
-  // function callAPI() {
-  //   return axios.get(host).then((res) => {
-  //     setProvinceList(res.data);
-  //   });
-  // }
+
   useMount(() => {
-    getStoreTypeList()
+    const api = {
+      IsEnable: true,
+      PageIndex: 1,
+      PageSize: 1000,
+    };
+    getStoreTypeList(api)
       .then((res) => {
         const newList = res.items.map((e) => e);
         setStoreTypeList(newList);
@@ -86,7 +116,7 @@ const index = () => {
       .catch((err) => {
         console.log(err);
       });
-    getAreaList()
+    getAreaList(api)
       .then((res) => {
         const newList = res.items.map((e) => e);
         setAreaList(newList);
@@ -133,14 +163,10 @@ const index = () => {
           }}
         >
           <Typography variant='h5' sx={{ fontWeight: '700' }}>
-            New Store
+            Update Store #{location.state.storeInfo.id}
           </Typography>
-          <Button
-            type='submit'
-            variant='contained'
-            // onClick={() => navigate('/admin/new-store', { replace: true })}
-          >
-            Create new store
+          <Button type='submit' variant='contained'>
+            Update store
           </Button>
         </Box>
 
@@ -302,6 +328,21 @@ const index = () => {
                   value={formik.values.description}
                   onChange={formik.handleChange}
                 />
+                <FormControl>
+                  <InputLabel id='selectStatusLabel'>Status</InputLabel>
+                  <Select
+                    labelId='selectStatusLabel'
+                    id='selectStatus'
+                    value={status}
+                    label='Status'
+                    onChange={(e) => {
+                      setStatus(e.target.value);
+                    }}
+                  >
+                    <MenuItem value={true}>Active</MenuItem>
+                    <MenuItem value={false}>Inactive</MenuItem>
+                  </Select>
+                </FormControl>
               </Box>
             </Paper>
           </Box>

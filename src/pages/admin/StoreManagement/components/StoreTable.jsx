@@ -13,15 +13,22 @@ import {
   Chip,
   useTheme,
   IconButton,
+  Snackbar,
+  Alert,
 } from '@mui/material';
 import getStoreList from '../../../../services/getStoreList';
-import { MoreVert } from '@mui/icons-material';
+import { Delete, DeleteForever, Edit, MoreVert } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
+import { blue, red } from '@mui/material/colors';
+import deleteStore from '../../../../services/deleteStore';
+import { CloseIcon } from '@mui/icons-material/Close';
+import useNotification from '../../../../utils/useNotification';
 
 const StoreTable = ({ province, city, district, search, isEnable }) => {
   const [pg, setpg] = React.useState(0);
   const [rpg, setrpg] = React.useState(5);
   const navigate = useNavigate();
+  const [msg, sendNotification] = useNotification();
   function handleChangePage(event, newpage) {
     setpg(newpage);
   }
@@ -67,7 +74,21 @@ const StoreTable = ({ province, city, district, search, isEnable }) => {
       .catch((err) => {
         console.log(err);
       });
-  }, [pg, rpg, province, city, district, search]);
+  }, [pg, rpg, province, city, district, search, msg]);
+
+  function deleteStoreId(storeId) {
+    deleteStore(storeId)
+      .then((res) => {
+        if (res.status == 200) {
+          sendNotification({ msg: 'Store delete success', variant: 'success' });
+        } else {
+          sendNotification({ msg: 'Store delete fail', variant: 'error' });
+        }
+      })
+      .catch((err) => {
+        sendNotification({ msg: 'Store delete fail', variant: 'error' });
+      });
+  }
 
   return (
     <Box>
@@ -132,9 +153,28 @@ const StoreTable = ({ province, city, district, search, isEnable }) => {
                       )}
                     </TableCell>
                     <TableCell>
-                      <IconButton>
-                        <MoreVert />
-                      </IconButton>
+                      <Box sx={{ display: 'flex' }}>
+                        <IconButton
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            navigate('/admin/update-store', {
+                              state: {
+                                storeInfo: row,
+                              },
+                            });
+                          }}
+                        >
+                          <Edit sx={{ color: blue[500] }} />
+                        </IconButton>
+                        <IconButton
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            deleteStoreId(row.id);
+                          }}
+                        >
+                          <DeleteForever sx={{ color: red[600] }} />
+                        </IconButton>
+                      </Box>
                     </TableCell>
                   </TableRow>
                 ))}

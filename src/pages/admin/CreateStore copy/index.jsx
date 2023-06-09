@@ -16,9 +16,9 @@ import { AddCircleOutline, FmdGood, Person } from '@mui/icons-material';
 import { blue } from '@mui/material/colors';
 import axios from 'axios';
 import { useMount } from 'ahooks';
-import getAreaList from './../../../services/getAreaList';
+import getAreaList from '../../../services/getAreaList';
 import getStoreTypeList from '../../../services/getStoreTypeList';
-import getServiceTypeList from './../../../services/getServiceTypeList';
+import getServiceTypeList from '../../../services/getServiceTypeList';
 import createStore from '../../../services/createStore';
 
 const validationSchema = yup.object({

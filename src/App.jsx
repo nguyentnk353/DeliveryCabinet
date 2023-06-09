@@ -14,6 +14,7 @@ import StoreManagement from './pages/admin/StoreManagement';
 import BoxSizeManagement from './pages/admin/BoxSizeManagement';
 import ServiceTypeManagement from './pages/admin/ServiceTypeManagement';
 import CreateStore from './pages/admin/CreateStore';
+import UpdateStore from './pages/admin/UpdateStore';
 import BoxTypeManagement from './pages/admin/BoxTypeManagement';
 import PriceTableManagement from './pages/admin/PriceTableManagement';
 import LockerManagement from './pages/admin/LockerManagement';
@@ -28,85 +29,95 @@ import StoreTypeManagement from './pages/admin/StoreTypeManagement/StoreTypeMana
 import AreaManagement from './pages/admin/AreaManagement/AreaManagement';
 import CreateAccount from './pages/admin/CreateAccount/CreateAccount';
 import TestUI from './pages/admin/TestUI/TestUI';
+import { SnackbarProvider } from 'notistack';
 
 function App() {
   return (
     <ProSidebarProvider>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        {/* <Admin /> */}
-        <Routes>
-          {/* public routes */}
-          <Route path='/' element={<Navigate to='/home' />} />
-          <Route path='/' element={<Guest />}>
-            <Route path='home' element={<GuestHome />} />
-          </Route>
-          <Route path='/login' element={<Login />} />
-          <Route path='/login-admin' element={<Login />} />
-          {/* <Route path='*' element={<MissingPage />} /> */}
-          {/* protected routes */}
-          <Route
-            path='/admin'
-            element={
-              <Suspense fallback={<></>}>
-                <RolesAuthRoute roles={['1']}>
-                  <Admin />
-                </RolesAuthRoute>
-              </Suspense>
-            }
-          >
-            <Route path='home' element={<AdminHome />} />
-            <Route path='account' element={<AccountManagement />} />
-            <Route path='new-account' element={<CreateAccount />} />
-            <Route path='store' element={<StoreManagement />} />
-            <Route path='new-store' element={<CreateStore />} />
-            <Route path='store-type' element={<StoreTypeManagement />} />
-            <Route path='area' element={<AreaManagement />} />
-            <Route path='box-size' element={<BoxSizeManagement />} />
-            <Route path='service-type' element={<ServiceTypeManagement />} />
-            <Route path='box-type' element={<BoxTypeManagement />} />
-            <Route path='price-table' element={<PriceTableManagement />} />
-            <Route path='locker' element={<LockerManagement />} />
-            <Route path='new-locker' element={<CreateLocker />} />
-            <Route path='testUI' element={<TestUI />} />
-          </Route>
-          <Route
-            path='/store-owner'
-            element={
-              <Suspense fallback={<></>}>
-                <RolesAuthRoute roles={['2']}>
-                  <StoreOwner />
-                </RolesAuthRoute>
-              </Suspense>
-            }
-          >
-            <Route path='home' element={<StoreOwnerHome />} />
-          </Route>
-          <Route
-            path='/staff'
-            element={
-              <Suspense fallback={<></>}>
-                <RolesAuthRoute roles={['3']}>
-                  <Staff />
-                </RolesAuthRoute>
-              </Suspense>
-            }
-          >
-            <Route path='home' element={<StaffHome />} />
-          </Route>
-          <Route
-            path='/customer'
-            element={
-              <Suspense fallback={<></>}>
-                <RolesAuthRoute roles={['4']}>
-                  <Customer />
-                </RolesAuthRoute>
-              </Suspense>
-            }
-          >
-            <Route path='home' element={<CustomerHome />} />
-          </Route>
-        </Routes>
+        <SnackbarProvider
+          maxSnack={4}
+          anchorOrigin={{
+            horizontal: 'right',
+            vertical: 'top',
+          }}
+        >
+          {/* <Admin /> */}
+          <Routes>
+            {/* public routes */}
+            <Route path='/' element={<Navigate to='/home' />} />
+            <Route path='/' element={<Guest />}>
+              <Route path='home' element={<GuestHome />} />
+            </Route>
+            <Route path='/login' element={<Login />} />
+            <Route path='/login-admin' element={<Login />} />
+            {/* <Route path='*' element={<MissingPage />} /> */}
+            {/* protected routes */}
+            <Route
+              path='/admin'
+              element={
+                <Suspense fallback={<></>}>
+                  <RolesAuthRoute roles={['1']}>
+                    <Admin />
+                  </RolesAuthRoute>
+                </Suspense>
+              }
+            >
+              <Route path='home' element={<AdminHome />} />
+              <Route path='account' element={<AccountManagement />} />
+              <Route path='new-account' element={<CreateAccount />} />
+              <Route path='store' element={<StoreManagement />} />
+              <Route path='new-store' element={<CreateStore />} />
+              <Route path='update-store' element={<UpdateStore />} />
+              <Route path='store-type' element={<StoreTypeManagement />} />
+              <Route path='area' element={<AreaManagement />} />
+              <Route path='box-size' element={<BoxSizeManagement />} />
+              <Route path='service-type' element={<ServiceTypeManagement />} />
+              <Route path='box-type' element={<BoxTypeManagement />} />
+              <Route path='price-table' element={<PriceTableManagement />} />
+              <Route path='locker' element={<LockerManagement />} />
+              <Route path='new-locker' element={<CreateLocker />} />
+              <Route path='testUI' element={<TestUI />} />
+            </Route>
+            <Route
+              path='/store-owner'
+              element={
+                <Suspense fallback={<></>}>
+                  <RolesAuthRoute roles={['2']}>
+                    <StoreOwner />
+                  </RolesAuthRoute>
+                </Suspense>
+              }
+            >
+              <Route path='home' element={<StoreOwnerHome />} />
+            </Route>
+            <Route
+              path='/staff'
+              element={
+                <Suspense fallback={<></>}>
+                  <RolesAuthRoute roles={['3']}>
+                    <Staff />
+                  </RolesAuthRoute>
+                </Suspense>
+              }
+            >
+              <Route path='home' element={<StaffHome />} />
+            </Route>
+            <Route
+              path='/customer'
+              element={
+                <Suspense fallback={<></>}>
+                  <RolesAuthRoute roles={['4']}>
+                    <Customer />
+                  </RolesAuthRoute>
+                </Suspense>
+              }
+            >
+              <Route path='home' element={<CustomerHome />} />
+            </Route>
+          </Routes>
+        </SnackbarProvider>
       </ThemeProvider>
     </ProSidebarProvider>
   );
