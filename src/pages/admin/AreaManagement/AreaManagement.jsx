@@ -57,7 +57,9 @@ const AreaManagement = () => {
     const navigate = useNavigate();
     const [value, setValue] = React.useState(0);
     const [showModal, setShowModal] = useState(false);
+    const [searchText, setSearchText] = useState('');
 
+    console.log("123456789")
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
@@ -120,6 +122,8 @@ const AreaManagement = () => {
                         placeholder='Search...'
                         type='search'
                         variant='outlined'
+                        onChange={(e) => setSearchText(e.target.value)}
+                        value={searchText}
                         sx={{
                             width: '45%',
                         }}
@@ -133,13 +137,13 @@ const AreaManagement = () => {
                     />
                 </Box>
                 <TabPanel value={value} index={0}>
-                    <Box><TableAreaList /></Box>
+                    <Box><TableAreaList search={searchText}/></Box>
                 </TabPanel>
                 <TabPanel value={value} index={1}>
-                    <Box><TableAreaList status={true}/></Box>
+                    <Box><TableAreaList status={true} search={searchText}/></Box>
                 </TabPanel>
                 <TabPanel value={value} index={2}>
-                    <Box><TableAreaList status={false}/></Box>
+                    <Box><TableAreaList status={false} search={searchText}/></Box>
                 </TabPanel>
             </Paper>
 

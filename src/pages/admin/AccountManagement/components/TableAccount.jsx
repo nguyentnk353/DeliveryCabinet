@@ -17,41 +17,30 @@ import React, { useEffect, useState } from 'react';
 import getAccountList from '../../../../services/getAccountList';
 import moment from 'moment/moment';
 
-const TableAccount = (props) => {
+const TableAccount = ({status, search, role}) => {
     
     const [table, setTable] = useState([]);
     const [page, setPage] = useState(0);
     const [rpg, setrpg] = React.useState(5);
-    const [pageAPI, setpageAPI] = useState({ PageIndex: 1, PageSize: 5, IsEnable: '', Role: ''});
     const [row, setRow] = useState();
 
     function handleChangePage(e, newpage) {
         setPage(newpage);
-        setpageAPI({
-            ...pageAPI,
-            PageIndex: newpage + 1
-        });
     }
 
     function handleChangeRowsPerPage(event) {
         setrpg(parseInt(event.target.value, 10));
         setPage(0);
-        setpageAPI({
-            ...pageAPI,
-            PageSize: event.target.value
-        });
     }
 
     useMount(() => {
-        setpageAPI({
-            ...pageAPI,
-            IsEnable: props.status,
-            Role: props.role,
-        });
-    });
-
-    useEffect(() => {
-        getAccountList(pageAPI)
+        const payload = {
+            PageIndex: page + 1,
+            PageSize: rpg,
+            Role: role,
+            IsEnable: status,
+          };
+          getAccountList(payload)
             .then((res) => {
                 const newTable = res.items.map((e) => e);
                 setTable(newTable);
@@ -60,7 +49,26 @@ const TableAccount = (props) => {
             .catch((err) => {
                 console.log(err);
             });
-    }, [pageAPI]);
+    });
+
+    useEffect(() => {
+        const payload = {
+            PageIndex: page + 1,
+            PageSize: rpg,
+            Role: role,
+            search: search,
+            IsEnable: status,
+          };
+        getAccountList(payload)
+            .then((res) => {
+                const newTable = res.items.map((e) => e);
+                setTable(newTable);
+                setRow(res.totalRecord)
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }, [page, rpg, search, role]);
     return (
         <Box>
             <TableContainer>

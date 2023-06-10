@@ -3,6 +3,8 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
 import { styled } from "@mui/material/styles";
+import defaultAvatar from '.././../../../assets/images/defaultAvatar.png';
+
 
 const StyledAvatar = styled(Avatar)(({ theme }) => ({
   width: theme.spacing(18),
@@ -16,7 +18,7 @@ const StyledButton = styled(Button)({
 
 const UploadAvatar = () => {
   const [loading, setLoading] = useState(false);
-  const [image, setImage] = useState("../../../../src/assets/images/defaultAvatar.png");
+  const [image, setImage] = useState(defaultAvatar);
 
   const handleImageChange = (event) => {
     setLoading(true);
@@ -35,7 +37,7 @@ const UploadAvatar = () => {
 
   return (
     <>
-      <StyledAvatar onClick={handleClick} src={image}>
+      <StyledAvatar onClick={handleClick} src={image || defaultAvatar}>
         {loading ? <CircularProgress /> : null}
       </StyledAvatar>
       <div style={{ textAlign: "center" }}>

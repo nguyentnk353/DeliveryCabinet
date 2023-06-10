@@ -13,7 +13,7 @@ import {
 } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import CreateStore from '../CreateStore';
 import TableAccount from './components/TableAccount';
@@ -61,8 +61,10 @@ const roleList = [
 const AccountManagement = () => {
   const theme = useTheme();
   const navigate = useNavigate();
-  const [value, setValue] = React.useState(0);
-  const [role, setRole] = React.useState();
+  const [value, setValue] = useState(0);
+  const [role, setRole] = useState();
+  const [searchText, setSearchText] = useState('');
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -121,10 +123,12 @@ const AccountManagement = () => {
             disablePortal
             id='role'
             options={roleList}
+            disableClearable
             getOptionLabel={(option) => option.name}
             sx={{ width: '20%' }}
             onChange={(event, newValue) => {
               if (newValue) {
+                console.log(newValue)
                 setRole(newValue.id);
               }
             }}
@@ -139,6 +143,8 @@ const AccountManagement = () => {
             placeholder='Search...'
             type='search'
             variant='outlined'
+            onChange={(e) => setSearchText(e.target.value)}
+            value={searchText}
             sx={{
               width: '78%',
             }}
@@ -153,17 +159,17 @@ const AccountManagement = () => {
         </Box>
         <TabPanel status={''} value={value} index={0}>
           <Box>
-            <TableAccount role={role} />
+            <TableAccount role={role} search={searchText}/>
           </Box>
         </TabPanel>
         <TabPanel value={value} index={1}>
           <Box>
-            <TableAccount status={true} role={role} />
+            <TableAccount status={true} role={role} search={searchText}/>
           </Box>
         </TabPanel>
         <TabPanel value={value} index={2}>
           <Box>
-            <TableAccount status={false} role={role} />
+            <TableAccount status={false} role={role} search={searchText}/>
           </Box>
         </TabPanel>
       </Paper>

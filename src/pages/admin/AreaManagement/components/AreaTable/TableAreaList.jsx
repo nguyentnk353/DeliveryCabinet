@@ -16,40 +16,47 @@ import { useMount } from 'ahooks';
 import React, { useEffect, useState } from 'react';
 import getAreaList from '../../../../../services/getAreaList';
 
-const TableAreaList = (status) => {
+const TableAreaList = ({status, search}) => {
 
     const [table, setTable] = useState([]);
     const [page, setPage] = useState(0);
     const [rpg, setrpg] = React.useState(5);
-    const [pageAPI, setpageAPI] = useState({ PageIndex: 1, PageSize: 5, IsEnable: ''});
     const [row, setRow] = useState();
 
     function handleChangePage(e, newpage) {
         setPage(newpage);
-        setpageAPI({
-            ...pageAPI,
-            PageIndex: newpage + 1
-        });
     }
 
     function handleChangeRowsPerPage(event) {
         setrpg(parseInt(event.target.value, 10));
         setPage(0);
-        setpageAPI({
-            ...pageAPI,
-            PageSize: event.target.value
-        });
     }
 
     useMount(() => {
-        setpageAPI({
-            ...pageAPI,
-            IsEnable: status.status
-        });
+        const payload = {
+            PageIndex: page + 1,
+            PageSize: rpg,
+            IsEnable: status,
+          };
+          getAreaList(payload)
+          .then((res) => {
+              const newTable = res.items.map((e) => e);
+              setTable(newTable);
+              setRow(res.totalRecord)
+          })
+          .catch((err) => {
+              console.log(err);
+          });  
     });
 
     useEffect(() => {
-        getAreaList(pageAPI)
+        const payload = {
+            PageIndex: page + 1,
+            PageSize: rpg,
+            search: search,
+            IsEnable: status,
+          };
+        getAreaList(payload)
             .then((res) => {
                 const newTable = res.items.map((e) => e);
                 setTable(newTable);
@@ -58,7 +65,7 @@ const TableAreaList = (status) => {
             .catch((err) => {
                 console.log(err);
             });
-      }, [pageAPI]);
+      }, [page, rpg, search]);
     return (
         <Box>
             <TableContainer>

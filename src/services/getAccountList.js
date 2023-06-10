@@ -1,12 +1,13 @@
 import axios from 'axios';
-// import axiosInstance from './axiosInstance';
+import axiosInstance from './axiosInstance';
 
 export default function getAccountList(props) {
   const url = 'https://deliver-store.tk/api/v1/users/public-paging';
 
-  return axios
+  return axiosInstance
     .get(url, {
       params: {
+        FullName: props.search,
         Role: props.Role,
         IsEnable: props.IsEnable,
         PageIndex: props.PageIndex,

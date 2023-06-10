@@ -6,6 +6,7 @@ export default function getAreaList(props) {
   return axios
     .get(url, {
       params: {
+        Name: props.search,
         IsEnable: props.IsEnable,
         PageIndex: props.PageIndex,
         PageSize: props.PageSize,
