@@ -26,8 +26,9 @@ import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import getStoreTypeList from '../../../services/getStoreTypeList';
-import AddStoreType from '../components/AddStoreType/AddStoreType';
-import TableStoreType from './components/TableStoreType';
+import AddStoreType from './components/AddStoreType/AddStoreType';
+import TableStoreType from './components/TableStoreType/TableStoreType';
+
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;

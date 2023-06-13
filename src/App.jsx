@@ -30,6 +30,7 @@ import AreaManagement from './pages/admin/AreaManagement/AreaManagement';
 import CreateAccount from './pages/admin/CreateAccount/CreateAccount';
 import TestUI from './pages/admin/TestUI/TestUI';
 import { SnackbarProvider } from 'notistack';
+import UpdateAccount from './pages/admin/AccountManagement/components/UpdateAccount/UpdateAccount';
 
 function App() {
   return (
@@ -67,6 +68,7 @@ function App() {
               <Route path='home' element={<AdminHome />} />
               <Route path='account' element={<AccountManagement />} />
               <Route path='new-account' element={<CreateAccount />} />
+              <Route path='update-account' element={<UpdateAccount />} />
               <Route path='store' element={<StoreManagement />} />
               <Route path='new-store' element={<CreateStore />} />
               <Route path='update-store' element={<UpdateStore />} />

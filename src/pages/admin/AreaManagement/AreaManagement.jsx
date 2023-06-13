@@ -14,7 +14,7 @@ import Grid from '@mui/material/Grid';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import AddArea from '../components/AddArea/AddArea';
+import AddArea from './components/AddArea/AddArea';
 import TableAreaList from './components/AreaTable/TableAreaList';
 
 
@@ -59,7 +59,6 @@ const AreaManagement = () => {
     const [showModal, setShowModal] = useState(false);
     const [searchText, setSearchText] = useState('');
 
-    console.log("123456789")
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };

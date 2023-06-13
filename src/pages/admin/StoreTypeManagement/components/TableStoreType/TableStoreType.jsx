@@ -1,4 +1,4 @@
-import { MoreVert } from '@mui/icons-material';
+import { DeleteForever, Edit, MoreVert } from '@mui/icons-material';
 import {
     Box,
     Chip,
@@ -14,14 +14,28 @@ import {
 } from '@mui/material';
 import { useMount } from 'ahooks';
 import React, { useEffect, useState } from 'react';
-import getStoreTypeList from '../../../../services/getStoreTypeList';
+import { blue, red } from '@mui/material/colors';
+import getStoreTypeList from '../../../../../services/getStoreTypeList';
+import useNotification from '../../../../../utils/useNotification';
+import deleteStoreType from './../../../../../services/deleteStoreType';
+import UpdateStoreTypeModal from '../UpdateStoreTypeModal/UpdateStoreTypeModal';
 
-const TableStoreType = ({status, search}) => {
+const TableStoreType = ({ status, search }) => {
 
     const [table, setTable] = useState([]);
     const [page, setPage] = useState(0);
     const [rpg, setrpg] = React.useState(5);
     const [row, setRow] = useState();
+    const [showModal, setShowModal] = useState(false);
+    const [infoModal, setInfoModal] = useState();
+    const [msg, sendNotification] = useNotification();
+
+    const handleModalOpen = () => {
+        setShowModal(true);
+    };
+    const handleModalClose = () => {
+        setShowModal(false);
+    };
 
     function handleChangePage(e, newpage) {
         setPage(newpage);
@@ -37,16 +51,16 @@ const TableStoreType = ({status, search}) => {
             PageIndex: page + 1,
             PageSize: rpg,
             IsEnable: status,
-          };
-          getStoreTypeList(payload)
-          .then((res) => {
-              const newTable = res.items.map((e) => e);
-              setTable(newTable);
-              setRow(res.totalRecord)
-          })
-          .catch((err) => {
-              console.log(err);
-          });
+        };
+        getStoreTypeList(payload)
+            .then((res) => {
+                const newTable = res.items.map((e) => e);
+                setTable(newTable);
+                setRow(res.totalRecord)
+            })
+            .catch((err) => {
+                console.log(err);
+            });
     });
 
     useEffect(() => {
@@ -55,7 +69,7 @@ const TableStoreType = ({status, search}) => {
             PageSize: rpg,
             search: search,
             IsEnable: status,
-          };
+        };
         getStoreTypeList(payload)
             .then((res) => {
                 const newTable = res.items.map((e) => e);
@@ -66,8 +80,28 @@ const TableStoreType = ({status, search}) => {
                 console.log(err);
             });
     }, [page, rpg, search]);
+
+    function deleteStoreTypeFunction(id) {
+        deleteStoreType(id)
+          .then((res) => {
+            if (res.status == 200) {
+              sendNotification({
+                msg: 'Store type delete success',
+                variant: 'success',
+              });
+            } else {
+              sendNotification({ msg: 'Store type delete fail', variant: 'error' });
+            }
+          })
+          .catch((err) => {
+            sendNotification({ msg: err, variant: 'error' });
+          });
+      }
     return (
         <Box>
+            <Box>
+                <UpdateStoreTypeModal showModal={showModal} onClose={handleModalClose} info={infoModal}/>
+            </Box>
             <TableContainer>
                 <Table sx={{ minWidth: 650 }} aria-label='simple table'>
                     <TableHead sx={{ backgroundColor: '#f4f6f8' }}>
@@ -110,9 +144,25 @@ const TableStoreType = ({status, search}) => {
                                     )}
                                 </TableCell>
                                 <TableCell>
-                                    <IconButton>
-                                        <MoreVert />
-                                    </IconButton>
+                                    <Box sx={{ display: 'flex' }}>
+                                        <IconButton
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                setInfoModal(row);
+                                                handleModalOpen()
+                                            }}
+                                        >
+                                            <Edit sx={{ color: blue[500] }} />
+                                        </IconButton>
+                                        <IconButton
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                deleteStoreTypeFunction(row.id);
+                                            }}
+                                        >
+                                            <DeleteForever sx={{ color: red[600] }} />
+                                        </IconButton>
+                                    </Box>
                                 </TableCell>
                             </TableRow>
                         ))}
