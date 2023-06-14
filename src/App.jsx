@@ -31,6 +31,7 @@ import CreateAccount from './pages/admin/CreateAccount/CreateAccount';
 import TestUI from './pages/admin/TestUI/TestUI';
 import { SnackbarProvider } from 'notistack';
 import UpdateAccount from './pages/admin/AccountManagement/components/UpdateAccount/UpdateAccount';
+import ShowAccInfo from './pages/admin/AccountManagement/ShowAccInfo/ShowAccInfo';
 
 function App() {
   return (
@@ -69,6 +70,7 @@ function App() {
               <Route path='account' element={<AccountManagement />} />
               <Route path='new-account' element={<CreateAccount />} />
               <Route path='update-account' element={<UpdateAccount />} />
+              <Route path='account/account-information' element={<ShowAccInfo />} />
               <Route path='store' element={<StoreManagement />} />
               <Route path='new-store' element={<CreateStore />} />
               <Route path='update-store' element={<UpdateStore />} />

@@ -64,12 +64,19 @@ const TableAreaList = ({ status, search }) => {
     });
 
     useEffect(() => {
-        const payload = {
-            PageIndex: page + 1,
-            PageSize: rpg,
-            search: search,
-            IsEnable: status,
-        };
+        const payload = search
+            ? {
+                PageIndex: 1,
+                PageSize: rpg,
+                search: search,
+                IsEnable: status,
+            }
+            : {
+                PageIndex: page + 1,
+                PageSize: rpg,
+                search: search,
+                IsEnable: status,
+            };
         getAreaList(payload)
             .then((res) => {
                 const newTable = res.items.map((e) => e);

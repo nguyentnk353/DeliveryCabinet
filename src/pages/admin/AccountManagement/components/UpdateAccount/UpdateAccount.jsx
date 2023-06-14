@@ -15,12 +15,13 @@ import React, { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import moment from "moment/moment";
-import UpLoadImage from "../UploadImage/UploadImage";
+import UpLoadImage from "../UpLoadImage/UpLoadImage";
 import { useLocation, useNavigate } from "react-router-dom";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import updateAccount from "../../../../../services/updateAccount";
 import useNotification from "../../../../../utils/useNotification";
 import deleteAccount from "../../../../../services/deleteAccount";
+
 
 const UpdateAccount = () => {
   const location = useLocation();

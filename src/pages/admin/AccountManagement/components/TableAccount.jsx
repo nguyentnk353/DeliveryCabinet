@@ -24,7 +24,6 @@ import useNotification from '../../../../utils/useNotification';
 
 const TableAccount = ({ status, search, role }) => {
 
-    console.log(role)
     const [table, setTable] = useState([]);
     const [page, setPage] = useState(0);
     const [rpg, setrpg] = React.useState(5);
@@ -45,7 +44,7 @@ const TableAccount = ({ status, search, role }) => {
     useMount(() => {
         const payload = {
             PageIndex: page + 1,
-            PageSize: rpg,  
+            PageSize: rpg,
             Role: role,
             IsEnable: status,
         };
@@ -54,20 +53,20 @@ const TableAccount = ({ status, search, role }) => {
                 const newTable = res.items.map((e) => e);
                 newTable.forEach(function (cs, index) {
                     switch (cs.role) {
-                      case 1:
-                        cs.roleName = 'Admin';
-                        return;
-                      case 2:
-                        cs.roleName = 'Store Owner';
-                        return;
-                      case 3:
-                        cs.roleName = 'Staff';
-                        return;
-                      case 4:
-                        cs.roleName = 'Customer';
-                        return;
+                        case 1:
+                            cs.roleName = 'Admin';
+                            return;
+                        case 2:
+                            cs.roleName = 'Store Owner';
+                            return;
+                        case 3:
+                            cs.roleName = 'Staff';
+                            return;
+                        case 4:
+                            cs.roleName = 'Customer';
+                            return;
                     }
-                  });
+                });
                 setTable(newTable);
                 setRow(res.totalRecord)
             })
@@ -77,32 +76,40 @@ const TableAccount = ({ status, search, role }) => {
     });
 
     useEffect(() => {
-        const payload = {
-            PageIndex: page + 1,
-            PageSize: rpg,
-            Role: role,
-            search: search,
-            IsEnable: status,
-        };
+        const payload = search
+            ? {
+                PageIndex: 1,
+                PageSize: rpg,
+                Role: role,
+                search: search,
+                IsEnable: status,
+            }
+            : {
+                PageIndex: page + 1,
+                PageSize: rpg,
+                Role: role,
+                search: search,
+                IsEnable: status,
+            };
         getAccountList(payload)
             .then((res) => {
                 const newTable = res.items.map((e) => e);
                 newTable.forEach(function (cs, index) {
                     switch (cs.role) {
-                      case 1:
-                        cs.roleName = 'Admin';
-                        return;
-                      case 2:
-                        cs.roleName = 'Store Owner';
-                        return;
-                      case 3:
-                        cs.roleName = 'Staff';
-                        return;
-                      case 4:
-                        cs.roleName = 'Customer';
-                        return;
+                        case 1:
+                            cs.roleName = 'Admin';
+                            return;
+                        case 2:
+                            cs.roleName = 'Store Owner';
+                            return;
+                        case 3:
+                            cs.roleName = 'Staff';
+                            return;
+                        case 4:
+                            cs.roleName = 'Customer';
+                            return;
                     }
-                  });
+                });
                 setTable(newTable);
                 setRow(res.totalRecord)
             })
@@ -113,52 +120,52 @@ const TableAccount = ({ status, search, role }) => {
 
     function deleteAccountFunction(id) {
         deleteAccount(id)
-          .then((res) => {
-            if (res.status == 200) {
-              sendNotification({
-                msg: 'Account delete success',
-                variant: 'success',
-              });
-              getAccountList({
-                PageIndex: page + 1,
-                PageSize: rpg,
-                Role: role,
-                search: search,
-                IsEnable: status,
+            .then((res) => {
+                if (res.status == 200) {
+                    sendNotification({
+                        msg: 'Account delete success',
+                        variant: 'success',
+                    });
+                    getAccountList({
+                        PageIndex: page + 1,
+                        PageSize: rpg,
+                        Role: role,
+                        search: search,
+                        IsEnable: status,
+                    })
+                        .then((res) => {
+                            const newTable = res.items.map((e) => e);
+                            newTable.forEach(function (cs, index) {
+                                switch (cs.role) {
+                                    case 1:
+                                        cs.roleName = 'Admin';
+                                        return;
+                                    case 2:
+                                        cs.roleName = 'Store Owner';
+                                        return;
+                                    case 3:
+                                        cs.roleName = 'Staff';
+                                        return;
+                                    case 4:
+                                        cs.roleName = 'Customer';
+                                        return;
+                                }
+                            });
+                            setTable(newTable);
+                            setRow(res.totalRecord)
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                        });
+                    // window.location.reload();
+                } else {
+                    sendNotification({ msg: 'Account delete fail', variant: 'error' });
+                }
             })
-              .then((res) => {
-                  const newTable = res.items.map((e) => e);
-                  newTable.forEach(function (cs, index) {
-                    switch (cs.role) {
-                      case 1:
-                        cs.roleName = 'Admin';
-                        return;
-                      case 2:
-                        cs.roleName = 'Store Owner';
-                        return;
-                      case 3:
-                        cs.roleName = 'Staff';
-                        return;
-                      case 4:
-                        cs.roleName = 'Customer';
-                        return;
-                    }
-                  });
-                  setTable(newTable);
-                  setRow(res.totalRecord)
-              })
-              .catch((err) => {
-                  console.log(err);
-              });
-            // window.location.reload();
-            } else {
-              sendNotification({ msg: 'Account delete fail', variant: 'error' });
-            }
-          })
-          .catch((err) => {
-            sendNotification({ msg: err, variant: 'error' });
-          });
-      }
+            .catch((err) => {
+                sendNotification({ msg: err, variant: 'error' });
+            });
+    }
     return (
         <Box>
             <TableContainer>
@@ -181,9 +188,16 @@ const TableAccount = ({ status, search, role }) => {
                                 sx={{
                                     '&:last-child td,&:last-child th': { border: 0 },
                                 }}
+                                onClick={() =>
+                                    navigate('/admin/account/account-information', {
+                                      state: {
+                                        accountInfo: row,
+                                      },
+                                    })
+                                  }
                             >
-                                
-                                <TableCell sx={{display:'flex', gap: '10px', alignItems:'center'}}>
+
+                                <TableCell sx={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
                                     <Avatar alt="Remy Sharp" src={row.imgUrl} />
                                     {row.fullName}
                                 </TableCell>

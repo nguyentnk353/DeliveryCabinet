@@ -64,7 +64,14 @@ const TableStoreType = ({ status, search }) => {
     });
 
     useEffect(() => {
-        const payload = {
+        const payload = search
+        ? {
+            PageIndex: 1,
+            PageSize: rpg,
+            search: search,
+            IsEnable: status,
+        }
+        : {
             PageIndex: page + 1,
             PageSize: rpg,
             search: search,
