@@ -2,7 +2,6 @@ import axiosInstance from './axiosInstance';
 
 export default function updateAccount(props) {
   const url = 'users';
-  console.log(props);
   return axiosInstance
     .put(url, {  
         id: props.id,

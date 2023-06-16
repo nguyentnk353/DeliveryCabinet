@@ -76,6 +76,10 @@ const TableAccount = ({ status, search, role }) => {
     });
 
     useEffect(() => {
+
+        if(search || role){
+            setPage(0)
+        }
         const payload = search
             ? {
                 PageIndex: 1,
@@ -187,14 +191,15 @@ const TableAccount = ({ status, search, role }) => {
                                 key={row.id}
                                 sx={{
                                     '&:last-child td,&:last-child th': { border: 0 },
+                                    cursor: 'pointer',
                                 }}
                                 onClick={() =>
                                     navigate('/admin/account/account-information', {
-                                      state: {
-                                        accountInfo: row,
-                                      },
+                                        state: {
+                                            accountInfo: row,
+                                        },
                                     })
-                                  }
+                                }
                             >
 
                                 <TableCell sx={{ display: 'flex', gap: '10px', alignItems: 'center' }}>

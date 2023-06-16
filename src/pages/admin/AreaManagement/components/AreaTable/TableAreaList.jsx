@@ -64,6 +64,9 @@ const TableAreaList = ({ status, search }) => {
     });
 
     useEffect(() => {
+        if(search){
+            setPage(0)
+        }
         const payload = search
             ? {
                 PageIndex: 1,

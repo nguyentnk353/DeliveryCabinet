@@ -2,7 +2,7 @@ import axios from 'axios';
 import axiosInstance from './axiosInstance';
 export default function postAccount(props) {
     const url = 'https://deliver-store.tk/api/v1/users';
-    console.log(props);
+    
     return axiosInstance
         .post(url, {
             loginName: props.loginName,

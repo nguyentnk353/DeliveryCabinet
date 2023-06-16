@@ -64,6 +64,9 @@ const TableStoreType = ({ status, search }) => {
     });
 
     useEffect(() => {
+        if(search){
+            setPage(0)
+        }
         const payload = search
         ? {
             PageIndex: 1,

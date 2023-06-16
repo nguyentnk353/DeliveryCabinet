@@ -21,31 +21,40 @@ import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import updateAccount from "../../../../../services/updateAccount";
 import useNotification from "../../../../../utils/useNotification";
 import deleteAccount from "../../../../../services/deleteAccount";
+import { useMount } from "ahooks";
+import getAccountById from "../../../../../services/getAccountById";
+import { useEffect } from "react";
 
 
 const UpdateAccount = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const [userInfo, setUserInfo] = useState({ id: '', fullName: '', email: '', phone: '', dob: '', isEnable: false, imgUrl: '' });
   const [msg, sendNotification] = useNotification();
   const statusList = [
     { name: "Active", id: true },
     { name: "InActive", id: false },
   ];
-  const [status, setStatus] = useState(
-    // statusList.filter((a) => a.id == location?.state?.accountInfo.isEnable)[0]
-    location?.state?.accountInfo.isEnable
-  );
   const phoneRegExp =
     /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 
+  useMount(() => {
+    getAccountById(location?.state?.accountInfo?.id)
+      .then((res) => {
+        setUserInfo(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  })
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      full_name: location?.state?.accountInfo.fullName,
-      email: location?.state?.accountInfo.email,
-      phone: location?.state?.accountInfo.phone,
-      // login_name: location?.state?.accountInfo.loginName,
-      dob: moment(location?.state?.accountInfo?.dob),
+      full_name: userInfo.fullName,
+      email: userInfo.email,
+      phone: userInfo.phone,
+      // login_name: userInfo.loginName,
+      dob: moment(userInfo?.dob),
     },
     validationSchema: Yup.object({
       full_name: Yup.string()
@@ -59,14 +68,14 @@ const UpdateAccount = () => {
     }),
     onSubmit: (values) => {
       const api = {
-        id: location?.state?.accountInfo?.id,
+        id: userInfo.id,
         // loginName: values.login_name,
         fullName: values.full_name,
         email: values.email,
         phone: values.phone,
         dob: values.dob._i,
-        isEnable: status,
-        imgUrl: location?.state?.accountInfo?.imgUrl,
+        isEnable: userInfo?.isEnable,
+        imgUrl: userInfo?.imgUrl,
       };
       updateAccount(api)
         .then((res) => {
@@ -86,7 +95,7 @@ const UpdateAccount = () => {
   });
 
   function deleteAccountFunction() {
-    deleteAccount(location?.state?.accountInfo?.id)
+    deleteAccount(userInfo?.id)
       .then((res) => {
         if (res.status == 200) {
           sendNotification({
@@ -182,7 +191,7 @@ const UpdateAccount = () => {
                           <DatePicker
                             label="Date Of Birth"
                             sx={{ width: '100%' }}
-                            // defaultValue={moment(location?.state?.accountInfo?.dob)}
+                            // defaultValue={moment(userInfo?.dob)}
                             value={moment(dob)}
                             onChange={(newValue) => {
                               setDob(moment(newValue.$d))
@@ -202,7 +211,15 @@ const UpdateAccount = () => {
                           onChange={(value) => {
                             formik.setFieldValue("dob", value);
                           }}
-                          renderInput={(params) => <TextField {...params} />}
+                          textField={(params) => (
+                            <TextField
+                              {...params}
+                              InputLabelProps={{ shrink: true }}
+                              variant="outlined"
+                              margin="normal"
+                              fullWidth
+                            />
+                          )}
                         />
                       </LocalizationProvider>
                     </Box>
@@ -227,18 +244,25 @@ const UpdateAccount = () => {
                       disablePortal
                       disableClearable
                       id="Status"
-                      defaultValue={
-                        statusList.filter(
-                          (a) => a.id == location?.state?.accountInfo.isEnable
-                        )[0]
-                      }
+                      // defaultValue={
+                      //   statusList.filter(
+                      //     (a) => a.id == userInfo.isEnable
+                      //   )[0]
+                      // }
+                      value={statusList.filter(s => s.id === userInfo?.isEnable)?.[0] || statusList[0]}
                       sx={{ paddingTop: "4.5%" }}
                       options={statusList}
                       getOptionLabel={(option) => option.name}
                       onChange={(event, newValue) => {
-                        if (newValue) {
-                          setStatus(newValue.id);
-                        }
+                        // if (newValue) {
+                        //   setStatus(newValue.id);
+                        // }
+                        setUserInfo((info) => {
+                          return {
+                            ...info,
+                            isEnable: newValue.id
+                          }
+                        })
                       }}
                       isOptionEqualToValue={(option, value) =>
                         option.name === value.name && option.id === value.id
