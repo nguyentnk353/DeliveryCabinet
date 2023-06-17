@@ -215,13 +215,10 @@ const BoxTypeTable = ({ searchText, createSuccess, isEnable }) => {
                       <Select
                         labelId='statusLabel'
                         id='status'
-                        value={field.status}
                         label='Status'
+                        value={formik.values.status}
                         onChange={(e) => {
-                          setField((preState) => ({
-                            ...preState,
-                            status: e.target.value,
-                          }));
+                          formik.setFieldValue('status', e.target.value);
                         }}
                       >
                         <MenuItem value={true}>Active</MenuItem>

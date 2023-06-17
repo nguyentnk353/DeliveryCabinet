@@ -1,22 +1,24 @@
-import React, { useState } from "react";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import CircularProgress from "@mui/material/CircularProgress";
-import { styled } from "@mui/material/styles";
+import React, { useState } from 'react';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
+import { styled } from '@mui/material/styles';
 
 const StyledAvatar = styled(Avatar)(({ theme }) => ({
   width: theme.spacing(18),
   height: theme.spacing(18),
-  margin: "auto",
+  margin: 'auto',
 }));
 
 const StyledButton = styled(Button)({
-  display: "none",
+  display: 'none',
 });
 
 const UploadAvatar = () => {
   const [loading, setLoading] = useState(false);
-  const [image, setImage] = useState("../../../../src/assets/images/defaultAvatar.png");
+  const [image, setImage] = useState(
+    '../../../../src/assets/images/defaultAvatar.png'
+  );
 
   const handleImageChange = (event) => {
     setLoading(true);
@@ -30,7 +32,7 @@ const UploadAvatar = () => {
   };
 
   const handleClick = () => {
-    document.getElementById("avatar-input").click();
+    document.getElementById('avatar-input').click();
   };
 
   return (
@@ -38,19 +40,20 @@ const UploadAvatar = () => {
       <StyledAvatar onClick={handleClick} src={image}>
         {loading ? <CircularProgress /> : null}
       </StyledAvatar>
-      <div style={{ textAlign: "center" }}>
+      <div style={{ textAlign: 'center' }}>
         <input
-          id="avatar-input"
-          type="file"
-          accept="image/png, image/jpeg"
+          id='avatar-input'
+          type='file'
+          accept='image/png, image/jpeg'
           onChange={handleImageChange}
-          style={{ display: "none" }}
-        />  
-        <label htmlFor="avatar-input">
-          <StyledButton variant="contained" component="span">
-          </StyledButton>
+          style={{ display: 'none' }}
+        />
+        <label htmlFor='avatar-input'>
+          <StyledButton variant='contained' component='span'></StyledButton>
         </label>
-        <div style={{ fontSize: "1rem", fontWeight:'380', marginTop: '50px' }}>Allowed *.jpg, *.png max size of 3 MB</div>
+        <div style={{ fontSize: '1rem', fontWeight: '380', marginTop: '50px' }}>
+          Allowed *.jpg, *.png max size of 3 MB
+        </div>
       </div>
     </>
   );

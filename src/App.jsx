@@ -17,6 +17,7 @@ import CreateStore from './pages/admin/CreateStore';
 import UpdateStore from './pages/admin/UpdateStore';
 import BoxTypeManagement from './pages/admin/BoxTypeManagement';
 import PriceTableManagement from './pages/admin/PriceTableManagement';
+import PriceTableItemManagement from './pages/admin/PriceTableItemManagement';
 import LockerManagement from './pages/admin/LockerManagement';
 import CreateLocker from './pages/admin/CreateLocker';
 import StoreOwner from './pages/storeOwner/StoreOwner';
@@ -30,6 +31,8 @@ import AreaManagement from './pages/admin/AreaManagement/AreaManagement';
 import CreateAccount from './pages/admin/CreateAccount/CreateAccount';
 import TestUI from './pages/admin/TestUI/TestUI';
 import { SnackbarProvider } from 'notistack';
+import 'antd/dist/reset.css';
+import './index.css';
 
 function App() {
   return (
@@ -76,6 +79,10 @@ function App() {
               <Route path='service-type' element={<ServiceTypeManagement />} />
               <Route path='box-type' element={<BoxTypeManagement />} />
               <Route path='price-table' element={<PriceTableManagement />} />
+              <Route
+                path='price-table-item'
+                element={<PriceTableItemManagement />}
+              />
               <Route path='locker' element={<LockerManagement />} />
               <Route path='new-locker' element={<CreateLocker />} />
               <Route path='testUI' element={<TestUI />} />

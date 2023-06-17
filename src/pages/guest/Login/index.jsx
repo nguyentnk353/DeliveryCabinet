@@ -25,6 +25,7 @@ import { useNavigate } from 'react-router-dom';
 import paperBg from '../../../assets/images/LoginPaper.png';
 import LoginImg1 from '../../../assets/images/LoginImg1.png';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
+import useNotification from '../../../utils/useNotification';
 
 const validationSchema = yup.object({
   loginName: yup.string('Enter your username').required('Username is required'),
@@ -37,6 +38,7 @@ export default function Login() {
   const navigate = useNavigate();
   const [isInvalid, setIsinvalid] = useState(false);
   const [showPassword, setShowPassword] = React.useState(false);
+  const [msg, sendNotification] = useNotification();
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -79,7 +81,7 @@ export default function Login() {
           }
         })
         .catch((error) => {
-          console.log(error);
+          sendNotification({ msg: error, variant: 'error' });
         });
     },
   });

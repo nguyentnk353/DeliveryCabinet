@@ -57,15 +57,25 @@ const StoreTable = ({ province, city, district, search, isEnable }) => {
       });
   });
   useEffect(() => {
-    const payload = {
-      PageIndex: pg,
-      PageSize: rpg,
-      province: province.name,
-      city: city.name,
-      district: district.name,
-      search: search,
-      isEnable: isEnable,
-    };
+    const payload = search
+      ? {
+          PageIndex: 0,
+          PageSize: rpg,
+          province: province.name,
+          city: city.name,
+          district: district.name,
+          search: search,
+          isEnable: isEnable,
+        }
+      : {
+          PageIndex: pg,
+          PageSize: rpg,
+          province: province.name,
+          city: city.name,
+          district: district.name,
+          search: search,
+          isEnable: isEnable,
+        };
     getStoreList(payload)
       .then((res) => {
         const newTable = res.items.map((e) => e);
