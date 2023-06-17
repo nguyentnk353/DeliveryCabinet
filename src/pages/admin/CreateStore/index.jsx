@@ -213,8 +213,8 @@ const index = () => {
                 id='ward'
                 options={wardList}
                 getOptionLabel={(option) => option.name}
-                onChange={(value) => {
-                  setWard(value);
+                onChange={(_, e) => {
+                  setWard(e);
                 }}
                 sx={{ width: '100%' }}
                 renderInput={(params) => <TextField {...params} label='Ward' />}

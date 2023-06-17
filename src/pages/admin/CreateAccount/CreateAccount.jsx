@@ -12,7 +12,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import React, { useState } from 'react';
-import UploadAvatar from '../components/UploadAvatar/UploadAvatar';
+import UploadAvatar from './components/UploadAvatar/UploadAvatar';
 import { useFormik } from 'formik';
 import * as Yup from "yup";
 import moment from 'moment/moment';
@@ -41,7 +41,7 @@ const CreateAccount = () => {
         validationSchema: Yup.object({
             full_name: Yup.string()
                 .min(2, "Full Name mininum 2 characters")
-                .max(15, "Full Name maximum 15 characters")
+                .max(30, "Full Name maximum 30 characters")
                 .required("Required!"),
             email: Yup.string()
                 .email("Invalid email format")

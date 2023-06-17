@@ -6,6 +6,7 @@ export default function getStoreTypeList(props) {
   return axios
     .get(url, {
       params: {
+        Name: props.search,
         IsEnable: props.IsEnable,
         PageIndex: props.PageIndex,
         PageSize: props.PageSize,

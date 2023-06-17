@@ -1,6 +1,6 @@
 import { Box, Button, FormHelperText, Modal, TextField, Typography } from "@mui/material";
 import React, { useState } from "react";
-import createStoreType from "../../../../services/postStoreType";
+import createStoreType from "../../../../../services/postStoreType";
 const AddStoreType = ({ showModal, onClose }) => {
     const [input1, setInput1] = useState("");
     const [input2, setInput2] = useState("");
@@ -46,10 +46,10 @@ const AddStoreType = ({ showModal, onClose }) => {
 
     const modalStyle = {
         position: "absolute",
-        width: 400,
+        width: 600,
         backgroundColor: "#fff",
         boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)",
-        padding: "20px",
+        padding: "3%",
         top: "50%",
         left: "50%",
         transform: "translate(-50%, -50%)",
@@ -60,7 +60,7 @@ const AddStoreType = ({ showModal, onClose }) => {
     return (
         <Modal open={showModal} onClose={onClose} error={error}>
             <Box style={modalStyle}>
-                <Typography variant='h5' sx={{ fontWeight: '700', textAlign: 'center', color: '#2196f3' }}>
+                <Typography variant='h5' sx={{ fontWeight: '700', textAlign: 'center', color: '#2196f3', paddingBottom: '8%' }}>
                     ADD STORE TYPE
                 </Typography>
                 <TextField

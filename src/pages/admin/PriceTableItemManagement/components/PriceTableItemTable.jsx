@@ -19,32 +19,36 @@ import {
   InputLabel,
   FormControl,
   Typography,
+  Checkbox,
+  FormControlLabel,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useMount } from 'ahooks';
 import { DeleteForever, Edit, MoreVert } from '@mui/icons-material';
-import getBoxTypeList from './../../../../services/getBoxTypeList';
 import useNotification from '../../../../utils/useNotification';
 import { blue, red } from '@mui/material/colors';
-import deleteBoxType from './../../../../services/deleteBoxType';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import updateBoxType from './../../../../services/updateBoxType';
-import getServiceTypeList from './../../../../services/getServiceTypeList';
-import updateServiceType from '../../../../services/updateServiceType';
-import deleteServiceType from '../../../../services/deleteServiceType';
+import moment from 'moment-timezone';
+import deletePriceTable from '../../../../services/deletePriceTable';
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
+import updatePriceTable from '../../../../services/updatePriceTable';
+import getPriceTableItemList from './../../../../services/getPriceTableItemList';
+import { useLocation } from 'react-router-dom';
+import updatePriceTableItem from './../../../../services/updatePriceTableItem';
+import deletePriceTableItem from './../../../../services/deletePriceTableItem';
 
-const validationSchema = yup.object({
-  price: yup
-    .number('Accept only positive number > 0')
-    .required('Price is required')
-    .positive('Accept only positive number > 0'),
-});
+moment.tz.setDefault('America/Los_Angeles');
 
-const ServiceTypeTable = ({ searchText, createSuccess, isEnable }) => {
+const validationSchema = yup.object({});
+
+const PriceTableItemTable = ({ searchText, createSuccess, isEnable }) => {
   const [pg, setpg] = React.useState(0);
   const [rpg, setrpg] = React.useState(5);
   const [msg, sendNotification] = useNotification();
+  const location = useLocation();
+
   function handleChangePage(event, newpage) {
     setpg(newpage);
   }
@@ -58,13 +62,13 @@ const ServiceTypeTable = ({ searchText, createSuccess, isEnable }) => {
 
   useMount(() => {
     const api = {
-      Id: searchText,
+      search: searchText,
       PageIndex: pg + 1,
       PageSize: rpg,
       IsEnable: isEnable,
+      PriceTableId: location?.state?.priceTable?.id,
     };
-
-    getServiceTypeList(api)
+    getPriceTableItemList(api)
       .then((res) => {
         const newTable = res.items.map((e) => e);
         setTable(newTable);
@@ -74,21 +78,24 @@ const ServiceTypeTable = ({ searchText, createSuccess, isEnable }) => {
         sendNotification({ msg: err, variant: 'error' });
       });
   });
+
   useEffect(() => {
     const api = searchText
       ? {
-          Id: searchText,
+          search: searchText,
           PageIndex: 1,
           PageSize: rpg,
           IsEnable: isEnable,
+          PriceTableId: location?.state?.priceTable?.id,
         }
       : {
-          Id: searchText,
+          search: searchText,
           PageIndex: pg + 1,
           PageSize: rpg,
           IsEnable: isEnable,
+          PriceTableId: location?.state?.priceTable?.id,
         };
-    getServiceTypeList(api)
+    getPriceTableItemList(api)
       .then((res) => {
         const newTable = res.items.map((e) => e);
         setTable(newTable);
@@ -96,23 +103,32 @@ const ServiceTypeTable = ({ searchText, createSuccess, isEnable }) => {
         createSuccess = false;
       })
       .catch((err) => {
-        console.log(err);
+        sendNotification({ msg: err, variant: 'error' });
       });
   }, [createSuccess, pg, rpg, searchText, msg]);
+
   const [open, setOpen] = React.useState(false);
 
   const [field, setField] = React.useState({
     id: '',
-    name: '',
-    status: true,
+    minDuration: 0,
+    maxDuration: 0,
+    unitPrice: 0,
+    description: 0,
+    isEnable: '',
+    priceTableId: '',
   });
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
     formik.resetForm({
       values: {
-        name: '',
-        description: '',
-        status: '',
+        id: '',
+        minDuration: 0,
+        maxDuration: 0,
+        unitPrice: 0,
+        description: 0,
+        isEnable: '',
+        priceTableId: '',
       },
     });
     setOpen(false);
@@ -138,20 +154,23 @@ const ServiceTypeTable = ({ searchText, createSuccess, isEnable }) => {
     onSubmit: (val) => {
       const api = {
         id: field.id,
-        price: val.price,
+        minDuration: val.minDuration,
+        maxDuration: val.maxDuration,
+        unitPrice: val.unitPrice,
         description: val.description,
-        isEnable: field.status,
+        isEnable: val.isEnable,
+        priceTableId: field.priceTableId,
       };
-      updateServiceType(api)
+      updatePriceTableItem(api)
         .then((res) => {
           if (res.status == 200) {
             sendNotification({
-              msg: 'Service type update success',
+              msg: 'Price table items update success',
               variant: 'success',
             });
           } else {
             sendNotification({
-              msg: 'Service type update fail',
+              msg: 'Price table items update fail',
               variant: 'error',
             });
           }
@@ -166,23 +185,26 @@ const ServiceTypeTable = ({ searchText, createSuccess, isEnable }) => {
   function openUpdate(row) {
     setField({
       id: row.id,
-      price: row.price,
+      minDuration: row.minDuration,
+      maxDuration: row.maxDuration,
+      unitPrice: row.unitPrice,
       description: row.description,
-      status: row.isEnable,
+      isEnable: row.isEnable,
+      priceTableId: location?.state?.priceTable?.id,
     });
     setOpen(true);
   }
   function apiDelete(id) {
-    deleteServiceType(id)
+    deletePriceTableItem(id)
       .then((res) => {
         if (res.status == 200) {
           sendNotification({
-            msg: 'Service type delete success',
+            msg: 'Price table items delete success',
             variant: 'success',
           });
         } else {
           sendNotification({
-            msg: 'Service type delete fail',
+            msg: 'Price table items delete fail',
             variant: 'error',
           });
         }
@@ -191,6 +213,7 @@ const ServiceTypeTable = ({ searchText, createSuccess, isEnable }) => {
         sendNotification({ msg: err, variant: 'error' });
       });
   }
+
   return (
     <Box>
       <Box>
@@ -209,7 +232,7 @@ const ServiceTypeTable = ({ searchText, createSuccess, isEnable }) => {
               fontWeight='bold'
               color={blue[500]}
             >
-              UPDATE SERVICE TYPE
+              UPDATE PRICE TABLE
             </Typography>
             <Box
               component='form'
@@ -218,30 +241,68 @@ const ServiceTypeTable = ({ searchText, createSuccess, isEnable }) => {
               sx={{ mt: 1 }}
             >
               <Box sx={{ padding: '2rem' }}>
-                <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+                <Box sx={{ display: 'flex', gap: 2 }}>
                   <TextField
                     margin='normal'
-                    width='40%'
+                    fullWidth
                     required
-                    id='price'
-                    label='Base price'
+                    id='minDuration'
+                    label='Min duration'
                     autoFocus
-                    value={formik.values.price}
+                    value={formik.values.minDuration}
                     onChange={formik.handleChange}
-                    error={formik.touched.price && Boolean(formik.errors.price)}
-                    helperText={formik.touched.price && formik.errors.price}
+                    error={
+                      formik.touched.minDuration &&
+                      Boolean(formik.errors.minDuration)
+                    }
+                    helperText={
+                      formik.touched.minDuration && formik.errors.minDuration
+                    }
                   />
-
-                  <Box sx={{ width: '40%', paddingTop: '1%' }}>
+                  <TextField
+                    margin='normal'
+                    fullWidth
+                    required
+                    id='maxDuration'
+                    label='Max duration'
+                    value={formik.values.maxDuration}
+                    onChange={formik.handleChange}
+                    error={
+                      formik.touched.maxDuration &&
+                      Boolean(formik.errors.maxDuration)
+                    }
+                    helperText={
+                      formik.touched.maxDuration && formik.errors.maxDuration
+                    }
+                  />
+                </Box>
+                <Box sx={{ display: 'flex', gap: 2 }}>
+                  <TextField
+                    margin='normal'
+                    fullWidth
+                    required
+                    id='unitPrice'
+                    label='Unit price'
+                    value={formik.values.unitPrice}
+                    onChange={formik.handleChange}
+                    error={
+                      formik.touched.unitPrice &&
+                      Boolean(formik.errors.unitPrice)
+                    }
+                    helperText={
+                      formik.touched.unitPrice && formik.errors.unitPrice
+                    }
+                  />
+                  <Box sx={{ width: '100%', paddingTop: '2.5%' }}>
                     <FormControl fullWidth>
                       <InputLabel id='statusLabel'>Status</InputLabel>
                       <Select
                         labelId='statusLabel'
-                        id='status'
+                        id='isEnable'
                         label='Status'
-                        value={formik.values.status}
+                        value={formik.values.isEnable}
                         onChange={(e) => {
-                          formik.setFieldValue('status', e.target.value);
+                          formik.setFieldValue('isEnable', e.target.value);
                         }}
                       >
                         <MenuItem value={true}>Active</MenuItem>
@@ -291,7 +352,9 @@ const ServiceTypeTable = ({ searchText, createSuccess, isEnable }) => {
           <TableHead sx={{ backgroundColor: '#f4f6f8' }}>
             <TableRow>
               <TableCell>Id</TableCell>
-              <TableCell>Base price</TableCell>
+              <TableCell>Min duration</TableCell>
+              <TableCell>Max duration</TableCell>
+              <TableCell>Unit price</TableCell>
               <TableCell>Description</TableCell>
               <TableCell>Status</TableCell>
               <TableCell>Action</TableCell>
@@ -308,7 +371,9 @@ const ServiceTypeTable = ({ searchText, createSuccess, isEnable }) => {
                 <TableCell component='th' scope='row'>
                   {row.id}
                 </TableCell>
-                <TableCell>{row.price}</TableCell>
+                <TableCell>{row.minDuration}</TableCell>
+                <TableCell>{row.maxDuration}</TableCell>
+                <TableCell>{row.unitPrice}</TableCell>
                 <TableCell>{row.description}</TableCell>
                 <TableCell>
                   {row.isEnable ? (
@@ -370,4 +435,4 @@ const ServiceTypeTable = ({ searchText, createSuccess, isEnable }) => {
   );
 };
 
-export default ServiceTypeTable;
+export default PriceTableItemTable;

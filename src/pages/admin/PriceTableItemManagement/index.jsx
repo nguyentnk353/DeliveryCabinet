@@ -19,7 +19,7 @@ import {
   Chip,
   useTheme,
   IconButton,
-  // Modal,
+  Modal,
   FormControlLabel,
   Checkbox,
 } from '@mui/material';
@@ -27,23 +27,21 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { DeleteOutline, SearchOutlined } from '@mui/icons-material';
 
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { blue } from '@mui/material/colors';
 
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import useNotification from '../../../utils/useNotification';
-import PriceTableTable from './components/PriceTableTable';
 import createPriceTable from './../../../services/createPriceTable';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
-// import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 // import moment from 'moment';
 import moment from 'moment-timezone';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DatePicker, Space, Modal } from 'antd';
-const { RangePicker } = DatePicker;
+import PriceTableItemTable from './components/PriceTableItemTable';
+import createPriceTableItem from '../../../services/createPriceTableItem';
 
 moment.tz.setDefault('America/Los_Angeles');
 function TabPanel(props) {
@@ -79,13 +77,23 @@ function a11yProps(index) {
   };
 }
 
+const validationSchema = yup.object({
+  minDuration: yup
+    .number('Accept only positive number > 0')
+    .required('Price is required')
+    .positive('Accept only positive number > 0'),
+  maxDuration: yup
+    .number('Accept only positive number > 0')
+    .required('Price is required')
+    .positive('Accept only positive number > 0'),
+  unitPrice: yup
+    .number('Accept only positive number > 0')
+    .required('Price is required')
+    .positive('Accept only positive number > 0'),
+});
 const index = () => {
-  const validationSchema = yup.object({
-    name: yup.string('Enter price table name').required('Name is required'),
-    applyFrom: yup.date().typeError('Invalid Date!'),
-    applyTo: yup.date().typeError('Invalid Date!'),
-  });
   const navigate = useNavigate();
+  const location = useLocation();
   const [value, setValue] = React.useState(0);
   const [open, setOpen] = React.useState(false);
   const [msg, sendNotification] = useNotification();
@@ -93,15 +101,10 @@ const index = () => {
   const handleClose = () => {
     formik.resetForm({
       values: {
-        name: '',
-        rangePicker: null,
-        mon: false,
-        tue: false,
-        wed: false,
-        thu: false,
-        fri: false,
-        sat: false,
-        sun: false,
+        minDuration: 0,
+        maxDuration: 0,
+        unitPrice: 0,
+        description: '',
       },
     });
     setOpen(false);
@@ -127,52 +130,32 @@ const index = () => {
 
   const formik = useFormik({
     initialValues: {
-      name: '',
-      rangePicker: null,
-      mon: false,
-      tue: false,
-      wed: false,
-      thu: false,
-      fri: false,
-      sat: false,
-      sun: false,
+      minDuration: 0,
+      maxDuration: 0,
+      unitPrice: 0,
+      description: '',
     },
     validationSchema: validationSchema,
     onSubmit: (val) => {
-      const bi = [0, 0, 0, 0, 0, 0, 0];
-      if (val.mon === true) bi[0] = 1;
-      else bi[0] = 0;
-      if (val.tue === true) bi[1] = 1;
-      else bi[1] = 0;
-      if (val.wed === true) bi[2] = 1;
-      else bi[2] = 0;
-      if (val.thu === true) bi[3] = 1;
-      else bi[3] = 0;
-      if (val.fri === true) bi[4] = 1;
-      else bi[4] = 0;
-      if (val.sat === true) bi[5] = 1;
-      else bi[5] = 0;
-      if (val.sun === true) bi[6] = 1;
-      else bi[6] = 0;
-
       const api = {
-        name: val.name,
-        applyFrom: moment(val.rangePicker[0].$d).utc().format(),
-        applyTo: moment(val.rangePicker[1].$d).utc().format(),
-        dateFilter: bi.join(''),
+        minDuration: val.minDuration,
+        maxDuration: val.maxDuration,
+        unitPrice: val.unitPrice,
+        description: val.description,
+        priceTableId: location?.state?.priceTable?.id,
       };
 
-      createPriceTable(api)
+      createPriceTableItem(api)
         .then((res) => {
           if (res.status == 201) {
             sendNotification({
-              msg: 'Price table create success',
+              msg: 'Price table items create success',
               variant: 'success',
             });
             setCreateSuccess(true);
           } else {
             sendNotification({
-              msg: 'Price table create fail',
+              msg: 'Price table items create fail',
               variant: 'error',
             });
           }
@@ -183,18 +166,15 @@ const index = () => {
         });
     },
   });
-
   return (
     <Box sx={{ p: '5%' }}>
       <Modal
         open={open}
         onClose={handleClose}
-        footer={null}
-        closable={false}
-        width={700}
+        aria-labelledby='modal-modal-title'
+        aria-describedby='modal-modal-description'
       >
-        <Box sx={{ padding: '2rem 7rem' }}>
-          {/* <Box sx={style}> */}
+        <Box sx={style}>
           <Typography
             id='modal-modal-title'
             variant='h5'
@@ -203,7 +183,7 @@ const index = () => {
             fontWeight='bold'
             color={blue[500]}
           >
-            ADD NEW PRICE TABLE
+            ADD NEW PRICE TABLE ITEMS
           </Typography>
           <Box
             component='form'
@@ -211,85 +191,78 @@ const index = () => {
             noValidate
             sx={{ mt: 1 }}
           >
-            {/* <Box sx={{ padding: '2rem' }}> */}
-            <Box>
-              <Box sx={{ marginBottom: '1rem' }}>
+            <Box sx={{ padding: '2rem' }}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  gap: 1,
+                }}
+              >
                 <TextField
                   margin='normal'
-                  sx={{ width: '410px' }}
+                  fullWidth
                   required
-                  id='name'
-                  label='Name'
+                  id='minDuration'
+                  label='Min duration'
                   autoFocus
-                  value={formik.values.name}
+                  value={formik.values.minDuration}
                   onChange={formik.handleChange}
-                  error={formik.touched.name && Boolean(formik.errors.name)}
-                  helperText={formik.touched.name && formik.errors.name}
+                  error={
+                    formik.touched.minDuration &&
+                    Boolean(formik.errors.minDuration)
+                  }
+                  helperText={
+                    formik.touched.minDuration && formik.errors.minDuration
+                  }
+                />
+                <TextField
+                  margin='normal'
+                  fullWidth
+                  required
+                  id='maxDuration'
+                  label='Max duration'
+                  value={formik.values.maxDuration}
+                  onChange={formik.handleChange}
+                  error={
+                    formik.touched.maxDuration &&
+                    Boolean(formik.errors.maxDuration)
+                  }
+                  helperText={
+                    formik.touched.maxDuration && formik.errors.maxDuration
+                  }
+                />
+                <TextField
+                  margin='normal'
+                  fullWidth
+                  required
+                  id='unitPrice'
+                  label='Unit price'
+                  value={formik.values.unitPrice}
+                  onChange={formik.handleChange}
+                  error={
+                    formik.touched.unitPrice && Boolean(formik.errors.unitPrice)
+                  }
+                  helperText={
+                    formik.touched.unitPrice && formik.errors.unitPrice
+                  }
                 />
               </Box>
-              <Box sx={{ marginBottom: '1rem' }}>
-                <RangePicker
-                  size='large'
-                  value={formik.values.rangePicker}
-                  onChange={(value) => {
-                    formik.setFieldValue('rangePicker', value);
-                  }}
-                  style={{
-                    zIndex: 10,
-                    padding: '0.75rem 1rem',
-                    width: '410px',
-                  }}
-                />
-              </Box>
-              <Box sx={{ marginBottom: '1rem' }}>
-                <Typography variant='body1' fontWeight='bold'>
-                  Date apply *
-                </Typography>
-                <Box>
-                  <FormControlLabel
-                    control={<Checkbox checked={formik.values.mon} />}
-                    label='2'
-                    name='mon'
-                    onChange={formik.handleChange}
-                  />
-                  <FormControlLabel
-                    control={<Checkbox checked={formik.values.tue} />}
-                    label='3'
-                    name='tue'
-                    onChange={formik.handleChange}
-                  />
-                  <FormControlLabel
-                    control={<Checkbox checked={formik.values.wed} />}
-                    label='4'
-                    name='wed'
-                    onChange={formik.handleChange}
-                  />
-                  <FormControlLabel
-                    control={<Checkbox checked={formik.values.thu} />}
-                    label='5'
-                    name='thu'
-                    onChange={formik.handleChange}
-                  />
-                  <FormControlLabel
-                    control={<Checkbox checked={formik.values.fri} />}
-                    label='6'
-                    name='fri'
-                    onChange={formik.handleChange}
-                  />
-                  <FormControlLabel
-                    control={<Checkbox checked={formik.values.sat} />}
-                    label='7'
-                    name='sat'
-                    onChange={formik.handleChange}
-                  />
-                  <FormControlLabel
-                    control={<Checkbox checked={formik.values.sun} />}
-                    label='Sun'
-                    name='sun'
-                    onChange={formik.handleChange}
-                  />
-                </Box>
-              </Box>
+              <TextField
+                margin='normal'
+                fullWidth
+                id='description'
+                label='Description'
+                value={formik.values.description}
+                onChange={formik.handleChange}
+                error={
+                  formik.touched.description &&
+                  Boolean(formik.errors.description)
+                }
+                helperText={
+                  formik.touched.description && formik.errors.description
+                }
+              />
             </Box>
             <Box
               sx={{
@@ -318,10 +291,10 @@ const index = () => {
         }}
       >
         <Typography variant='h6' fontWeight='bold'>
-          Price table management
+          Price table items management
         </Typography>
         <Button variant='contained' onClick={handleOpen}>
-          + New price table
+          + New price table items
         </Button>
       </Box>
 
@@ -384,21 +357,21 @@ const index = () => {
         </Box>
         <Box>
           <TabPanel value={value} index={0}>
-            <PriceTableTable
+            <PriceTableItemTable
               searchText={searchText}
               createSuccess={createSuccess}
               isEnable={''}
             />
           </TabPanel>
           <TabPanel value={value} index={1}>
-            <PriceTableTable
+            <PriceTableItemTable
               searchText={searchText}
               createSuccess={createSuccess}
               isEnable={true}
             />
           </TabPanel>
           <TabPanel value={value} index={2}>
-            <PriceTableTable
+            <PriceTableItemTable
               searchText={searchText}
               createSuccess={createSuccess}
               isEnable={false}

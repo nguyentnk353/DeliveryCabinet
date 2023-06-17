@@ -38,9 +38,18 @@ const validationSchema = yup.object({
 const index = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [province, setProvince] = useState({ name: 'Choose province', key: 0 });
-  const [district, setDistrict] = useState({ name: 'Choose district', key: 0 });
-  const [ward, setWard] = useState({ name: 'Choose ward', key: 0 });
+  const [province, setProvince] = useState({
+    name: location?.state?.storeInfo?.province,
+    key: 0,
+  });
+  const [district, setDistrict] = useState({
+    name: location?.state?.storeInfo?.city,
+    key: 0,
+  });
+  const [ward, setWard] = useState({
+    name: location?.state?.storeInfo?.district,
+    key: 0,
+  });
   const [provinceList, setProvinceList] = useState([]);
   const [districtList, setDistrictList] = useState([]);
   const [wardList, setWardList] = useState([]);
@@ -208,6 +217,7 @@ const index = () => {
                 autoFocus
                 options={provinceList}
                 getOptionLabel={(option) => option.name}
+                value={province}
                 onChange={(_, e) => {
                   setProvince(e);
                   callApiDistrict(host + 'p/' + e.code + '?depth=2');
@@ -222,6 +232,7 @@ const index = () => {
                 id='district'
                 options={districtList}
                 getOptionLabel={(option) => option.name}
+                value={district}
                 onChange={(_, e) => {
                   setDistrict(e);
                   callApiWard(host + 'd/' + e.code + '?depth=2');
@@ -236,8 +247,9 @@ const index = () => {
                 id='ward'
                 options={wardList}
                 getOptionLabel={(option) => option.name}
-                onChange={(value) => {
-                  setWard(value);
+                value={ward}
+                onChange={(_, e) => {
+                  setWard(e);
                 }}
                 sx={{ width: '100%' }}
                 renderInput={(params) => <TextField {...params} label='Ward' />}
@@ -293,6 +305,7 @@ const index = () => {
                   id='storeType'
                   options={storeTypeList}
                   getOptionLabel={(option) => option.name}
+                  value={storeType}
                   onChange={(_, e) => {
                     setStoreType(e);
                   }}
@@ -306,6 +319,7 @@ const index = () => {
                   id='area'
                   options={areaList}
                   getOptionLabel={(option) => option.name}
+                  value={area}
                   onChange={(_, e) => {
                     setArea(e);
                   }}
@@ -320,6 +334,7 @@ const index = () => {
                   id='serviceType'
                   options={serviceTypeList}
                   getOptionLabel={(option) => option.description}
+                  value={serviceType}
                   onChange={(_, e) => {
                     setServiceType(e);
                   }}

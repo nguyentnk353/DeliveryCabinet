@@ -812,7 +812,10 @@ const index = () => {
         </DialogTitle>
         <DialogContent>
           <DialogContentText id='alert-dialog-description'>
-            Please check locker's information is correct
+            Please check locker's information is correct.
+            <br />
+            You will not be able to change boxes's information after created
+            locker
           </DialogContentText>
         </DialogContent>
         <DialogActions>
