@@ -1,4 +1,4 @@
-import { SearchOutlined } from '@mui/icons-material';
+import { DeleteOutline, SearchOutlined } from '@mui/icons-material';
 import {
   Autocomplete,
   Box,
@@ -13,9 +13,8 @@ import {
 } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import CreateStore from '../CreateStore';
 import TableAccount from './components/TableAccount';
 
 function TabPanel(props) {
@@ -61,8 +60,10 @@ const roleList = [
 const AccountManagement = () => {
   const theme = useTheme();
   const navigate = useNavigate();
-  const [value, setValue] = React.useState(0);
-  const [role, setRole] = React.useState();
+  const [value, setValue] = useState(0);
+  const [role, setRole] = useState({ name: '', id: undefined });
+  const [searchText, setSearchText] = useState();
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -119,13 +120,16 @@ const AccountManagement = () => {
         >
           <Autocomplete
             disablePortal
+            autoFocus
             id='role'
             options={roleList}
+            disableClearable
+            value={role}
             getOptionLabel={(option) => option.name}
             sx={{ width: '20%' }}
             onChange={(event, newValue) => {
               if (newValue) {
-                setRole(newValue.id);
+                setRole(newValue);
               }
             }}
             isOptionEqualToValue={(option, value) =>
@@ -139,8 +143,10 @@ const AccountManagement = () => {
             placeholder='Search...'
             type='search'
             variant='outlined'
+            onChange={(e) => setSearchText(e.target.value)}
+            value={searchText}
             sx={{
-              width: '78%',
+              width: '67%',
             }}
             InputProps={{
               startAdornment: (
@@ -150,20 +156,33 @@ const AccountManagement = () => {
               ),
             }}
           />
+          <Box>
+            <Button
+              color='error'
+              startIcon={<DeleteOutline />}
+              sx={{ marginLeft: '1rem', paddingTop: '15px'}}
+              onClick={() => {
+                setRole({ name: '', id: undefined });
+                setSearchText('');
+              }}
+            >
+              Clear
+            </Button>
+          </Box>
         </Box>
         <TabPanel status={''} value={value} index={0}>
           <Box>
-            <TableAccount role={role} />
+            <TableAccount role={role?.id} search={searchText}/>
           </Box>
         </TabPanel>
         <TabPanel value={value} index={1}>
           <Box>
-            <TableAccount status={true} role={role} />
+            <TableAccount status={true} role={role?.id} search={searchText}/>
           </Box>
         </TabPanel>
         <TabPanel value={value} index={2}>
           <Box>
-            <TableAccount status={false} role={role} />
+            <TableAccount status={false} role={role?.id} search={searchText}/>
           </Box>
         </TabPanel>
       </Paper>

@@ -26,8 +26,9 @@ import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import getStoreTypeList from '../../../services/getStoreTypeList';
-import AddStoreType from '../components/AddStoreType/AddStoreType';
-import TableStoreType from './components/TableStoreType';
+import AddStoreType from './components/AddStoreType/AddStoreType';
+import TableStoreType from './components/TableStoreType/TableStoreType';
+
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -68,6 +69,7 @@ const StoreTypeManagement = () => {
     const navigate = useNavigate();
     const [value, setValue] = React.useState(0);
     const [showModal, setShowModal] = useState(false);
+    const [searchText, setSearchText] = useState('');
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -75,11 +77,11 @@ const StoreTypeManagement = () => {
 
     const handleModalOpen = () => {
         setShowModal(true);
-      };
-    
-      const handleModalClose = () => {
+    };
+
+    const handleModalClose = () => {
         setShowModal(false);
-      };
+    };
     return (
         <Box sx={{ p: '5%' }}>
             <Box sx={{
@@ -92,7 +94,7 @@ const StoreTypeManagement = () => {
                         </Typography>
                     </Grid>
                     <Grid item xs={4}>
-                    <Button variant="contained"  onClick={handleModalOpen}>Add Store Type</Button>
+                        <Button variant="contained" onClick={handleModalOpen}>Add Store Type</Button>
                         <AddStoreType showModal={showModal} onClose={handleModalClose} />
                     </Grid>
                 </Grid>
@@ -129,6 +131,8 @@ const StoreTypeManagement = () => {
                         placeholder='Search...'
                         type='search'
                         variant='outlined'
+                        onChange={(e) => setSearchText(e.target.value)}
+                        value={searchText}
                         sx={{
                             width: '45%',
                         }}
@@ -142,13 +146,13 @@ const StoreTypeManagement = () => {
                     />
                 </Box>
                 <TabPanel value={value} index={0}>
-                    <Box><TableStoreType /></Box>
+                    <Box><TableStoreType search={searchText} /></Box>
                 </TabPanel>
                 <TabPanel value={value} index={1}>
-                    <Box><TableStoreType status={true} /></Box>
+                    <Box><TableStoreType status={true} search={searchText} /></Box>
                 </TabPanel>
                 <TabPanel value={value} index={2}>
-                    <Box><TableStoreType status={false} /></Box>
+                    <Box><TableStoreType status={false} search={searchText} /></Box>
                 </TabPanel>
             </Paper>
 

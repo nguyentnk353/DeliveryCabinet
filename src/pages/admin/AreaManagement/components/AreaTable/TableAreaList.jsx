@@ -1,4 +1,4 @@
-import { MoreVert } from '@mui/icons-material';
+import { DeleteForever, Edit } from '@mui/icons-material';
 import {
     Box,
     Chip,
@@ -12,44 +12,47 @@ import {
     TablePagination,
     TableRow
 } from '@mui/material';
+import { blue, red } from '@mui/material/colors';
 import { useMount } from 'ahooks';
 import React, { useEffect, useState } from 'react';
 import getAreaList from '../../../../../services/getAreaList';
+import UpdateAreaModal from '../UpdateAreaModal/UpdateAreaModal';
+import useNotification from '../../../../../utils/useNotification';
+import deleteArea from '../../../../../services/deleteArea';
 
-const TableAreaList = (status) => {
+const TableAreaList = ({ status, search }) => {
 
     const [table, setTable] = useState([]);
     const [page, setPage] = useState(0);
     const [rpg, setrpg] = React.useState(5);
-    const [pageAPI, setpageAPI] = useState({ PageIndex: 1, PageSize: 5, IsEnable: ''});
     const [row, setRow] = useState();
+    const [showModal, setShowModal] = useState(false);
+    const [infoModal, setInfoModal] = useState();
+    const [msg, sendNotification] = useNotification();
+
+    const handleModalOpen = () => {
+        setShowModal(true);
+    };
+    const handleModalClose = () => {
+        setShowModal(false);
+    };
 
     function handleChangePage(e, newpage) {
         setPage(newpage);
-        setpageAPI({
-            ...pageAPI,
-            PageIndex: newpage + 1
-        });
     }
 
     function handleChangeRowsPerPage(event) {
         setrpg(parseInt(event.target.value, 10));
         setPage(0);
-        setpageAPI({
-            ...pageAPI,
-            PageSize: event.target.value
-        });
     }
 
     useMount(() => {
-        setpageAPI({
-            ...pageAPI,
-            IsEnable: status.status
-        });
-    });
-
-    useEffect(() => {
-        getAreaList(pageAPI)
+        const payload = {
+            PageIndex: page + 1,
+            PageSize: rpg,
+            IsEnable: status,
+        };
+        getAreaList(payload)
             .then((res) => {
                 const newTable = res.items.map((e) => e);
                 setTable(newTable);
@@ -58,9 +61,56 @@ const TableAreaList = (status) => {
             .catch((err) => {
                 console.log(err);
             });
-      }, [pageAPI]);
+    });
+
+    useEffect(() => {
+        if(search){
+            setPage(0)
+        }
+        const payload = search
+            ? {
+                PageIndex: 1,
+                PageSize: rpg,
+                search: search,
+                IsEnable: status,
+            }
+            : {
+                PageIndex: page + 1,
+                PageSize: rpg,
+                search: search,
+                IsEnable: status,
+            };
+        getAreaList(payload)
+            .then((res) => {
+                const newTable = res.items.map((e) => e);
+                setTable(newTable);
+                setRow(res.totalRecord)
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }, [page, rpg, search]);
+    function deleteAreaFunction(id) {
+        deleteArea(id)
+          .then((res) => {
+            if (res.status == 200) {
+              sendNotification({
+                msg: 'Area delete success',
+                variant: 'success',
+              });
+            } else {
+              sendNotification({ msg: 'Area delete fail', variant: 'error' });
+            }
+          })
+          .catch((err) => {
+            sendNotification({ msg: err, variant: 'error' });
+          });
+      }
     return (
         <Box>
+            <Box>
+                <UpdateAreaModal showModal={showModal} onClose={handleModalClose} info={infoModal}/>
+            </Box>
             <TableContainer>
                 <Table sx={{ minWidth: 650 }} aria-label='simple table'>
                     <TableHead sx={{ backgroundColor: '#f4f6f8' }}>
@@ -103,9 +153,27 @@ const TableAreaList = (status) => {
                                     )}
                                 </TableCell>
                                 <TableCell>
-                                    <IconButton>
-                                        <MoreVert />
-                                    </IconButton>
+                                    <Box sx={{ display: 'flex' }}>
+                                        <IconButton
+                                            
+                                            onClick={(e)=>{
+                                                e.stopPropagation();
+                                                setInfoModal(row);
+                                                handleModalOpen()
+                                            }                                               
+                                           }
+                                        >
+                                            <Edit sx={{ color: blue[500] }} />
+                                        </IconButton>
+                                        <IconButton
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                deleteAreaFunction(row.id);
+                                            }}
+                                        >
+                                            <DeleteForever sx={{ color: red[600] }} />
+                                        </IconButton>
+                                    </Box>
                                 </TableCell>
                             </TableRow>
                         ))}

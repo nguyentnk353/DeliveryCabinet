@@ -31,6 +31,8 @@ import AreaManagement from './pages/admin/AreaManagement/AreaManagement';
 import CreateAccount from './pages/admin/CreateAccount/CreateAccount';
 import TestUI from './pages/admin/TestUI/TestUI';
 import { SnackbarProvider } from 'notistack';
+import UpdateAccount from './pages/admin/AccountManagement/components/UpdateAccount/UpdateAccount';
+import ShowAccInfo from './pages/admin/AccountManagement/ShowAccInfo/ShowAccInfo';
 import 'antd/dist/reset.css';
 import './index.css';
 
@@ -70,6 +72,11 @@ function App() {
               <Route path='home' element={<AdminHome />} />
               <Route path='account' element={<AccountManagement />} />
               <Route path='new-account' element={<CreateAccount />} />
+              <Route path='update-account' element={<UpdateAccount />} />
+              <Route
+                path='account/account-information'
+                element={<ShowAccInfo />}
+              />
               <Route path='store' element={<StoreManagement />} />
               <Route path='new-store' element={<CreateStore />} />
               <Route path='update-store' element={<UpdateStore />} />
