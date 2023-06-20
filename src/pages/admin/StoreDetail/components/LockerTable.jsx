@@ -26,9 +26,9 @@ import { DeleteForever, Edit, MoreVert } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import getLockerList from '../../../../services/getLockerList';
 import { blue, red } from '@mui/material/colors';
-import deleteLocker from './../../../../services/deleteLocker';
+import deleteLocker from '../../../../services/deleteLocker';
 import useNotification from '../../../../utils/useNotification';
-import updateLocker from './../../../../services/updateLocker';
+import updateLocker from '../../../../services/updateLocker';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 
@@ -36,7 +36,7 @@ const validationSchema = yup.object({
   name: yup.string('Enter box size name').required('Name is required'),
 });
 
-const LockerTable = ({ search, isEnable }) => {
+const LockerTable = ({ search, isEnable, storeId }) => {
   const [pg, setpg] = React.useState(0);
   const [rpg, setrpg] = React.useState(5);
   const [msg, sendNotification] = useNotification();
@@ -74,14 +74,14 @@ const LockerTable = ({ search, isEnable }) => {
     }
     const payload = search
       ? {
-          StoreId: '',
+          StoreId: storeId,
           PageIndex: 0,
           PageSize: rpg,
           search: search,
           isEnable: isEnable,
         }
       : {
-          StoreId: '',
+          StoreId: storeId,
           PageIndex: pg,
           PageSize: rpg,
           search: search,

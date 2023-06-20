@@ -56,9 +56,13 @@ const index = () => {
   const [storeTypeList, setStoreTypeList] = useState([]);
   const [areaList, setAreaList] = useState([]);
   const [serviceTypeList, setServiceTypeList] = useState([]);
-  const [storeType, setStoreType] = useState({});
-  const [area, setArea] = useState({});
-  const [serviceType, setServiceType] = useState({});
+  const [storeType, setStoreType] = useState(
+    location?.state?.storeInfo?.storeType
+  );
+  const [area, setArea] = useState(location?.state?.storeInfo?.area);
+  const [serviceType, setServiceType] = useState(
+    location?.state?.storeInfo?.serviceType
+  );
   const [status, setStatus] = useState(location?.state?.storeInfo?.isEnable);
   const [msg, sendNotification] = useNotification();
 

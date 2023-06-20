@@ -128,9 +128,9 @@ const StoreTable = ({ province, city, district, search, isEnable }) => {
                       cursor: 'pointer',
                     }}
                     onClick={() =>
-                      navigate('/admin/locker', {
+                      navigate('/admin/store-detail', {
                         state: {
-                          storeId: row.id,
+                          storeInfo: row,
                         },
                       })
                     }

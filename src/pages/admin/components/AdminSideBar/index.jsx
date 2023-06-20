@@ -19,12 +19,15 @@ import { BsBox } from 'react-icons/bs';
 import './index.scss';
 
 const index = () => {
-  const [selected, setSelected] = useState('Store');
+  const selected = localStorage.getItem('selected');
   const { collapseSidebar, toggleSidebar, collapsed, broken } = useProSidebar();
   const theme = useTheme();
   const pcolor = theme.palette.primary.main;
   const plcolor = blue[50];
   const navigate = useNavigate();
+  function setSelected(s) {
+    localStorage.setItem('selected', s);
+  }
 
   const Item = ({ title, to, icon, selected, setSelected }) => {
     return (
@@ -173,20 +176,13 @@ const index = () => {
                   variant='body2'
                   sx={{ p: '16px 0 11px 6px', fontWeight: '600' }}
                 >
-                  Service
+                  Cabinet
                 </Typography>
                 <Box>
                   <Item
-                    title='Price table'
-                    icon={<RequestQuoteOutlined />}
-                    to='/admin/price-table'
-                    selected={selected}
-                    setSelected={setSelected}
-                  />
-                  <Item
-                    title='Service type'
-                    icon={<RoomServiceOutlined />}
-                    to='/admin/service-type'
+                    title='Cabinet'
+                    icon={<BiCabinet />}
+                    to='/admin/cabinet'
                     selected={selected}
                     setSelected={setSelected}
                   />
@@ -210,6 +206,29 @@ const index = () => {
                     title='Box type'
                     icon={<BsBox />}
                     to='/admin/box-type'
+                    selected={selected}
+                    setSelected={setSelected}
+                  />
+                </Box>
+                <Divider />
+                <Typography
+                  variant='body2'
+                  sx={{ p: '16px 0 11px 6px', fontWeight: '600' }}
+                >
+                  Service
+                </Typography>
+                <Box>
+                  <Item
+                    title='Price table'
+                    icon={<RequestQuoteOutlined />}
+                    to='/admin/price-table'
+                    selected={selected}
+                    setSelected={setSelected}
+                  />
+                  <Item
+                    title='Service type'
+                    icon={<RoomServiceOutlined />}
+                    to='/admin/service-type'
                     selected={selected}
                     setSelected={setSelected}
                   />
@@ -256,21 +275,14 @@ const index = () => {
 
                 <Box>
                   <Item
-                    title='Price table'
-                    icon={<RequestQuoteOutlined />}
-                    to='/admin/price-table'
-                    selected={selected}
-                    setSelected={setSelected}
-                  />
-                  <Item
-                    title='Service type'
-                    icon={<RoomServiceOutlined />}
-                    to='/admin/service-type'
+                    title='Cabinet'
+                    icon={<BiCabinet />}
+                    to='/admin/cabinet'
                     selected={selected}
                     setSelected={setSelected}
                   />
                 </Box>
-                <Divider sx={{ marginBottom: '4px' }} />
+                <Divider />
 
                 <Box>
                   <Item
@@ -284,6 +296,23 @@ const index = () => {
                     title='Box type'
                     icon={<BsBox />}
                     to='/admin/box-type'
+                    selected={selected}
+                    setSelected={setSelected}
+                  />
+                </Box>
+                <Divider sx={{ marginBottom: '4px' }} />
+                <Box>
+                  <Item
+                    title='Price table'
+                    icon={<RequestQuoteOutlined />}
+                    to='/admin/price-table'
+                    selected={selected}
+                    setSelected={setSelected}
+                  />
+                  <Item
+                    title='Service type'
+                    icon={<RoomServiceOutlined />}
+                    to='/admin/service-type'
                     selected={selected}
                     setSelected={setSelected}
                   />
