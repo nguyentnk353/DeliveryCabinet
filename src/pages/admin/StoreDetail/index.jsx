@@ -11,6 +11,7 @@ import {
   IconButton,
   Snackbar,
   Alert,
+  Divider,
 } from '@mui/material';
 import PropTypes from 'prop-types';
 import { DeleteOutline, MoreVert, SearchOutlined } from '@mui/icons-material';
@@ -53,7 +54,8 @@ function a11yProps(index) {
 }
 const index = () => {
   const location = useLocation();
-  // const storeId = location.state.storeId;
+  const storeInfo = location?.state?.storeInfo;
+  const storeId = storeInfo?.id;
   const notifyState = location?.state?.notify;
   const navigate = useNavigate();
   const [value, setValue] = React.useState(0);
@@ -116,18 +118,129 @@ const index = () => {
         }}
       >
         <Typography variant='h5' sx={{ fontWeight: '700' }}>
-          Cabinet List
+          Store Detail
         </Typography>
-        <Button
+        {/* <Button
           variant='contained'
           onClick={() =>
             navigate('/admin/new-locker', {
-              replace: true,
+              state: {
+                storeId: storeId,
+              },
             })
           }
         >
-          + New cabinet
-        </Button>
+          + New locker
+        </Button> */}
+      </Box>
+      <Box sx={{ marginBottom: '2rem' }}>
+        <Box sx={{ width: '60%' }}>
+          <Paper sx={{ borderRadius: '16px', padding: '2rem' }}>
+            <Box>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                <Box sx={{ width: '45%' }}>
+                  <Typography
+                    variant='body1'
+                    sx={{ fontWeight: '700', marginBottom: '1rem' }}
+                  >
+                    Id :{' '}
+                    <Typography display='inline' variant='body1'>
+                      {storeInfo?.id}
+                    </Typography>
+                  </Typography>
+                  <Typography
+                    variant='body1'
+                    sx={{ fontWeight: '700', marginBottom: '1rem' }}
+                  >
+                    Address :{' '}
+                    <Typography display='inline' variant='body1'>
+                      {storeInfo?.address}
+                    </Typography>
+                  </Typography>
+                  <Typography
+                    variant='body1'
+                    sx={{ fontWeight: '700', marginBottom: '1rem' }}
+                  >
+                    Province :{' '}
+                    <Typography display='inline' variant='body1'>
+                      {storeInfo?.province}
+                    </Typography>
+                  </Typography>
+                  <Typography
+                    variant='body1'
+                    sx={{ fontWeight: '700', marginBottom: '1rem' }}
+                  >
+                    District :{' '}
+                    <Typography display='inline' variant='body1'>
+                      {storeInfo?.city}
+                    </Typography>
+                  </Typography>
+                  <Typography
+                    variant='body1'
+                    sx={{ fontWeight: '700', marginBottom: '1rem' }}
+                  >
+                    Ward :{' '}
+                    <Typography display='inline' variant='body1'>
+                      {storeInfo?.district}
+                    </Typography>
+                  </Typography>
+                </Box>
+                <Box sx={{ width: '45%' }}>
+                  <Typography
+                    variant='body1'
+                    sx={{ fontWeight: '700', marginBottom: '1rem' }}
+                  >
+                    Store type :{' '}
+                    <Typography display='inline' variant='body1'>
+                      {storeInfo?.storeType?.name}
+                    </Typography>
+                  </Typography>
+                  <Typography
+                    variant='body1'
+                    sx={{ fontWeight: '700', marginBottom: '1rem' }}
+                  >
+                    Area :{' '}
+                    <Typography display='inline' variant='body1'>
+                      {storeInfo?.area?.name}
+                    </Typography>
+                  </Typography>
+                  <Typography
+                    variant='body1'
+                    sx={{ fontWeight: '700', marginBottom: '1rem' }}
+                  >
+                    Service type :{' '}
+                    <Typography display='inline' variant='body1'>
+                      {storeInfo?.serviceType?.description}
+                    </Typography>
+                    <Typography variant='body2' sx={{ opacity: '50%' }}>
+                      Base price: {storeInfo?.serviceType?.price} (VND)
+                    </Typography>
+                  </Typography>
+                  <Typography
+                    variant='body1'
+                    sx={{ fontWeight: '700', marginBottom: '1rem' }}
+                  >
+                    Store owner :{' '}
+                    <Typography display='inline' variant='body1'>
+                      {storeInfo?.user?.fullName}
+                      <Typography variant='body2' sx={{ opacity: '50%' }}>
+                        Email: {storeInfo?.user?.email}
+                      </Typography>
+                    </Typography>
+                  </Typography>
+                </Box>
+              </Box>
+              <Box>
+                <Typography variant='body1' sx={{ fontWeight: '700' }}>
+                  Description :{' '}
+                  <Typography display='inline' variant='body1'>
+                    {storeInfo?.description}
+                  </Typography>
+                </Typography>
+              </Box>
+            </Box>
+          </Paper>
+        </Box>
       </Box>
       <Paper sx={{ borderRadius: '16px' }}>
         <Box
@@ -187,13 +300,13 @@ const index = () => {
           </Box>
         </Box>
         <TabPanel value={value} index={0}>
-          <LockerTable search={searchText} isEnable={''} />
+          <LockerTable search={searchText} storeId={storeId} isEnable={''} />
         </TabPanel>
         <TabPanel value={value} index={1}>
-          <LockerTable search={searchText} isEnable={true} />
+          <LockerTable search={searchText} storeId={storeId} isEnable={true} />
         </TabPanel>
         <TabPanel value={value} index={2}>
-          <LockerTable search={searchText} isEnable={false} />
+          <LockerTable search={searchText} storeId={storeId} isEnable={false} />
         </TabPanel>
       </Paper>
       <Snackbar

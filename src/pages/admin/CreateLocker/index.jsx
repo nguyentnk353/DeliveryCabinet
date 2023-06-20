@@ -29,17 +29,19 @@ import CloseIcon from '@mui/icons-material/Close';
 import { yellow } from '@mui/material/colors';
 
 const validationSchema = yup.object({
-  name: yup.string('Enter locker name').required('Name of locker is required'),
-  row: yup.string('Enter locker rows').required('Rows of locker is required'),
+  name: yup
+    .string('Enter cabinet name')
+    .required('Name of cabinet is required'),
+  row: yup.string('Enter cabinet rows').required('Rows of cabinet is required'),
   col: yup
-    .string('Enter locker columns')
-    .required('Columns of locker is required'),
+    .string('Enter cabinet columns')
+    .required('Columns of cabinet is required'),
 });
 
 const index = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const storeId = location.state.storeId;
+  const storeId = location?.state?.storeId ? location?.state?.storeId : 0;
   const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: yellow[100],
     textAlign: 'center',
@@ -241,7 +243,7 @@ const index = () => {
           setNotify((preState) => ({
             ...preState,
             isOpen: true,
-            msg: 'Box is bigger than locker',
+            msg: 'Box is bigger than cabinet',
             type: 'warning',
           }));
         } else {
@@ -475,11 +477,11 @@ const index = () => {
     createLocker(data)
       .then((res) => {
         if (res.status == 201) {
-          navigate('/admin/locker', {
+          navigate('/admin/cabinet', {
             state: {
               notify: {
                 isOpen: true,
-                msg: 'Create locker successfully',
+                msg: 'Create cabinet successfully',
                 type: 'success',
               },
             },
@@ -488,7 +490,7 @@ const index = () => {
           setNotify((preState) => ({
             ...preState,
             isOpen: true,
-            msg: 'Create locker fail',
+            msg: 'Create cabinet fail',
             type: 'error',
           }));
         }
@@ -497,7 +499,7 @@ const index = () => {
         setNotify((preState) => ({
           ...preState,
           isOpen: true,
-          msg: 'Create locker fail',
+          msg: err,
           type: 'error',
         }));
       });
@@ -519,7 +521,7 @@ const index = () => {
           }}
         >
           <Typography variant='h5' sx={{ fontWeight: '700' }}>
-            New Locker
+            New Cabinet
           </Typography>
           {/* <Button
             type='submit'
@@ -595,7 +597,7 @@ const index = () => {
               <Box>
                 <FormControlLabel
                   control={<Checkbox checked={formik.values.isPattern} />}
-                  label='Use this as layout for other locker'
+                  label='Use this as layout for other cabinet'
                   id='isPattern'
                   name='isPattern'
                   onChange={formik.handleChange}
@@ -764,7 +766,7 @@ const index = () => {
                   onClick={() => setCreateButton(true)}
                   sx={{ marginLeft: 1 }}
                 >
-                  Create Locker
+                  Create Cabinet
                 </Button>
               </Box>
             </Box>
@@ -808,14 +810,14 @@ const index = () => {
         aria-describedby='alert-dialog-description'
       >
         <DialogTitle id='alert-dialog-title'>
-          {'Confirm create locker'}
+          {'Confirm create cabinet'}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id='alert-dialog-description'>
-            Please check locker's information is correct.
+            Please check cabinet's information is correct.
             <br />
             You will not be able to change boxes's information after created
-            locker
+            cabinet.
           </DialogContentText>
         </DialogContent>
         <DialogActions>

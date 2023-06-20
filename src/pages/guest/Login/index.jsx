@@ -68,6 +68,7 @@ export default function Login() {
 
             switch (decoded.Role) {
               case '1':
+                localStorage.setItem('selected', 'Store');
                 return navigate('/admin/store', { replace: true });
               case '2':
                 return navigate('/store-owner/home', { replace: true });

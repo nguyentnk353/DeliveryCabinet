@@ -20,6 +20,7 @@ import PriceTableManagement from './pages/admin/PriceTableManagement';
 import PriceTableItemManagement from './pages/admin/PriceTableItemManagement';
 import LockerManagement from './pages/admin/LockerManagement';
 import CreateLocker from './pages/admin/CreateLocker';
+import StoreDetail from './pages/admin/StoreDetail';
 import StoreOwner from './pages/storeOwner/StoreOwner';
 import StoreOwnerHome from './pages/storeOwner/StoreOwnerHome';
 import Staff from './pages/staff/Staff';
@@ -78,6 +79,7 @@ function App() {
                 element={<ShowAccInfo />}
               />
               <Route path='store' element={<StoreManagement />} />
+              <Route path='store-detail' element={<StoreDetail />} />
               <Route path='new-store' element={<CreateStore />} />
               <Route path='update-store' element={<UpdateStore />} />
               <Route path='store-type' element={<StoreTypeManagement />} />
@@ -90,7 +92,7 @@ function App() {
                 path='price-table-item'
                 element={<PriceTableItemManagement />}
               />
-              <Route path='locker' element={<LockerManagement />} />
+              <Route path='cabinet' element={<LockerManagement />} />
               <Route path='new-locker' element={<CreateLocker />} />
               <Route path='testUI' element={<TestUI />} />
             </Route>
