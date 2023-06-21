@@ -13,6 +13,7 @@ import AccountManagement from './pages/admin/AccountManagement/AccountManagement
 import StoreManagement from './pages/admin/StoreManagement';
 import BoxSizeManagement from './pages/admin/BoxSizeManagement';
 import ServiceTypeManagement from './pages/admin/ServiceTypeManagement';
+import ServiceConfig from './pages/admin/ServiceConfig';
 import CreateStore from './pages/admin/CreateStore';
 import UpdateStore from './pages/admin/UpdateStore';
 import BoxTypeManagement from './pages/admin/BoxTypeManagement';
@@ -86,6 +87,7 @@ function App() {
               <Route path='area' element={<AreaManagement />} />
               <Route path='box-size' element={<BoxSizeManagement />} />
               <Route path='service-type' element={<ServiceTypeManagement />} />
+              <Route path='service-config' element={<ServiceConfig />} />
               <Route path='box-type' element={<BoxTypeManagement />} />
               <Route path='price-table' element={<PriceTableManagement />} />
               <Route

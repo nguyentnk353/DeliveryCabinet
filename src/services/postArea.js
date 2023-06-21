@@ -1,8 +1,8 @@
-import axios from 'axios';
+import { request } from '../utils/request';
 export default function postArea(props) {
-  const url = 'https://deliver-store.tk/api/v1/areas';
+  const url = '/v1/areas';
 
-  return axios
+  return request
     .post(url, {
       name: props.name,
       description: props.description,
