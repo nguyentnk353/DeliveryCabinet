@@ -1,9 +1,8 @@
-import axios from 'axios';
-// import axiosInstance from './axiosInstance';
+import { request } from '../utils/request';
 
 export default function getStoreTypeList(props) {
-  const url = 'https://deliver-store.tk/api/v1/storeTypes/storeType-paging';
-  return axios
+  const url = '/storeTypes/storeType-paging';
+  return request
     .get(url, {
       params: {
         Name: props.search,

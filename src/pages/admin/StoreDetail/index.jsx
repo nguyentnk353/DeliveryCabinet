@@ -148,15 +148,7 @@ const index = () => {
                       {storeInfo?.id}
                     </Typography>
                   </Typography>
-                  <Typography
-                    variant='body1'
-                    sx={{ fontWeight: '700', marginBottom: '1rem' }}
-                  >
-                    Address :{' '}
-                    <Typography display='inline' variant='body1'>
-                      {storeInfo?.address}
-                    </Typography>
-                  </Typography>
+
                   <Typography
                     variant='body1'
                     sx={{ fontWeight: '700', marginBottom: '1rem' }}
@@ -182,6 +174,15 @@ const index = () => {
                     Ward :{' '}
                     <Typography display='inline' variant='body1'>
                       {storeInfo?.district}
+                    </Typography>
+                  </Typography>
+                  <Typography
+                    variant='body1'
+                    sx={{ fontWeight: '700', marginBottom: '1rem' }}
+                  >
+                    Address :{' '}
+                    <Typography display='inline' variant='body1'>
+                      {storeInfo?.address}
                     </Typography>
                   </Typography>
                 </Box>
@@ -241,6 +242,17 @@ const index = () => {
             </Box>
           </Paper>
         </Box>
+      </Box>
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          marginBottom: '2rem',
+        }}
+      >
+        <Typography variant='h5' sx={{ fontWeight: '700' }}>
+          Cabinet List
+        </Typography>
       </Box>
       <Paper sx={{ borderRadius: '16px' }}>
         <Box

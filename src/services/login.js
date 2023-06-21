@@ -1,4 +1,4 @@
-import { request } from '../utils/request';
+import { loginRequest } from '../utils/loginRequest';
 
 export default function login(props) {
   const url = '/user/authenticate';
@@ -6,7 +6,7 @@ export default function login(props) {
   const Password = props.password;
   const postData = {};
   const error = { error: 'login-fail' };
-  return request
+  return loginRequest
     .post(url, postData, {
       params: {
         loginName: LoginName,

@@ -1,9 +1,8 @@
-import axios from 'axios';
-// import axiosInstance from './axiosInstance';
+import { request } from '../utils/request';
 
 export default function getAreaList(props) {
-  const url = 'https://deliver-store.tk/api/v1/areas/area-paging';
-  return axios
+  const url = '/areas/area-paging';
+  return request
     .get(url, {
       params: {
         Name: props.search,

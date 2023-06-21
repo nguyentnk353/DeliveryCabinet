@@ -8,6 +8,7 @@ import {
   FmdGoodOutlined,
   RoomServiceOutlined,
   RequestQuoteOutlined,
+  SettingsOutlined,
 } from '@mui/icons-material';
 import logo from '.././../../../assets/images/DeliveryPNG.png';
 import dlogo from '.././../../../assets/images/DeliveryLogo.png';
@@ -232,8 +233,16 @@ const index = () => {
                     selected={selected}
                     setSelected={setSelected}
                   />
+                  <Item
+                    title='Service config'
+                    icon={<SettingsOutlined />}
+                    to='/admin/service-config'
+                    selected={selected}
+                    setSelected={setSelected}
+                  />
                 </Box>
                 <Divider />
+                <Box sx={{ width: '200px', height: '50px' }} />
               </Box>
             ) : (
               <Box sx={{ padding: '0 15px 0 10px' }}>
@@ -316,8 +325,16 @@ const index = () => {
                     selected={selected}
                     setSelected={setSelected}
                   />
+                  <Item
+                    title='Service config'
+                    icon={<SettingsOutlined />}
+                    to='/admin/service-config'
+                    selected={selected}
+                    setSelected={setSelected}
+                  />
                 </Box>
                 <Divider sx={{ marginBottom: '4px' }} />
+                <Box sx={{ width: '200px', height: '50px' }} />
               </Box>
             )}
           </Box>

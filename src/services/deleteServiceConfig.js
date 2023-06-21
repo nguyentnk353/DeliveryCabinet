@@ -1,7 +1,7 @@
 import { request } from '../utils/request';
 
-export default function deleteStoreType(id) {
-  const url = '/storeTypes/' + id;
+export default function deleteServiceConfig(id) {
+  const url = '/serviceConfigs/' + id;
 
   return request
     .delete(url)

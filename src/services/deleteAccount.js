@@ -1,9 +1,9 @@
-import axiosInstance from './axiosInstance';
+import { request } from '../utils/request';
 
 export default function deleteAccount(id) {
   const url = 'users/' + id;
 
-  return axiosInstance
+  return request
     .delete(url)
     .then((response) => response)
     .catch((err) => err);
