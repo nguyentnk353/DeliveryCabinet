@@ -206,12 +206,12 @@ const PriceTableTable = ({ searchText, createSuccess, isEnable }) => {
   });
 
   function openUpdate(row) {
-    const b = row.dateFilter.split('').map(Number);
+    const b = row?.dateFilter?.split('').map(Number);
     setField({
-      id: row.id,
-      name: row.name,
-      status: row.isEnable,
-      rangePicker: [dayjs(row.applyFrom), dayjs(row.applyTo)],
+      id: row?.id,
+      name: row?.name,
+      status: row?.isEnable,
+      rangePicker: [dayjs(row?.applyFrom), dayjs(row?.applyTo)],
       mon: b[0] == 1,
       tue: b[1] == 1,
       wed: b[2] == 1,
@@ -243,15 +243,15 @@ const PriceTableTable = ({ searchText, createSuccess, isEnable }) => {
   }
 
   function showDateFilter(date) {
-    const b = date.split('').map(Number);
-    const tf = b.map((e) => {
+    const b = date?.split('').map(Number);
+    const tf = b?.map((e) => {
       if (e == 1) {
         return true;
       } else {
         return false;
       }
     });
-    const check = tf.map((e, i) => {
+    const check = tf?.map((e, i) => {
       let d = i + 2;
       if (d == 8) d = 'Sun';
       return (
@@ -436,7 +436,7 @@ const PriceTableTable = ({ searchText, createSuccess, isEnable }) => {
           <TableBody>
             {table.map((row) => (
               <TableRow
-                key={row.id}
+                key={row?.id}
                 sx={{
                   '&:last-child td,&:last-child th': { border: 0 },
                   '&:hover': {
@@ -453,17 +453,17 @@ const PriceTableTable = ({ searchText, createSuccess, isEnable }) => {
                 }
               >
                 <TableCell component='th' scope='row'>
-                  {row.name}
+                  {row?.name}
                 </TableCell>
                 <TableCell>
-                  {moment(row.applyFrom).format('DD /MM /YYYY')}
+                  {moment(row?.applyFrom).format('DD /MM /YYYY')}
                 </TableCell>
                 <TableCell>
-                  {moment(row.applyTo).format('DD /MM /YYYY')}
+                  {moment(row?.applyTo).format('DD /MM /YYYY')}
                 </TableCell>
-                <TableCell>{showDateFilter(row.dateFilter)}</TableCell>
+                <TableCell>{showDateFilter(row?.dateFilter)}</TableCell>
                 <TableCell>
-                  {row.isEnable ? (
+                  {row?.isEnable ? (
                     <Chip
                       label='Active'
                       size='small'

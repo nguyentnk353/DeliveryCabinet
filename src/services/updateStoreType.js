@@ -1,7 +1,7 @@
 import { request } from '../utils/request';
 
 export default function updateStoreType(props) {
-  const url = 'storeTypes';
+  const url = 'store-types';
   return request
     .put(url, {
       id: props.id,

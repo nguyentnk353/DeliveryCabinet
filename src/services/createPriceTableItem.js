@@ -7,7 +7,7 @@ export default function createPriceTableItem({
   description,
   priceTableId,
 }) {
-  const url = '/priceTableItems';
+  const url = '/price-table-items';
 
   return request
     .post(url, {

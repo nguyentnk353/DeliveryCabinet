@@ -6,7 +6,7 @@ export default function getServiceTypeList({
   PageSize,
   IsEnable,
 }) {
-  const url = '/serviceTypes/serviceType-paging';
+  const url = '/service-types';
 
   return request
     .get(url, {

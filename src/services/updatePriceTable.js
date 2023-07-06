@@ -8,7 +8,7 @@ export default function updatePriceTable({
   dateFilter,
   isEnable,
 }) {
-  const url = '/priceTables';
+  const url = '/price-tables';
 
   return request
     .put(url, {

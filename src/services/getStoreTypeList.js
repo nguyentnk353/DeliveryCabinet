@@ -1,7 +1,7 @@
 import { request } from '../utils/request';
 
 export default function getStoreTypeList(props) {
-  const url = '/storeTypes/storeType-paging';
+  const url = '/store-types';
   return request
     .get(url, {
       params: {

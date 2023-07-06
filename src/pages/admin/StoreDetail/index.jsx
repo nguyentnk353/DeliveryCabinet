@@ -118,7 +118,7 @@ const index = () => {
         }}
       >
         <Typography variant='h5' sx={{ fontWeight: '700' }}>
-          Store Detail
+          Store #{storeId} Detail
         </Typography>
         {/* <Button
           variant='contained'

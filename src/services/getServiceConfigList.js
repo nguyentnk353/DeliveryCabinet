@@ -6,7 +6,7 @@ export default function getServiceConfigList({
   PageSize,
   IsEnable,
 }) {
-  const url = '/serviceConfigs/serviceConfig-paging';
+  const url = '/service-configs';
 
   return request
     .get(url, {

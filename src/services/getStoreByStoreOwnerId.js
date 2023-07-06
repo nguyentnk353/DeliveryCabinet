@@ -10,7 +10,7 @@ export default function getStoreByStoreOwnerId({
   isEnable,
   UserId,
 }) {
-  const url = '/stores/store-paging';
+  const url = '/stores';
 
   return request
     .get(url, {

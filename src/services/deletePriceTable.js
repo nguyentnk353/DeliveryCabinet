@@ -1,7 +1,7 @@
 import { request } from '../utils/request';
 
 export default function deletePriceTable(id) {
-  const url = '/priceTables/' + id;
+  const url = '/price-tables/' + id;
 
   return request
     .delete(url)

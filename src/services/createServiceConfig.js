@@ -7,7 +7,7 @@ export default function createServiceConfig({
   applyFrom,
   applyTo,
 }) {
-  const url = '/serviceConfigs';
+  const url = '/service-configs';
 
   return request
     .post(url, {

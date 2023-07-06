@@ -1,7 +1,7 @@
 import { request } from '../utils/request';
 
 export default function updateBoxSize({ id, name, description, isEnable }) {
-  const url = '/boxSizes/';
+  const url = '/box-sizes/';
 
   return request
     .put(url, {

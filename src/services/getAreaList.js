@@ -1,7 +1,7 @@
 import { request } from '../utils/request';
 
 export default function getAreaList(props) {
-  const url = '/areas/area-paging';
+  const url = '/areas';
   return request
     .get(url, {
       params: {

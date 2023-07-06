@@ -1,7 +1,7 @@
 import { request } from '../utils/request';
 
 export default function deleteBoxType(id) {
-  const url = '/boxTypes/' + id;
+  const url = '/box-types/' + id;
 
   return request
     .delete(url)

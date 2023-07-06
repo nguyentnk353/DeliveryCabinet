@@ -1,7 +1,7 @@
 import { request } from '../utils/request';
 
 export default function getAccountList(props) {
-  const url = 'users/public-paging';
+  const url = '/users';
 
   return request
     .get(url, {
