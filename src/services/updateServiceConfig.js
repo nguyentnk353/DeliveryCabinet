@@ -9,7 +9,7 @@ export default function updateServiceConfig({
   applyTo,
   isEnable,
 }) {
-  const url = '/serviceConfigs';
+  const url = '/service-configs';
 
   return request
     .put(url, {

@@ -320,7 +320,10 @@ const index = () => {
         <Typography variant='h6' fontWeight='bold'>
           Price table management
         </Typography>
-        <Button variant='contained' onClick={handleOpen}>
+        <Button
+          variant='contained'
+          onClick={() => navigate('/admin/new-price-table', { replace: true })}
+        >
           + New price table
         </Button>
       </Box>

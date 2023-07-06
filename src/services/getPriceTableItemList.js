@@ -7,7 +7,7 @@ export default function getPriceTableItemList({
   IsEnable,
   PriceTableId,
 }) {
-  const url = '/priceTableItems/priceTableItem-paging';
+  const url = '/price-table-items';
 
   return request
     .get(url, {

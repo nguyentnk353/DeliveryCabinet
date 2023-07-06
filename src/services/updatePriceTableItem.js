@@ -9,7 +9,7 @@ export default function updatePriceTableItem({
   priceTableId,
   isEnable,
 }) {
-  const url = '/priceTableItems';
+  const url = '/price-table-items';
 
   return request
     .put(url, {

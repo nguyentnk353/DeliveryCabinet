@@ -7,7 +7,7 @@ export default function getLockerList({
   isEnable,
   StoreId,
 }) {
-  const url = '/lockers/locker-paging';
+  const url = '/lockers';
 
   return request
     .get(url, {

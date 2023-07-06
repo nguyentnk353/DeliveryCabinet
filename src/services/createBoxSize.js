@@ -7,7 +7,7 @@ export default function createBoxSize({
   description,
   multiplyPrice,
 }) {
-  const url = '/boxSizes';
+  const url = '/box-sizes';
 
   return request
     .post(url, {

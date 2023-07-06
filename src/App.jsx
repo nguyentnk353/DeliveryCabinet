@@ -10,6 +10,7 @@ import GuestHome from './pages/guest/GuestHome';
 import Admin from './pages/admin/Admin';
 import AdminHome from './pages/admin/AdminHome';
 import AccountManagement from './pages/admin/AccountManagement/AccountManagement';
+import CustomerManagement from './pages/admin/CustomerManagement/CustomerManagement';
 import StoreManagement from './pages/admin/StoreManagement';
 import BoxSizeManagement from './pages/admin/BoxSizeManagement';
 import ServiceTypeManagement from './pages/admin/ServiceTypeManagement';
@@ -22,6 +23,8 @@ import PriceTableItemManagement from './pages/admin/PriceTableItemManagement';
 import LockerManagement from './pages/admin/LockerManagement';
 import CreateLocker from './pages/admin/CreateLocker';
 import StoreDetail from './pages/admin/StoreDetail';
+import ConfigPage from './pages/admin/ConfigPage';
+import CreatePriceTable from './pages/admin/CreatePriceTable';
 import StoreOwner from './pages/storeOwner/StoreOwner';
 import StoreOwnerHome from './pages/storeOwner/StoreOwnerHome';
 import Staff from './pages/staff/Staff';
@@ -73,6 +76,7 @@ function App() {
             >
               <Route path='home' element={<AdminHome />} />
               <Route path='account' element={<AccountManagement />} />
+              <Route path='customer' element={<CustomerManagement />} />
               <Route path='new-account' element={<CreateAccount />} />
               <Route path='update-account' element={<UpdateAccount />} />
               <Route
@@ -90,12 +94,14 @@ function App() {
               <Route path='service-config' element={<ServiceConfig />} />
               <Route path='box-type' element={<BoxTypeManagement />} />
               <Route path='price-table' element={<PriceTableManagement />} />
+              <Route path='new-price-table' element={<CreatePriceTable />} />
               <Route
                 path='price-table-item'
                 element={<PriceTableItemManagement />}
               />
               <Route path='cabinet' element={<LockerManagement />} />
               <Route path='new-locker' element={<CreateLocker />} />
+              <Route path='config' element={<ConfigPage />} />
               <Route path='testUI' element={<TestUI />} />
             </Route>
             <Route

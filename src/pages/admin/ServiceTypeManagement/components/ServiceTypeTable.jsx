@@ -139,8 +139,8 @@ const ServiceTypeTable = ({ searchText, createSuccess, isEnable }) => {
       const api = {
         id: field.id,
         price: val.price,
-        description: val.description,
-        isEnable: field.status,
+        name: val.name,
+        isEnable: val.status,
       };
       updateServiceType(api)
         .then((res) => {
@@ -167,7 +167,7 @@ const ServiceTypeTable = ({ searchText, createSuccess, isEnable }) => {
     setField({
       id: row.id,
       price: row.price,
-      description: row.description,
+      name: row.name,
       status: row.isEnable,
     });
     setOpen(true);
@@ -191,6 +191,7 @@ const ServiceTypeTable = ({ searchText, createSuccess, isEnable }) => {
         sendNotification({ msg: err, variant: 'error' });
       });
   }
+  console.log(field);
   return (
     <Box>
       <Box>
@@ -218,6 +219,18 @@ const ServiceTypeTable = ({ searchText, createSuccess, isEnable }) => {
               sx={{ mt: 1 }}
             >
               <Box sx={{ padding: '2rem' }}>
+                <TextField
+                  margin='normal'
+                  fullWidth
+                  id='name'
+                  required
+                  label='Name'
+                  autoFocus
+                  value={formik.values.name}
+                  onChange={formik.handleChange}
+                  error={formik.touched.name && Boolean(formik.errors.name)}
+                  helperText={formik.touched.name && formik.errors.name}
+                />
                 <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
                   <TextField
                     margin='normal'
@@ -225,7 +238,6 @@ const ServiceTypeTable = ({ searchText, createSuccess, isEnable }) => {
                     required
                     id='price'
                     label='Base price'
-                    autoFocus
                     value={formik.values.price}
                     onChange={formik.handleChange}
                     error={formik.touched.price && Boolean(formik.errors.price)}
@@ -250,21 +262,6 @@ const ServiceTypeTable = ({ searchText, createSuccess, isEnable }) => {
                     </FormControl>
                   </Box>
                 </Box>
-                <TextField
-                  margin='normal'
-                  fullWidth
-                  id='description'
-                  label='Description'
-                  value={formik.values.description}
-                  onChange={formik.handleChange}
-                  error={
-                    formik.touched.description &&
-                    Boolean(formik.errors.description)
-                  }
-                  helperText={
-                    formik.touched.description && formik.errors.description
-                  }
-                />
               </Box>
               <Box
                 sx={{
@@ -291,8 +288,8 @@ const ServiceTypeTable = ({ searchText, createSuccess, isEnable }) => {
           <TableHead sx={{ backgroundColor: '#f4f6f8' }}>
             <TableRow>
               <TableCell>Id</TableCell>
+              <TableCell>Name</TableCell>
               <TableCell>Base price</TableCell>
-              <TableCell>Description</TableCell>
               <TableCell>Status</TableCell>
               <TableCell>Action</TableCell>
             </TableRow>
@@ -308,8 +305,8 @@ const ServiceTypeTable = ({ searchText, createSuccess, isEnable }) => {
                 <TableCell component='th' scope='row'>
                   {row.id}
                 </TableCell>
+                <TableCell>{row.name}</TableCell>
                 <TableCell>{row.price}</TableCell>
-                <TableCell>{row.description}</TableCell>
                 <TableCell>
                   {row.isEnable ? (
                     <Chip

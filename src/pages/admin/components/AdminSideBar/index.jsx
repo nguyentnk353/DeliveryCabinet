@@ -9,6 +9,8 @@ import {
   RoomServiceOutlined,
   RequestQuoteOutlined,
   SettingsOutlined,
+  HomeOutlined,
+  ListAltOutlined,
 } from '@mui/icons-material';
 import logo from '.././../../../assets/images/DeliveryPNG.png';
 import dlogo from '.././../../../assets/images/DeliveryLogo.png';
@@ -131,55 +133,30 @@ const index = () => {
                   variant='body2'
                   sx={{ p: '16px 0 11px 6px', fontWeight: '600' }}
                 >
-                  Store
+                  Management
                 </Typography>
                 <Box>
                   <Item
-                    title='Store'
-                    icon={<StoreOutlined />}
+                    title='Dashboard'
+                    icon={<HomeOutlined />}
                     to='/admin/store'
                     selected={selected}
                     setSelected={setSelected}
                   />
                   <Item
-                    title='Store Type'
-                    icon={<StorefrontOutlined />}
-                    to='/admin/store-type'
+                    title='Order'
+                    icon={<ListAltOutlined />}
+                    to='/admin/store'
                     selected={selected}
                     setSelected={setSelected}
                   />
                   <Item
-                    title='Area'
-                    icon={<FmdGoodOutlined />}
-                    to='/admin/area'
-                    selected={selected}
-                    setSelected={setSelected}
-                  />
-                </Box>
-                <Divider />
-                <Typography
-                  variant='body2'
-                  sx={{ p: '16px 0 11px 6px', fontWeight: '600' }}
-                >
-                  Account
-                </Typography>
-                <Box>
-                  <Item
-                    title='Account'
+                    title='Customer'
                     icon={<PersonOutlineOutlined />}
-                    to='/admin/account'
+                    to='/admin/customer'
                     selected={selected}
                     setSelected={setSelected}
                   />
-                </Box>
-                <Divider />
-                <Typography
-                  variant='body2'
-                  sx={{ p: '16px 0 11px 6px', fontWeight: '600' }}
-                >
-                  Cabinet
-                </Typography>
-                <Box>
                   <Item
                     title='Cabinet'
                     icon={<BiCabinet />}
@@ -187,26 +164,10 @@ const index = () => {
                     selected={selected}
                     setSelected={setSelected}
                   />
-                </Box>
-                <Divider />
-                <Typography
-                  variant='body2'
-                  sx={{ p: '16px 0 11px 6px', fontWeight: '600' }}
-                >
-                  Box
-                </Typography>
-                <Box>
                   <Item
-                    title='Box size'
-                    icon={<BiCabinet />}
-                    to='/admin/box-size'
-                    selected={selected}
-                    setSelected={setSelected}
-                  />
-                  <Item
-                    title='Box type'
-                    icon={<BsBox />}
-                    to='/admin/box-type'
+                    title='Store'
+                    icon={<StoreOutlined />}
+                    to='/admin/store'
                     selected={selected}
                     setSelected={setSelected}
                   />
@@ -220,28 +181,29 @@ const index = () => {
                 </Typography>
                 <Box>
                   <Item
-                    title='Price table'
+                    title='Service price'
                     icon={<RequestQuoteOutlined />}
                     to='/admin/price-table'
                     selected={selected}
                     setSelected={setSelected}
                   />
                   <Item
-                    title='Service type'
-                    icon={<RoomServiceOutlined />}
-                    to='/admin/service-type'
+                    title='Account'
+                    icon={<PersonOutlineOutlined />}
+                    to='/admin/account'
                     selected={selected}
                     setSelected={setSelected}
                   />
                   <Item
-                    title='Service config'
+                    title='Config'
                     icon={<SettingsOutlined />}
-                    to='/admin/service-config'
+                    to='/admin/config'
                     selected={selected}
                     setSelected={setSelected}
                   />
                 </Box>
                 <Divider />
+
                 <Box sx={{ width: '200px', height: '50px' }} />
               </Box>
             ) : (
