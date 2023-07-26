@@ -9,6 +9,7 @@ import {
   TableBody,
   TableCell,
   TableContainer,
+  TableFooter,
   TableHead,
   TablePagination,
   TableRow,
@@ -26,7 +27,7 @@ const TableAccount = ({ status, search, role }) => {
   const [table, setTable] = useState([]);
   const [page, setPage] = useState(0);
   const [rpg, setrpg] = React.useState(5);
-  const [row, setRow] = useState();
+  const [row, setRow] = useState(0);
   const navigate = useNavigate();
   const [msg, sendNotification] = useNotification();
 
@@ -173,6 +174,7 @@ const TableAccount = ({ status, search, role }) => {
         <Table sx={{ minWidth: 650 }} aria-label='simple table'>
           <TableHead sx={{ backgroundColor: '#f4f6f8' }}>
             <TableRow>
+              <TableCell>Id</TableCell>
               <TableCell>Name</TableCell>
               <TableCell>Email</TableCell>
               <TableCell>Phone</TableCell>
@@ -191,13 +193,14 @@ const TableAccount = ({ status, search, role }) => {
                   cursor: 'pointer',
                 }}
                 onClick={() =>
-                  navigate('/admin/account/account-information', {
+                  navigate('/admin/customer/customer-information', {
                     state: {
                       accountInfo: row,
                     },
                   })
                 }
               >
+                <TableCell>{row.id}</TableCell>
                 <TableCell
                   sx={{ display: 'flex', gap: '10px', alignItems: 'center' }}
                 >
@@ -235,7 +238,7 @@ const TableAccount = ({ status, search, role }) => {
                     <IconButton
                       onClick={(e) => {
                         e.stopPropagation();
-                        navigate('/admin/update-account', {
+                        navigate('/admin/update-customer', {
                           state: {
                             accountInfo: row,
                           },
@@ -256,19 +259,23 @@ const TableAccount = ({ status, search, role }) => {
                 </TableCell>
               </TableRow>
             ))}
+            <Divider />
           </TableBody>
+
+          <TableFooter>
+            <TableRow>
+              <TablePagination
+                rowsPerPageOptions={[5, 10, 25]}
+                count={row}
+                rowsPerPage={rpg}
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+              />
+            </TableRow>
+          </TableFooter>
         </Table>
       </TableContainer>
-      <Divider />
-      <TablePagination
-        rowsPerPageOptions={[5, 10, 25]}
-        component='div'
-        count={row}
-        rowsPerPage={rpg}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      />
     </Box>
   );
 };

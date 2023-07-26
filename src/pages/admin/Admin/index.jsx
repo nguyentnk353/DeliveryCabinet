@@ -14,7 +14,9 @@ const index = () => {
       <AdminSideBar />
       <Box sx={{ display: 'flex', flex: '1 1', flexDirection: 'column' }}>
         <AdminNavBar />
-        <Outlet />
+        <Box sx={{ p: '2% 4%' }}>
+          <Outlet />
+        </Box>
         <Footer />
       </Box>
     </Box>

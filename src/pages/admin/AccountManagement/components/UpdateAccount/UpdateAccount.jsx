@@ -6,34 +6,42 @@ import {
   Paper,
   TextField,
   Typography,
-} from "@mui/material";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import React, { useState } from "react";
-import { useFormik } from "formik";
-import * as Yup from "yup";
-import moment from "moment/moment";
-import UpLoadImage from "../UpLoadImage/UpLoadImage";
-import { useLocation, useNavigate } from "react-router-dom";
-import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
-import updateAccount from "../../../../../services/updateAccount";
-import useNotification from "../../../../../utils/useNotification";
-import deleteAccount from "../../../../../services/deleteAccount";
-import { useMount } from "ahooks";
-import getAccountById from "../../../../../services/getAccountById";
-import { useEffect } from "react";
-
+} from '@mui/material';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import React, { useState } from 'react';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import moment from 'moment/moment';
+import UpLoadImage from '../UpLoadImage/UpLoadImage';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
+import updateAccount from '../../../../../services/updateAccount';
+import useNotification from '../../../../../utils/useNotification';
+import deleteAccount from '../../../../../services/deleteAccount';
+import { useMount } from 'ahooks';
+import getAccountById from '../../../../../services/getAccountById';
+import { useEffect } from 'react';
+import CustomBreadcrumb from '../../../../../components/CustomBreadcrumb';
 
 const UpdateAccount = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [userInfo, setUserInfo] = useState({ id: '', fullName: '', email: '', phone: '', dob: '', isEnable: false, imgUrl: '' });
+  const [userInfo, setUserInfo] = useState({
+    id: '',
+    fullName: '',
+    email: '',
+    phone: '',
+    dob: '',
+    isEnable: false,
+    imgUrl: '',
+  });
   const [msg, sendNotification] = useNotification();
   const statusList = [
-    { name: "Active", id: true },
-    { name: "InActive", id: false },
+    { name: 'Active', id: true },
+    { name: 'InActive', id: false },
   ];
   const phoneRegExp =
     /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
@@ -46,7 +54,7 @@ const UpdateAccount = () => {
       .catch((err) => {
         console.log(err);
       });
-  })
+  });
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
@@ -58,13 +66,13 @@ const UpdateAccount = () => {
     },
     validationSchema: Yup.object({
       full_name: Yup.string()
-        .min(2, "Full Name mininum 2 characters")
-        .max(30, "Full Name maximum 30 characters")
-        .required("Required!"),
-      email: Yup.string().email("Invalid email format").required("Required!"),
+        .min(2, 'Full Name mininum 2 characters')
+        .max(30, 'Full Name maximum 30 characters')
+        .required('Required!'),
+      email: Yup.string().email('Invalid email format').required('Required!'),
       phone: Yup.string()
-        .required("Required!")
-        .matches(phoneRegExp, "Phone number is not valid"),
+        .required('Required!')
+        .matches(phoneRegExp, 'Phone number is not valid'),
     }),
     onSubmit: (values) => {
       const api = {
@@ -102,7 +110,7 @@ const UpdateAccount = () => {
             msg: 'Account delete success',
             variant: 'success',
           });
-          navigate('/admin/account', { replace: true })
+          navigate('/admin/user', { replace: true });
         } else {
           sendNotification({ msg: 'Account delete fail', variant: 'error' });
         }
@@ -111,29 +119,50 @@ const UpdateAccount = () => {
         sendNotification({ msg: err, variant: 'error' });
       });
   }
+  const bcList = [
+    { name: 'User', sidebar: 'User', to: '/admin/user' },
+    {
+      name: 'Update user',
+      sidebar: 'User',
+      to: '/admin/user/user-information',
+    },
+  ];
   return (
-    <Box sx={{ p: "5%" }}>
-      <Box sx={{ marginBottom: "2rem" }}>
-        <Typography variant="h5" sx={{ fontWeight: "700" }}>
-          Update Account
-        </Typography>
+    <Box>
+      <Box
+        sx={{
+          marginBottom: '1.5rem',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}
+      >
+        <Box>
+          <Typography
+            variant='h5'
+            sx={{ fontWeight: '600', marginBottom: '0.25rem' }}
+          >
+            Update User #{location?.state?.accountInfo.id}
+          </Typography>
+          <Box>
+            <CustomBreadcrumb list={bcList} />
+          </Box>
+        </Box>
       </Box>
       <form onSubmit={formik.handleSubmit}>
-        <Grid container spacing={6} columns={12}>
-          <Grid item xs={4}>
-            <Paper sx={{ borderRadius: "16px" }} elevation={3}>
-              <Box
-                sx={{
-                  padding: "16% 0",
-                }}
-              >
+        <Box>
+          <Box sx={{ display: 'flex', gap: 6 }}>
+            <Paper
+              sx={{ borderRadius: '16px', width: '30%', padding: '2%' }}
+              elevation={3}
+            >
+              <Box sx={{ padding: '10% 0' }}>
                 <UpLoadImage />
               </Box>
             </Paper>
-          </Grid>
-          <Grid item xs={8}>
-            <Paper sx={{ borderRadius: "16px" }} elevation={3}>
-              <Box sx={{ padding: "20px" }}>
+
+            <Paper sx={{ borderRadius: '16px', width: '65%' }} elevation={3}>
+              <Box sx={{ padding: '20px' }}>
                 <Grid
                   container
                   rowSpacing={1}
@@ -141,13 +170,13 @@ const UpdateAccount = () => {
                 >
                   <Grid item xs={6}>
                     <TextField
-                      label="Full Name"
-                      id="full_name"
-                      variant="outlined"
+                      label='Full Name'
+                      id='full_name'
+                      variant='outlined'
                       value={formik.values.full_name}
                       onChange={formik.handleChange}
                       fullWidth
-                      margin="normal"
+                      margin='normal'
                       required
                     />
                     {formik.errors.full_name && formik.touched.full_name && (
@@ -156,13 +185,13 @@ const UpdateAccount = () => {
                   </Grid>
                   <Grid item xs={6}>
                     <TextField
-                      label="Email"
-                      id="email"
-                      variant="outlined"
+                      label='Email'
+                      id='email'
+                      variant='outlined'
                       value={formik.values.email}
                       onChange={formik.handleChange}
                       fullWidth
-                      margin="normal"
+                      margin='normal'
                       required
                     />
                     {formik.errors.email && formik.touched.email && (
@@ -171,13 +200,13 @@ const UpdateAccount = () => {
                   </Grid>
                   <Grid item xs={6}>
                     <TextField
-                      label="Phone"
-                      id="phone"
-                      variant="outlined"
+                      label='Phone'
+                      id='phone'
+                      variant='outlined'
                       value={formik.values.phone}
                       onChange={formik.handleChange}
                       fullWidth
-                      margin="normal"
+                      margin='normal'
                       required
                     />
                     {formik.errors.phone && formik.touched.phone && (
@@ -185,7 +214,7 @@ const UpdateAccount = () => {
                     )}
                   </Grid>
                   <Grid item xs={6}>
-                    <Box sx={{ paddingTop: "5%" }}>
+                    <Box sx={{ paddingTop: '5%' }}>
                       {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DemoContainer components={['DatePicker']}>
                           <DatePicker
@@ -202,21 +231,21 @@ const UpdateAccount = () => {
                       </LocalizationProvider> */}
                       <LocalizationProvider dateAdapter={AdapterMoment}>
                         <DatePicker
-                          label="Date Of Birth"
+                          label='Date Of Birth'
                           sx={{ width: '100%' }}
-                          id="dob"
-                          name="dob"
+                          id='dob'
+                          name='dob'
                           required
                           value={formik.values.dob}
                           onChange={(value) => {
-                            formik.setFieldValue("dob", value);
+                            formik.setFieldValue('dob', value);
                           }}
                           textField={(params) => (
                             <TextField
                               {...params}
                               InputLabelProps={{ shrink: true }}
-                              variant="outlined"
-                              margin="normal"
+                              variant='outlined'
+                              margin='normal'
                               fullWidth
                             />
                           )}
@@ -243,14 +272,18 @@ const UpdateAccount = () => {
                     <Autocomplete
                       disablePortal
                       disableClearable
-                      id="Status"
+                      id='Status'
                       // defaultValue={
                       //   statusList.filter(
                       //     (a) => a.id == userInfo.isEnable
                       //   )[0]
                       // }
-                      value={statusList.filter(s => s.id === userInfo?.isEnable)?.[0] || statusList[0]}
-                      sx={{ paddingTop: "4.5%" }}
+                      value={
+                        statusList.filter(
+                          (s) => s.id === userInfo?.isEnable
+                        )?.[0] || statusList[0]
+                      }
+                      sx={{ paddingTop: '4.5%' }}
                       options={statusList}
                       getOptionLabel={(option) => option.name}
                       onChange={(event, newValue) => {
@@ -260,22 +293,22 @@ const UpdateAccount = () => {
                         setUserInfo((info) => {
                           return {
                             ...info,
-                            isEnable: newValue.id
-                          }
-                        })
+                            isEnable: newValue.id,
+                          };
+                        });
                       }}
                       isOptionEqualToValue={(option, value) =>
                         option.name === value.name && option.id === value.id
                       }
                       renderInput={(params) => (
-                        <TextField {...params} label="Status" />
+                        <TextField {...params} label='Status' />
                       )}
                     />
                   </Grid>
                   <Grid item xs={6}></Grid>
-                  <Box sx={{ marginLeft: "auto", marginTop: "20px", }}>
+                  <Box sx={{ marginLeft: 'auto', marginTop: '20px' }}>
                     <Button
-                      variant="contained"
+                      variant='contained'
                       sx={{
                         margin: '20px',
                         backgroundColor: '#D32F2F',
@@ -284,15 +317,15 @@ const UpdateAccount = () => {
                     >
                       Ban Account
                     </Button>
-                    <Button variant="contained" type="submit">
+                    <Button variant='contained' type='submit'>
                       Update Account
                     </Button>
                   </Box>
                 </Grid>
               </Box>
             </Paper>
-          </Grid>
-        </Grid>
+          </Box>
+        </Box>
       </form>
     </Box>
   );

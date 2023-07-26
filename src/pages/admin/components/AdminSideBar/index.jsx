@@ -45,7 +45,7 @@ const index = () => {
             }}
             style={{
               paddingLeft: '10px',
-              borderRadius: '12px',
+              borderRadius: '8px',
               marginBottom: '4px',
             }}
           >
@@ -61,8 +61,8 @@ const index = () => {
               navigate(to, { replace: true });
             }}
             style={{
-              padding: '10px 16px 10px 24px',
-              borderRadius: '12px',
+              // padding: '10px 16px 10px 24px',
+              borderRadius: '8px',
               marginBottom: '4px',
             }}
           >
@@ -87,8 +87,14 @@ const index = () => {
           backgroundColor: `${plcolor} !important`,
         },
         '& .ps-menu-button.ps-active': {
-          color: 'white !important',
-          backgroundColor: `${pcolor} !important`,
+          // color: 'white !important',
+          // backgroundColor: `${pcolor} !important`,
+          color: `${pcolor} !important`,
+          backgroundColor: `${plcolor} !important`,
+
+          '& .css-ksh4t7-MuiTypography-root': {
+            fontWeight: '600 !important',
+          },
         },
       }}
     >
@@ -139,14 +145,14 @@ const index = () => {
                   <Item
                     title='Dashboard'
                     icon={<HomeOutlined />}
-                    to='/admin/store'
+                    to='/admin/dashboard'
                     selected={selected}
                     setSelected={setSelected}
                   />
                   <Item
                     title='Order'
                     icon={<ListAltOutlined />}
-                    to='/admin/store'
+                    to='/admin/dashboard'
                     selected={selected}
                     setSelected={setSelected}
                   />
@@ -188,9 +194,9 @@ const index = () => {
                     setSelected={setSelected}
                   />
                   <Item
-                    title='Account'
+                    title='User'
                     icon={<PersonOutlineOutlined />}
-                    to='/admin/account'
+                    to='/admin/user'
                     selected={selected}
                     setSelected={setSelected}
                   />
@@ -210,41 +216,26 @@ const index = () => {
               <Box sx={{ padding: '0 15px 0 10px' }}>
                 <Box>
                   <Item
-                    title='Store'
-                    icon={<StoreOutlined />}
-                    to='/admin/store'
+                    title='Dashboard'
+                    icon={<HomeOutlined />}
+                    to='/admin/dashboard'
                     selected={selected}
                     setSelected={setSelected}
                   />
                   <Item
-                    title='Store Type'
-                    icon={<StorefrontOutlined />}
-                    to='/admin/store-type'
+                    title='Order'
+                    icon={<ListAltOutlined />}
+                    to='/admin/dashboard'
                     selected={selected}
                     setSelected={setSelected}
                   />
                   <Item
-                    title='Area'
-                    icon={<FmdGoodOutlined />}
-                    to='/admin/store'
-                    selected={selected}
-                    setSelected={setSelected}
-                  />
-                </Box>
-                <Divider sx={{ marginBottom: '4px' }} />
-
-                <Box>
-                  <Item
-                    title='Account'
+                    title='Customer'
                     icon={<PersonOutlineOutlined />}
-                    to='/admin/account'
+                    to='/admin/customer'
                     selected={selected}
                     setSelected={setSelected}
                   />
-                </Box>
-                <Divider sx={{ marginBottom: '4px' }} />
-
-                <Box>
                   <Item
                     title='Cabinet'
                     icon={<BiCabinet />}
@@ -252,50 +243,39 @@ const index = () => {
                     selected={selected}
                     setSelected={setSelected}
                   />
+                  <Item
+                    title='Store'
+                    icon={<StoreOutlined />}
+                    to='/admin/store'
+                    selected={selected}
+                    setSelected={setSelected}
+                  />
                 </Box>
                 <Divider />
-
                 <Box>
                   <Item
-                    title='Box size'
-                    icon={<BiCabinet />}
-                    to='/admin/box-size'
-                    selected={selected}
-                    setSelected={setSelected}
-                  />
-                  <Item
-                    title='Box type'
-                    icon={<BsBox />}
-                    to='/admin/box-type'
-                    selected={selected}
-                    setSelected={setSelected}
-                  />
-                </Box>
-                <Divider sx={{ marginBottom: '4px' }} />
-                <Box>
-                  <Item
-                    title='Price table'
+                    title='Service price'
                     icon={<RequestQuoteOutlined />}
                     to='/admin/price-table'
                     selected={selected}
                     setSelected={setSelected}
                   />
                   <Item
-                    title='Service type'
-                    icon={<RoomServiceOutlined />}
-                    to='/admin/service-type'
+                    title='User'
+                    icon={<PersonOutlineOutlined />}
+                    to='/admin/user'
                     selected={selected}
                     setSelected={setSelected}
                   />
                   <Item
-                    title='Service config'
+                    title='Config'
                     icon={<SettingsOutlined />}
-                    to='/admin/service-config'
+                    to='/admin/config'
                     selected={selected}
                     setSelected={setSelected}
                   />
                 </Box>
-                <Divider sx={{ marginBottom: '4px' }} />
+                <Divider />
                 <Box sx={{ width: '200px', height: '50px' }} />
               </Box>
             )}

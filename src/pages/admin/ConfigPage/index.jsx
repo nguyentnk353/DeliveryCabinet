@@ -16,7 +16,7 @@ const index = () => {
   const navigate = useNavigate();
   const mColor = theme.palette.primary.main;
   return (
-    <Box sx={{ p: '5%' }}>
+    <Box>
       <Box
         sx={{
           display: 'flex',

@@ -22,21 +22,28 @@ import {
   TextField,
   Button,
 } from '@mui/material';
-import { DeleteForever, Edit, MoreVert } from '@mui/icons-material';
+import {
+  AssignmentTurnedIn,
+  DeleteForever,
+  Edit,
+  MoreVert,
+} from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import getLockerList from '../../../../services/getLockerList';
-import { blue, red } from '@mui/material/colors';
+import { blue, green, red } from '@mui/material/colors';
 import deleteLocker from './../../../../services/deleteLocker';
 import useNotification from '../../../../utils/useNotification';
 import updateLocker from './../../../../services/updateLocker';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
+import AssignModal from './AssignModal';
 
 const validationSchema = yup.object({
   name: yup.string('Enter box size name').required('Name is required'),
 });
 
 const LockerTable = ({ search, isEnable }) => {
+  const theme = useTheme();
   const [pg, setpg] = React.useState(0);
   const [rpg, setrpg] = React.useState(5);
   const [msg, sendNotification] = useNotification();
@@ -98,10 +105,18 @@ const LockerTable = ({ search, isEnable }) => {
   }, [pg, rpg, search, msg]);
 
   const [open, setOpen] = React.useState(false);
+  const [open2, setOpen2] = React.useState(false);
 
   const [field, setField] = React.useState({
     id: '',
     name: '',
+    status: true,
+    description: '',
+  });
+  const [field2, setField2] = React.useState({
+    id: '',
+    name: '',
+    storeId: '',
     status: true,
     description: '',
   });
@@ -142,6 +157,7 @@ const LockerTable = ({ search, isEnable }) => {
       const api = {
         id: field.id,
         name: val.name,
+        storeId: val.storeId,
         description: val.description,
         isEnable: val.status,
       };
@@ -188,8 +204,104 @@ const LockerTable = ({ search, isEnable }) => {
         sendNotification({ msg: err, variant: 'error' });
       });
   }
+  function openAssign(row) {
+    setField2({
+      id: row.id,
+      name: row.name,
+      storeId: row.storeId,
+      status: row.isEnable,
+      description: row.description,
+    });
+    setOpen2(true);
+  }
   return (
     <Box>
+      <AssignModal open={open2} setOpen={setOpen2} field={field2} />
+      <Box>
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby='modal-modal-title'
+          aria-describedby='modal-modal-description'
+        >
+          <Box sx={style}>
+            <Typography
+              id='modal-modal-title'
+              variant='h5'
+              component='h2'
+              textAlign='center'
+              fontWeight='bold'
+              color={blue[500]}
+            >
+              UPDATE CABINET
+            </Typography>
+            <Box
+              component='form'
+              onSubmit={formik.handleSubmit}
+              noValidate
+              sx={{ mt: 1 }}
+            >
+              <Box sx={{ padding: '2rem' }}>
+                <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+                  <TextField
+                    margin='normal'
+                    fullWidth
+                    required
+                    id='name'
+                    label='Name'
+                    autoFocus
+                    value={formik.values.name}
+                    onChange={formik.handleChange}
+                    error={formik.touched.name && Boolean(formik.errors.name)}
+                    helperText={formik.touched.name && formik.errors.name}
+                  />
+                  <Box sx={{ width: '50%', paddingTop: '1%' }}>
+                    <FormControl fullWidth>
+                      <InputLabel id='statusLabel'>Status</InputLabel>
+                      <Select
+                        labelId='statusLabel'
+                        id='status'
+                        label='Status'
+                        value={formik.values.status}
+                        onChange={(e) => {
+                          formik.setFieldValue('status', e.target.value);
+                        }}
+                      >
+                        <MenuItem value={true}>Active</MenuItem>
+                        <MenuItem value={false}>Inactive</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Box>
+                </Box>
+                <TextField
+                  margin='normal'
+                  fullWidth
+                  id='description'
+                  label='Description'
+                  value={formik.values.description}
+                  onChange={formik.handleChange}
+                />
+              </Box>
+              <Box
+                sx={{
+                  display: 'flex',
+                  gap: 1,
+                  textAlign: 'center',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
+                <Button variant='contained' type='submit'>
+                  Update
+                </Button>
+                <Button variant='outlined' onClick={handleClose}>
+                  Cancel
+                </Button>
+              </Box>
+            </Box>
+          </Box>
+        </Modal>
+      </Box>
       <Box>
         <Modal
           open={open}
@@ -281,8 +393,8 @@ const LockerTable = ({ search, isEnable }) => {
             <Table sx={{ minWidth: 650 }} aria-label='simple table'>
               <TableHead sx={{ backgroundColor: '#f4f6f8' }}>
                 <TableRow>
+                  <TableCell>Id</TableCell>
                   <TableCell>Name</TableCell>
-
                   <TableCell>Description</TableCell>
                   <TableCell>Rows</TableCell>
                   <TableCell>Columns</TableCell>
@@ -309,6 +421,9 @@ const LockerTable = ({ search, isEnable }) => {
                     //   })
                     // }
                   >
+                    <TableCell component='th' scope='row'>
+                      {row.id}
+                    </TableCell>
                     <TableCell component='th' scope='row'>
                       {row.name}
                     </TableCell>
@@ -353,6 +468,14 @@ const LockerTable = ({ search, isEnable }) => {
                           }}
                         >
                           <DeleteForever sx={{ color: red[600] }} />
+                        </IconButton>
+                        <IconButton
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            openAssign(row);
+                          }}
+                        >
+                          <AssignmentTurnedIn sx={{ color: green[500] }} />
                         </IconButton>
                       </Box>
                     </TableCell>

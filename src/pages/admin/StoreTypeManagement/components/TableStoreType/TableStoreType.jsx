@@ -116,6 +116,7 @@ const TableStoreType = ({ status, search }) => {
                 <Table sx={{ minWidth: 650 }} aria-label='simple table'>
                     <TableHead sx={{ backgroundColor: '#f4f6f8' }}>
                         <TableRow>
+                            <TableCell>Id</TableCell>
                             <TableCell>Name</TableCell>
                             <TableCell>Description</TableCell>
                             <TableCell>Status</TableCell>
@@ -130,6 +131,7 @@ const TableStoreType = ({ status, search }) => {
                                     '&:last-child td,&:last-child th': { border: 0 },
                                 }}
                             >
+                                <TableCell>{row.id}</TableCell>
                                 <TableCell>{row.name}</TableCell>
                                 <TableCell>{row.description}</TableCell>
                                 <TableCell>

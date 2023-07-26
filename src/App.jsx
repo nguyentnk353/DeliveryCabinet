@@ -9,6 +9,7 @@ import Guest from './pages/guest/Guest';
 import GuestHome from './pages/guest/GuestHome';
 import Admin from './pages/admin/Admin';
 import AdminHome from './pages/admin/AdminHome';
+import DashboardPage from './pages/admin/DashboardPage';
 import AccountManagement from './pages/admin/AccountManagement/AccountManagement';
 import CustomerManagement from './pages/admin/CustomerManagement/CustomerManagement';
 import StoreManagement from './pages/admin/StoreManagement';
@@ -38,6 +39,9 @@ import TestUI from './pages/admin/TestUI/TestUI';
 import { SnackbarProvider } from 'notistack';
 import UpdateAccount from './pages/admin/AccountManagement/components/UpdateAccount/UpdateAccount';
 import ShowAccInfo from './pages/admin/AccountManagement/ShowAccInfo/ShowAccInfo';
+import UpdateCustomer from './pages/admin/CustomerManagement/components/UpdateAccount/UpdateAccount';
+import ShowCustomerInfo from './pages/admin/CustomerManagement/ShowAccInfo/ShowAccInfo';
+import Analytics from './pages/admin/Analytics';
 import 'antd/dist/reset.css';
 import './index.css';
 
@@ -75,13 +79,16 @@ function App() {
               }
             >
               <Route path='home' element={<AdminHome />} />
-              <Route path='account' element={<AccountManagement />} />
+              <Route path='dashboard' element={<Analytics />} />
+              <Route path='user' element={<AccountManagement />} />
               <Route path='customer' element={<CustomerManagement />} />
-              <Route path='new-account' element={<CreateAccount />} />
-              <Route path='update-account' element={<UpdateAccount />} />
+              <Route path='new-user' element={<CreateAccount />} />
+              <Route path='update-user' element={<UpdateAccount />} />
+              <Route path='user/user-information' element={<ShowAccInfo />} />
+              <Route path='update-customer' element={<UpdateCustomer />} />
               <Route
-                path='account/account-information'
-                element={<ShowAccInfo />}
+                path='customer/customer-information'
+                element={<ShowCustomerInfo />}
               />
               <Route path='store' element={<StoreManagement />} />
               <Route path='store-detail' element={<StoreDetail />} />
@@ -100,7 +107,7 @@ function App() {
                 element={<PriceTableItemManagement />}
               />
               <Route path='cabinet' element={<LockerManagement />} />
-              <Route path='new-locker' element={<CreateLocker />} />
+              <Route path='new-cabinet' element={<CreateLocker />} />
               <Route path='config' element={<ConfigPage />} />
               <Route path='testUI' element={<TestUI />} />
             </Route>

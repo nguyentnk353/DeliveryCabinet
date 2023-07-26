@@ -12,6 +12,10 @@ import {
   Snackbar,
   Alert,
   Divider,
+  Table,
+  TableBody,
+  TableRow,
+  TableCell,
 } from '@mui/material';
 import PropTypes from 'prop-types';
 import { DeleteOutline, MoreVert, SearchOutlined } from '@mui/icons-material';
@@ -19,6 +23,8 @@ import LockerTable from './components/LockerTable';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { CloseIcon } from '@mui/icons-material/Close';
 import { useMount } from 'ahooks';
+import CustomBreadcrumb from '../../../components/CustomBreadcrumb';
+import storeDefault from '../../../assets/images/storeDefault.jpg';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -107,150 +113,118 @@ const index = () => {
       </IconButton>
     </React.Fragment>
   );
-
+  const bcList = [
+    { name: 'Store', sidebar: 'Store', to: '/admin/store' },
+    { name: 'Store detail', sidebar: 'Store', to: '/admin/store/store-detail' },
+  ];
+  console.log(storeInfo);
+  const table = [
+    { name: 'Store owner', info: storeInfo?.user?.fullName },
+    { name: 'Province', info: storeInfo?.province },
+    { name: 'District', info: storeInfo?.city },
+    { name: 'Ward', info: storeInfo?.district },
+    { name: 'Store type', info: storeInfo?.storeType.name },
+    { name: 'Area', info: storeInfo?.area.name },
+    { name: 'Service type', info: storeInfo?.serviceType.name },
+  ];
   return (
-    <Box sx={{ p: '5%' }}>
+    <Box>
       <Box
         sx={{
+          marginBottom: '1.5rem',
           display: 'flex',
           justifyContent: 'space-between',
-          marginBottom: '2rem',
+          alignItems: 'center',
         }}
       >
-        <Typography variant='h5' sx={{ fontWeight: '700' }}>
-          Store #{storeId} Detail
-        </Typography>
-        {/* <Button
-          variant='contained'
-          onClick={() =>
-            navigate('/admin/new-locker', {
-              state: {
-                storeId: storeId,
-              },
-            })
-          }
-        >
-          + New locker
-        </Button> */}
+        <Box>
+          <Typography
+            variant='h5'
+            sx={{ fontWeight: '600', marginBottom: '0.25rem' }}
+          >
+            Store #{storeId} detail
+          </Typography>
+          <Box>
+            <CustomBreadcrumb list={bcList} />
+          </Box>
+        </Box>
       </Box>
       <Box sx={{ marginBottom: '2rem' }}>
-        <Box sx={{ width: '60%' }}>
-          <Paper sx={{ borderRadius: '16px', padding: '2rem' }}>
-            <Box>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                <Box sx={{ width: '45%' }}>
-                  <Typography
-                    variant='body1'
-                    sx={{ fontWeight: '700', marginBottom: '1rem' }}
-                  >
-                    Id :{' '}
-                    <Typography display='inline' variant='body1'>
-                      {storeInfo?.id}
-                    </Typography>
+        <Paper sx={{ borderRadius: '16px', padding: '2rem' }}>
+          <Box>
+            <Box sx={{ display: 'flex', gap: 5 }}>
+              <img
+                src={storeInfo?.imgUrl ? storeInfo?.imgUrl : storeDefault}
+                alt='store image'
+                style={{ width: '50%' }}
+              />
+              <Box>
+                <Box>
+                  <Typography variant='h4' sx={{ fontWeight: '500' }}>
+                    {storeInfo?.name}
                   </Typography>
-
-                  <Typography
-                    variant='body1'
-                    sx={{ fontWeight: '700', marginBottom: '1rem' }}
-                  >
-                    Province :{' '}
-                    <Typography display='inline' variant='body1'>
-                      {storeInfo?.province}
-                    </Typography>
-                  </Typography>
-                  <Typography
-                    variant='body1'
-                    sx={{ fontWeight: '700', marginBottom: '1rem' }}
-                  >
-                    District :{' '}
-                    <Typography display='inline' variant='body1'>
-                      {storeInfo?.city}
-                    </Typography>
-                  </Typography>
-                  <Typography
-                    variant='body1'
-                    sx={{ fontWeight: '700', marginBottom: '1rem' }}
-                  >
-                    Ward :{' '}
-                    <Typography display='inline' variant='body1'>
-                      {storeInfo?.district}
-                    </Typography>
-                  </Typography>
-                  <Typography
-                    variant='body1'
-                    sx={{ fontWeight: '700', marginBottom: '1rem' }}
-                  >
+                  <Typography variant='body1' sx={{ marginBottom: '1rem' }}>
                     Address :{' '}
                     <Typography display='inline' variant='body1'>
                       {storeInfo?.address}
                     </Typography>
                   </Typography>
                 </Box>
-                <Box sx={{ width: '45%' }}>
-                  <Typography
-                    variant='body1'
-                    sx={{ fontWeight: '700', marginBottom: '1rem' }}
-                  >
-                    Store type :{' '}
-                    <Typography display='inline' variant='body1'>
-                      {storeInfo?.storeType?.name}
-                    </Typography>
+                <Divider />
+                <Box>
+                  <Typography variant='body1' sx={{ fontWeight: '500' }}>
+                    Description
                   </Typography>
-                  <Typography
-                    variant='body1'
-                    sx={{ fontWeight: '700', marginBottom: '1rem' }}
-                  >
-                    Area :{' '}
-                    <Typography display='inline' variant='body1'>
-                      {storeInfo?.area?.name}
-                    </Typography>
-                  </Typography>
-                  <Typography
-                    variant='body1'
-                    sx={{ fontWeight: '700', marginBottom: '1rem' }}
-                  >
-                    Service type :{' '}
-                    <Typography display='inline' variant='body1'>
-                      {storeInfo?.serviceType?.description}
-                    </Typography>
-                    <Typography variant='body2' sx={{ opacity: '50%' }}>
-                      Base price: {storeInfo?.serviceType?.price} (VND)
-                    </Typography>
-                  </Typography>
-                  <Typography
-                    variant='body1'
-                    sx={{ fontWeight: '700', marginBottom: '1rem' }}
-                  >
-                    Store owner :{' '}
-                    <Typography display='inline' variant='body1'>
-                      {storeInfo?.user?.fullName}
-                      <Typography variant='body2' sx={{ opacity: '50%' }}>
-                        Email: {storeInfo?.user?.email}
-                      </Typography>
-                    </Typography>
+                  <Typography variant='body1' sx={{}}>
+                    {storeInfo?.description}
                   </Typography>
                 </Box>
               </Box>
+            </Box>
+            <Divider sx={{ margin: '2% 0' }} />
+            <Box>
+              <Typography
+                variant='body1'
+                sx={{ fontWeight: '500', marginBottom: '1rem' }}
+              >
+                Detail information
+              </Typography>
               <Box>
-                <Typography variant='body1' sx={{ fontWeight: '700' }}>
-                  Description :{' '}
-                  <Typography display='inline' variant='body1'>
-                    {storeInfo?.description}
-                  </Typography>
-                </Typography>
+                <Table>
+                  <TableBody>
+                    {table.map((row) => (
+                      <TableRow
+                        sx={{
+                          '&:nth-of-type(odd)': {
+                            backgroundColor: '#fafafa',
+                          },
+                        }}
+                      >
+                        <TableCell
+                          component='th'
+                          scope='row'
+                          sx={{ backgroundColor: '#f0f2f5' }}
+                        >
+                          {row.name}
+                        </TableCell>
+                        <TableCell>{row.info}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
               </Box>
             </Box>
-          </Paper>
-        </Box>
+          </Box>
+        </Paper>
       </Box>
       <Box
         sx={{
           display: 'flex',
           justifyContent: 'space-between',
-          marginBottom: '2rem',
+          marginBottom: '1rem',
         }}
       >
-        <Typography variant='h5' sx={{ fontWeight: '700' }}>
+        <Typography variant='h5' sx={{ fontWeight: '600' }}>
           Cabinet List
         </Typography>
       </Box>

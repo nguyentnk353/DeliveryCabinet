@@ -54,6 +54,7 @@ const LockerTable = ({ search, isEnable, storeId }) => {
 
   useMount(() => {
     const payload = {
+      StoreId: storeId,
       PageIndex: pg,
       PageSize: rpg,
       isEnable: isEnable,
@@ -142,6 +143,7 @@ const LockerTable = ({ search, isEnable, storeId }) => {
       const api = {
         id: field.id,
         name: val.name,
+        storeId: val.storeId,
         description: val.description,
         isEnable: val.status,
       };
