@@ -3,8 +3,10 @@ import {
   Box,
   Button,
   Checkbox,
+  Divider,
   FormControl,
   FormControlLabel,
+  Grid,
   IconButton,
   InputLabel,
   MenuItem,
@@ -32,12 +34,13 @@ import { DatePicker } from 'antd';
 import { useMount } from 'ahooks';
 import getServiceTypeList from '../../../services/getServiceTypeList';
 import { Close, DeleteForever, Save } from '@mui/icons-material';
-import { red } from '@mui/material/colors';
+import { blue, red } from '@mui/material/colors';
 import moment from 'moment';
 import dayjs from 'dayjs';
 import getBoxTypeList from '../../../services/getBoxTypeList';
 import getBoxSizeList from '../../../services/getBoxSizeList';
 import { PropTypes } from 'prop-types';
+import CustomBreadcrumb from '../../../components/CustomBreadcrumb';
 const { RangePicker } = DatePicker;
 
 function TabPanel(props) {
@@ -188,7 +191,7 @@ const index = () => {
 
       const serviceList = table.map((e) => {
         return {
-          serviceTyeId: e.service.id,
+          serviceTypeId: e.service.id,
           priority: e.priority,
           applyFrom: moment(e.applyDate[0].$d).utc().format(),
           applyTo: moment(e.applyDate[1].$d).utc().format(),
@@ -201,6 +204,30 @@ const index = () => {
         dateFilter: bi.join(''),
         priceTableItems: itemList,
         serviceConfigs: serviceList,
+      };
+      const data = {
+        name: '#3',
+        applyFrom: '2023-07-01T07:01:04Z',
+        applyTo: '2023-08-31T07:01:04Z',
+        dateFilter: '1111111',
+        priceTableItems: [
+          {
+            minDuration: '0',
+            maxDuration: '15',
+            price: '1000',
+            description: 'FTPU',
+            boxSizeId: 1,
+            boxTypeId: 11,
+          },
+        ],
+        serviceConfigs: [
+          {
+            serviceTypeId: 8,
+            priority: '5',
+            applyFrom: '2023-07-01T07:01:15Z',
+            applyTo: '2023-08-31T07:01:15Z',
+          },
+        ],
       };
 
       createPriceTable(api)
@@ -224,7 +251,10 @@ const index = () => {
                 sun: false,
               },
             });
+            setPiList([]);
+            setTable([]);
           } else {
+            console.log(res);
             sendNotification({
               msg: 'Price table create fail',
               variant: 'error',
@@ -232,7 +262,8 @@ const index = () => {
           }
         })
         .catch((err) => {
-          sendNotification({ msg: err, variant: 'error' });
+          console.log(err.response.data);
+          // sendNotification({ msg: err, variant: 'error' });
         });
     },
   });
@@ -290,26 +321,36 @@ const index = () => {
     const newTable = piList.filter((e) => e.id != id);
     setPiList(newTable);
   }
+  const bcList = [
+    { name: 'Price table', sidebar: 'Service price', to: '/admin/price-table' },
+    {
+      name: 'New price table',
+      sidebar: 'Service price',
+      to: '/admin/new-price-table',
+    },
+  ];
   return (
-    <Box sx={{ p: '5%' }}>
+    <Box>
       <Box>
         <Box
           sx={{
+            marginBottom: '1.5rem',
             display: 'flex',
             justifyContent: 'space-between',
-            marginBottom: '2rem',
+            alignItems: 'center',
           }}
         >
-          <Typography variant='h5' sx={{ fontWeight: '700' }}>
-            New Price Table
-          </Typography>
-          {/* <Button
-            type='submit'
-            variant='contained'
-            // onClick={() => navigate('/admin/new-store', { replace: true })}
-          >
-            Create new price table
-          </Button> */}
+          <Box>
+            <Typography
+              variant='h5'
+              sx={{ fontWeight: '600', marginBottom: '0.25rem' }}
+            >
+              New Store
+            </Typography>
+            <Box>
+              <CustomBreadcrumb list={bcList} />
+            </Box>
+          </Box>
         </Box>
         <Box>
           <Box
@@ -318,14 +359,13 @@ const index = () => {
             noValidate
             sx={{ mt: 1 }}
           >
-            <Paper sx={{ padding: '2% 4%' }}>
-              <Typography variant='h6' sx={{ fontWeight: '700' }}>
-                Price table info
-              </Typography>
+            <Paper sx={{ padding: '2% 4%', width: '80%', margin: '2% auto' }}>
               <Box>
-                {/* <Box sx={{ padding: '2rem' }}> */}
                 <Box>
-                  <Box sx={{ marginBottom: '1rem' }}>
+                  <Typography variant='h6' sx={{ fontWeight: '700' }}>
+                    Basic information
+                  </Typography>
+                  <Box sx={{ marginBottom: '1rem', display: 'flex', gap: 4 }}>
                     <TextField
                       margin='normal'
                       sx={{ width: '410px' }}
@@ -338,388 +378,498 @@ const index = () => {
                       error={formik.touched.name && Boolean(formik.errors.name)}
                       helperText={formik.touched.name && formik.errors.name}
                     />
-                  </Box>
-                  <Box sx={{ marginBottom: '1rem' }}>
-                    <RangePicker
-                      size='large'
-                      value={formik.values.rangePicker}
-                      onChange={(value) => {
-                        formik.setFieldValue('rangePicker', value);
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
                       }}
-                      style={{
-                        zIndex: 10,
-                        padding: '0.75rem 1rem',
-                        width: '410px',
-                      }}
-                    />
+                    >
+                      <RangePicker
+                        size='large'
+                        value={formik.values.rangePicker}
+                        onChange={(value) => {
+                          formik.setFieldValue('rangePicker', value);
+                        }}
+                        style={{
+                          marginTop: '0.5rem',
+                          padding: '0.75rem',
+                          width: '410px',
+                        }}
+                      />
+                    </Box>
                   </Box>
+
                   <Box sx={{ marginBottom: '1rem' }}>
-                    <Typography variant='body1' fontWeight='bold'>
+                    <Typography variant='body1' fontWeight='600'>
                       Date apply *
                     </Typography>
                     <Box>
                       <FormControlLabel
                         control={<Checkbox checked={formik.values.mon} />}
-                        label='2'
+                        label='Monday'
                         name='mon'
                         onChange={formik.handleChange}
                       />
                       <FormControlLabel
                         control={<Checkbox checked={formik.values.tue} />}
-                        label='3'
+                        label='Tuesday'
                         name='tue'
                         onChange={formik.handleChange}
                       />
                       <FormControlLabel
                         control={<Checkbox checked={formik.values.wed} />}
-                        label='4'
+                        label='Wednesday'
                         name='wed'
                         onChange={formik.handleChange}
                       />
                       <FormControlLabel
                         control={<Checkbox checked={formik.values.thu} />}
-                        label='5'
+                        label='Thursday'
                         name='thu'
                         onChange={formik.handleChange}
                       />
                       <FormControlLabel
                         control={<Checkbox checked={formik.values.fri} />}
-                        label='6'
+                        label='Friday'
                         name='fri'
                         onChange={formik.handleChange}
                       />
                       <FormControlLabel
                         control={<Checkbox checked={formik.values.sat} />}
-                        label='7'
+                        label='Saturday'
                         name='sat'
                         onChange={formik.handleChange}
                       />
                       <FormControlLabel
                         control={<Checkbox checked={formik.values.sun} />}
-                        label='Sun'
+                        label='Sunday'
                         name='sun'
                         onChange={formik.handleChange}
                       />
                     </Box>
                   </Box>
                 </Box>
-                <Box>
-                  <Typography variant='body1' fontWeight='bold'>
+                <Divider />
+                <Box sx={{ margin: '1rem 0' }}>
+                  <Typography
+                    variant='h6'
+                    sx={{ fontWeight: '700', marginBottom: '1rem' }}
+                  >
                     Service apply
                   </Typography>
                   <Box>
-                    <Box>
-                      <TableContainer>
-                        <Table sx={{ minWidth: 650 }} aria-label='simple table'>
-                          <TableHead sx={{ backgroundColor: '#f4f6f8' }}>
-                            <TableRow>
-                              <TableCell>Service</TableCell>
-                              <TableCell>Priority</TableCell>
-                              <TableCell>Apply from</TableCell>
-                              <TableCell>Apply to</TableCell>
-                              <TableCell>Action</TableCell>
-                            </TableRow>
-                          </TableHead>
-                          <TableBody>
-                            {table.map((row) => (
-                              <TableRow
-                                // key={row.id}
-                                sx={{
-                                  '&:last-child td,&:last-child th': {
-                                    border: 0,
-                                  },
-                                }}
-                              >
-                                <TableCell component='th' scope='row'>
-                                  {row.service.name}
-                                </TableCell>
-                                <TableCell>{row.priority}</TableCell>
-                                <TableCell>
-                                  {dayjs(row?.applyDate[0]).format(
-                                    'DD /MM /YYYY'
-                                  )}
-                                </TableCell>
-                                <TableCell>
-                                  {dayjs(row?.applyDate[1]).format(
-                                    'DD /MM /YYYY'
-                                  )}
-                                </TableCell>
-
-                                <TableCell>
-                                  <Box sx={{ display: 'flex' }}>
-                                    <IconButton
-                                      onClick={(e, i) => {
-                                        e.stopPropagation();
-                                        deleteServiceItem(row.id);
-                                        // apiDeleteBoxType(row.id);
-                                      }}
-                                    >
-                                      <DeleteForever sx={{ color: red[600] }} />
-                                    </IconButton>
-                                  </Box>
-                                </TableCell>
+                    {table.length > 0 && (
+                      <Box>
+                        <TableContainer>
+                          <Table
+                            sx={{ minWidth: 650 }}
+                            aria-label='simple table'
+                          >
+                            <TableHead sx={{ backgroundColor: '#f4f6f8' }}>
+                              <TableRow>
+                                <TableCell>Service</TableCell>
+                                <TableCell>Priority</TableCell>
+                                <TableCell>Apply from</TableCell>
+                                <TableCell>Apply to</TableCell>
+                                <TableCell>Action</TableCell>
                               </TableRow>
-                            ))}
-                          </TableBody>
-                        </Table>
-                      </TableContainer>
-                    </Box>
-                    {openRow ? (
-                      <Box sx={{ display: 'flex', gap: 2 }}>
-                        <Autocomplete
-                          disablePortal
-                          id='serviceType'
-                          autoFocus
-                          options={serviceTypeList}
-                          disableClearable
-                          getOptionLabel={(option) => option.name}
-                          value={selectService}
-                          onChange={(_, e) => {
-                            setSelectService(e);
-                          }}
-                          sx={{ width: '20%' }}
-                          renderInput={(params) => (
-                            <TextField {...params} label='Service' />
-                          )}
-                        />
+                            </TableHead>
+                            <TableBody>
+                              {table.map((row) => (
+                                <TableRow
+                                  // key={row.id}
+                                  sx={{
+                                    '&:last-child td,&:last-child th': {
+                                      border: 0,
+                                    },
+                                  }}
+                                >
+                                  <TableCell component='th' scope='row'>
+                                    {row.service.name}
+                                  </TableCell>
+                                  <TableCell>{row.priority}</TableCell>
+                                  <TableCell>
+                                    {dayjs(row?.applyDate[0]).format(
+                                      'DD /MM /YYYY'
+                                    )}
+                                  </TableCell>
+                                  <TableCell>
+                                    {dayjs(row?.applyDate[1]).format(
+                                      'DD /MM /YYYY'
+                                    )}
+                                  </TableCell>
 
-                        <TextField
-                          margin='normal'
-                          required
-                          id='priority'
-                          label='Priority'
-                          value={rowInput.priority}
-                          onChange={(e) => {
-                            setRowInput((param) => ({
-                              ...param,
-                              priority: e.target.value,
-                            }));
+                                  <TableCell>
+                                    <Box sx={{ display: 'flex' }}>
+                                      <IconButton
+                                        onClick={(e, i) => {
+                                          e.stopPropagation();
+                                          deleteServiceItem(row.id);
+                                          // apiDeleteBoxType(row.id);
+                                        }}
+                                      >
+                                        <DeleteForever
+                                          sx={{ color: red[600] }}
+                                        />
+                                      </IconButton>
+                                    </Box>
+                                  </TableCell>
+                                </TableRow>
+                              ))}
+                            </TableBody>
+                          </Table>
+                        </TableContainer>
+                      </Box>
+                    )}
+                    {openRow ? (
+                      <Box>
+                        <Grid container spacing={2}>
+                          <Grid item xs={4}>
+                            <Box>
+                              <Autocomplete
+                                disablePortal
+                                id='serviceType'
+                                autoFocus
+                                options={serviceTypeList}
+                                disableClearable
+                                getOptionLabel={(option) => option.name}
+                                value={selectService}
+                                onChange={(_, e) => {
+                                  setSelectService(e);
+                                }}
+                                sx={{ width: '100%', margin: 'auto' }}
+                                renderInput={(params) => (
+                                  <TextField {...params} label='Service' />
+                                )}
+                              />
+                            </Box>
+                          </Grid>
+                          <Grid item xs={4}>
+                            <Box>
+                              <TextField
+                                required
+                                fullWidth
+                                id='priority'
+                                label='Priority'
+                                value={rowInput.priority}
+                                onChange={(e) => {
+                                  setRowInput((param) => ({
+                                    ...param,
+                                    priority: e.target.value,
+                                  }));
+                                }}
+                              />
+                            </Box>
+                          </Grid>
+                          <Grid item xs={4}>
+                            <Box
+                              sx={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                justifyContent: 'center',
+                              }}
+                            >
+                              <RangePicker
+                                // size='large'
+                                value={rowInput.dateRange}
+                                onChange={(val) => {
+                                  setRowInput((param) => ({
+                                    ...param,
+                                    dateRange: val,
+                                  }));
+                                }}
+                                style={{
+                                  padding: '1rem',
+                                }}
+                              />
+                            </Box>
+                          </Grid>
+                        </Grid>
+                        <Box
+                          sx={{
+                            display: 'flex',
+                            justifyContent: 'flex-end',
+                            gap: 1,
+                            padding: '1rem 0',
                           }}
-                        />
-                        <Box>
-                          <RangePicker
-                            // size='large'
-                            value={rowInput.dateRange}
-                            onChange={(val) => {
-                              setRowInput((param) => ({
-                                ...param,
-                                dateRange: val,
-                              }));
-                            }}
-                            // style={{
-                            //   zIndex: 10,
-                            //   padding: '0.75rem 1rem',
-                            //   width: '410px',
-                            // }}
-                          />
+                        >
+                          <IconButton>
+                            <Save
+                              onClick={addService}
+                              sx={{ color: blue[500] }}
+                            />
+                          </IconButton>
+                          <IconButton>
+                            <Close
+                              onClick={cancelServiceItem}
+                              sx={{ color: red[500] }}
+                            />
+                          </IconButton>
                         </Box>
-                        <Save onClick={addService} />
-                        <Close onClick={cancelServiceItem} />
                       </Box>
                     ) : (
                       <Box>
-                        <Button variant='text' onClick={addServiceItem}>
+                        <Button variant='outlined' onClick={addServiceItem}>
                           + Add service type
                         </Button>
                       </Box>
                     )}
                   </Box>
                 </Box>
-                <Typography variant='body1' fontWeight='bold'>
-                  Price table items
-                </Typography>
-                <Box>
-                  <Tabs
-                    value={value}
-                    onChange={handleChange}
-                    variant='scrollable'
-                    scrollButtons
-                    aria-label='basic tabs example'
+                <Divider />
+                <Box sx={{ margin: '1rem 0' }}>
+                  <Typography
+                    variant='h6'
+                    sx={{ fontWeight: '700', marginBottom: '1rem' }}
+                  >
+                    Price table items
+                  </Typography>
+                  <Box>
+                    <Tabs
+                      value={value}
+                      onChange={handleChange}
+                      variant='scrollable'
+                      scrollButtons
+                      aria-label='basic tabs example'
+                      sx={{
+                        [`& .${tabsClasses.scrollButtons}`]: {
+                          '&.Mui-disabled': { opacity: 0.3 },
+                        },
+                      }}
+                    >
+                      {boxTypeList.map((e, i) => {
+                        return <Tab label={e.name} {...a11yProps(i)} />;
+                      })}
+                    </Tabs>
+                    <Box>
+                      {boxTypeList.map((e, i) => {
+                        return (
+                          <TabPanel value={value} index={i}>
+                            <Box>
+                              {piList.length > 0 && (
+                                <Box>
+                                  <TableContainer>
+                                    <Table
+                                      sx={{ minWidth: 650 }}
+                                      aria-label='simple table'
+                                    >
+                                      <TableHead
+                                        sx={{ backgroundColor: '#f4f6f8' }}
+                                      >
+                                        <TableRow>
+                                          <TableCell>Box size</TableCell>
+                                          <TableCell>
+                                            Minimum time (minute)
+                                          </TableCell>
+                                          <TableCell>
+                                            Maximum time (minute)
+                                          </TableCell>
+                                          <TableCell>Price</TableCell>
+                                          <TableCell>Description</TableCell>
+                                          <TableCell>Action</TableCell>
+                                        </TableRow>
+                                      </TableHead>
+                                      <TableBody>
+                                        {piList.map((row) => {
+                                          if (
+                                            row.boxType.id ==
+                                            boxTypeList[value].id
+                                          ) {
+                                            return (
+                                              <TableRow
+                                                // key={row.id}
+                                                sx={{
+                                                  '&:last-child td,&:last-child th':
+                                                    {
+                                                      border: 0,
+                                                    },
+                                                }}
+                                              >
+                                                <TableCell
+                                                  component='th'
+                                                  scope='row'
+                                                >
+                                                  {row.boxSize.name}
+                                                </TableCell>
+                                                <TableCell>{row.min}</TableCell>
+                                                <TableCell>{row.max}</TableCell>
+                                                <TableCell>
+                                                  {row.price}
+                                                </TableCell>
+                                                <TableCell>
+                                                  {row.description}
+                                                </TableCell>
+
+                                                <TableCell>
+                                                  <Box sx={{ display: 'flex' }}>
+                                                    <IconButton
+                                                      onClick={(e, i) => {
+                                                        e.stopPropagation();
+                                                        deleteItem(row.id);
+                                                      }}
+                                                    >
+                                                      <DeleteForever
+                                                        sx={{ color: red[600] }}
+                                                      />
+                                                    </IconButton>
+                                                  </Box>
+                                                </TableCell>
+                                              </TableRow>
+                                            );
+                                          }
+                                        })}
+                                      </TableBody>
+                                    </Table>
+                                  </TableContainer>
+                                </Box>
+                              )}
+                              {openRowItem ? (
+                                <Box>
+                                  <Grid container spacing={2}>
+                                    <Grid item xs={3}>
+                                      <Box sx={{ paddingTop: '1rem' }}>
+                                        <Autocomplete
+                                          disablePortal
+                                          id='boxSize'
+                                          autoFocus
+                                          options={boxSizeList}
+                                          disableClearable
+                                          getOptionLabel={(option) =>
+                                            option.name
+                                          }
+                                          value={selectBoxSize}
+                                          onChange={(_, e) => {
+                                            setSelectBoxSize(e);
+                                          }}
+                                          sx={{ width: '100%', margin: 'auto' }}
+                                          renderInput={(params) => (
+                                            <TextField
+                                              {...params}
+                                              label='Box size'
+                                            />
+                                          )}
+                                        />
+                                      </Box>
+                                    </Grid>
+                                    <Grid item xs={3}>
+                                      <TextField
+                                        margin='normal'
+                                        required
+                                        id='min'
+                                        label='Minimum time (minute)'
+                                        value={rowInputItem.min}
+                                        onChange={(e) => {
+                                          setRowInputItem((param) => ({
+                                            ...param,
+                                            min: e.target.value,
+                                          }));
+                                        }}
+                                      />
+                                    </Grid>
+                                    <Grid item xs={3}>
+                                      <TextField
+                                        margin='normal'
+                                        required
+                                        id='max'
+                                        label='Maximum time (minute)'
+                                        value={rowInputItem.max}
+                                        onChange={(e) => {
+                                          setRowInputItem((param) => ({
+                                            ...param,
+                                            max: e.target.value,
+                                          }));
+                                        }}
+                                      />
+                                    </Grid>
+                                    <Grid item xs={3}>
+                                      <TextField
+                                        margin='normal'
+                                        required
+                                        id='price'
+                                        label='Price'
+                                        value={rowInputItem.price}
+                                        onChange={(e) => {
+                                          setRowInputItem((param) => ({
+                                            ...param,
+                                            price: e.target.value,
+                                          }));
+                                        }}
+                                      />
+                                    </Grid>
+                                  </Grid>
+                                  <Box>
+                                    <TextField
+                                      margin='normal'
+                                      id='description'
+                                      label='Description'
+                                      fullWidth
+                                      value={rowInputItem.description}
+                                      onChange={(e) => {
+                                        setRowInputItem((param) => ({
+                                          ...param,
+                                          description: e.target.value,
+                                        }));
+                                      }}
+                                    />
+                                  </Box>
+                                  <Box
+                                    sx={{
+                                      display: 'flex',
+                                      justifyContent: 'flex-end',
+                                      gap: 1,
+                                      padding: '1rem 0',
+                                    }}
+                                  >
+                                    <IconButton>
+                                      <Save
+                                        onClick={addItem}
+                                        sx={{ color: blue[500] }}
+                                      />
+                                    </IconButton>
+                                    <IconButton>
+                                      <Close
+                                        onClick={cancelItem}
+                                        sx={{ color: red[500] }}
+                                      />
+                                    </IconButton>
+                                  </Box>
+                                </Box>
+                              ) : (
+                                <Box sx={{ padding: '1rem 0' }}>
+                                  <Button
+                                    variant='outlined'
+                                    onClick={addRowItem}
+                                  >
+                                    + Add items
+                                  </Button>
+                                </Box>
+                              )}
+                            </Box>
+                          </TabPanel>
+                        );
+                      })}
+                    </Box>
+                  </Box>
+                  <Divider />
+                  <Box
                     sx={{
-                      [`& .${tabsClasses.scrollButtons}`]: {
-                        '&.Mui-disabled': { opacity: 0.3 },
-                      },
+                      marginTop: '1rem',
+                      display: 'flex',
+                      justifyContent: 'flex-end',
+                      gap: 2,
                     }}
                   >
-                    {boxTypeList.map((e, i) => {
-                      return <Tab label={e.name} {...a11yProps(i)} />;
-                    })}
-                  </Tabs>
-                  <Box>
-                    {boxTypeList.map((e, i) => {
-                      return (
-                        <TabPanel value={value} index={i}>
-                          <Box>
-                            <Box>
-                              <TableContainer>
-                                <Table
-                                  sx={{ minWidth: 650 }}
-                                  aria-label='simple table'
-                                >
-                                  <TableHead
-                                    sx={{ backgroundColor: '#f4f6f8' }}
-                                  >
-                                    <TableRow>
-                                      <TableCell>Box size</TableCell>
-                                      <TableCell>
-                                        Minimum time (minute)
-                                      </TableCell>
-                                      <TableCell>
-                                        Maximum time (minute)
-                                      </TableCell>
-                                      <TableCell>Price</TableCell>
-                                      <TableCell>Description</TableCell>
-                                      <TableCell>Action</TableCell>
-                                    </TableRow>
-                                  </TableHead>
-                                  <TableBody>
-                                    {piList.map((row) => {
-                                      if (
-                                        row.boxType.id == boxTypeList[value].id
-                                      ) {
-                                        return (
-                                          <TableRow
-                                            // key={row.id}
-                                            sx={{
-                                              '&:last-child td,&:last-child th':
-                                                {
-                                                  border: 0,
-                                                },
-                                            }}
-                                          >
-                                            <TableCell
-                                              component='th'
-                                              scope='row'
-                                            >
-                                              {row.boxSize.name}
-                                            </TableCell>
-                                            <TableCell>{row.min}</TableCell>
-                                            <TableCell>{row.max}</TableCell>
-                                            <TableCell>{row.price}</TableCell>
-                                            <TableCell>
-                                              {row.description}
-                                            </TableCell>
-
-                                            <TableCell>
-                                              <Box sx={{ display: 'flex' }}>
-                                                <IconButton
-                                                  onClick={(e, i) => {
-                                                    e.stopPropagation();
-                                                    deleteItem(row.id);
-                                                  }}
-                                                >
-                                                  <DeleteForever
-                                                    sx={{ color: red[600] }}
-                                                  />
-                                                </IconButton>
-                                              </Box>
-                                            </TableCell>
-                                          </TableRow>
-                                        );
-                                      }
-                                    })}
-                                  </TableBody>
-                                </Table>
-                              </TableContainer>
-                            </Box>
-                            {openRowItem ? (
-                              <Box sx={{ display: 'flex', gap: 2 }}>
-                                <Autocomplete
-                                  disablePortal
-                                  id='boxSize'
-                                  autoFocus
-                                  options={boxSizeList}
-                                  disableClearable
-                                  getOptionLabel={(option) => option.name}
-                                  value={selectBoxSize}
-                                  onChange={(_, e) => {
-                                    setSelectBoxSize(e);
-                                  }}
-                                  sx={{ width: '20%' }}
-                                  renderInput={(params) => (
-                                    <TextField {...params} label='Box size' />
-                                  )}
-                                />
-                                <TextField
-                                  margin='normal'
-                                  required
-                                  id='min'
-                                  label='Minimum time (minute)'
-                                  value={rowInputItem.min}
-                                  onChange={(e) => {
-                                    setRowInputItem((param) => ({
-                                      ...param,
-                                      min: e.target.value,
-                                    }));
-                                  }}
-                                />{' '}
-                                <TextField
-                                  margin='normal'
-                                  required
-                                  id='max'
-                                  label='Maximum time (minute)'
-                                  value={rowInputItem.max}
-                                  onChange={(e) => {
-                                    setRowInputItem((param) => ({
-                                      ...param,
-                                      max: e.target.value,
-                                    }));
-                                  }}
-                                />
-                                <TextField
-                                  margin='normal'
-                                  required
-                                  id='price'
-                                  label='Price'
-                                  value={rowInputItem.price}
-                                  onChange={(e) => {
-                                    setRowInputItem((param) => ({
-                                      ...param,
-                                      price: e.target.value,
-                                    }));
-                                  }}
-                                />{' '}
-                                <TextField
-                                  margin='normal'
-                                  required
-                                  id='description'
-                                  label='Description'
-                                  value={rowInputItem.description}
-                                  onChange={(e) => {
-                                    setRowInputItem((param) => ({
-                                      ...param,
-                                      description: e.target.value,
-                                    }));
-                                  }}
-                                />
-                                <Save onClick={addItem} />
-                                <Close onClick={cancelItem} />
-                              </Box>
-                            ) : (
-                              <Box>
-                                <Button variant='text' onClick={addRowItem}>
-                                  + Add items
-                                </Button>
-                              </Box>
-                            )}
-                          </Box>
-                        </TabPanel>
-                      );
-                    })}
+                    <Button
+                      variant='outlined'
+                      onClick={() => navigate('/admin/price-table', {})}
+                    >
+                      Cancel
+                    </Button>
+                    <Button type='submit' variant='contained'>
+                      Create new price table
+                    </Button>
                   </Box>
-                </Box>
-                <Box
-                  sx={{
-                    display: 'flex',
-                    gap: 1,
-                    textAlign: 'center',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}
-                >
-                  <Button variant='contained' type='submit'>
-                    Add
-                  </Button>
                 </Box>
               </Box>
             </Paper>

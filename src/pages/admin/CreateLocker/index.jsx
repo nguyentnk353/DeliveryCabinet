@@ -27,6 +27,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import createLocker from '../../../services/createLocker';
 import CloseIcon from '@mui/icons-material/Close';
 import { yellow } from '@mui/material/colors';
+import CustomBreadcrumb from '../../../components/CustomBreadcrumb';
 
 const validationSchema = yup.object({
   name: yup
@@ -41,7 +42,8 @@ const validationSchema = yup.object({
 const index = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const storeId = location?.state?.storeId ? location?.state?.storeId : 0;
+  // const storeId = location?.state?.storeId ? location?.state?.storeId : 0;
+  const storeId = 0;
   const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: yellow[100],
     textAlign: 'center',
@@ -53,7 +55,7 @@ const index = () => {
   const [boxSizeList, setBoxSizeList] = useState([]);
   const [boxTypeList, setBoxTypeList] = useState([]);
   const boxSize1 = boxSizeList.find((e) => e.id == 1);
-  const boxType1 = boxTypeList.find((e) => e.id == 1);
+  const boxType1 = boxTypeList.find((e) => e.name === 'Normal');
   const [boxClick, setBoxClick] = useState(false);
   const [createButton, setCreateButton] = useState(false);
   const [boxNum, setBoxNum] = useState({
@@ -173,7 +175,7 @@ const index = () => {
             Description: values.boxDescription,
             LockerId: 1,
             BoxType: boxType1,
-            Code: 'Box ' + index1,
+            Code: 'B' + index1,
             IsFake: false,
             BoxSize: boxSize1,
             FromTop: top,
@@ -217,7 +219,7 @@ const index = () => {
             Description: values.boxDescription,
             LockerId: 1,
             BoxType: boxType1,
-            Code: 'Box ' + index1,
+            Code: 'B' + index1,
             IsFake: false,
             BoxSize: boxSize1,
             FromTop: top,
@@ -354,7 +356,7 @@ const index = () => {
                     Description: 'Box ' + index1,
                     LockerId: 1,
                     BoxType: boxType1,
-                    Code: 'Box ' + index1,
+                    Code: 'B' + index1,
                     IsFake: false,
                     BoxSize: boxSize1,
                     FromTop: top,
@@ -410,7 +412,7 @@ const index = () => {
         Description: '',
         LockerId: 1,
         BoxType: boxType1,
-        Code: 'Box ' + index1,
+        Code: 'B' + index1,
         IsFake: false,
         BoxSize: boxSize1,
         FromTop: top,
@@ -504,9 +506,13 @@ const index = () => {
         }));
       });
   }
+  const bcList = [
+    { name: 'Cabinet', sidebar: 'Cabinet', to: '/admin/cabinet' },
+    { name: 'New cabinet', sidebar: 'Cabinet', to: '/admin/new-cabinet' },
+  ];
 
   return (
-    <Box sx={{ p: '5%' }}>
+    <Box>
       <Box
         component='form'
         onSubmit={formik.handleSubmit}
@@ -515,21 +521,23 @@ const index = () => {
       >
         <Box
           sx={{
+            marginBottom: '1.5rem',
             display: 'flex',
             justifyContent: 'space-between',
-            marginBottom: '2rem',
+            alignItems: 'center',
           }}
         >
-          <Typography variant='h5' sx={{ fontWeight: '700' }}>
-            New Cabinet
-          </Typography>
-          {/* <Button
-            type='submit'
-            variant='contained'
-            // onClick={() => navigate('/admin/new-store', { replace: true })}
-          >
-            Create new locker
-          </Button> */}
+          <Box>
+            <Typography
+              variant='h5'
+              sx={{ fontWeight: '600', marginBottom: '0.25rem' }}
+            >
+              New Cabinet
+            </Typography>
+            <Box>
+              <CustomBreadcrumb list={bcList} />
+            </Box>
+          </Box>
         </Box>
         <Box>
           <Paper
@@ -708,6 +716,31 @@ const index = () => {
                         style={{ width: '40%' }}
                         onChange={(e, value) => {
                           setBoxType(value);
+                          if (boxNum.BoxType.id != value.id) {
+                            const newData = data.box.map((e, i) => {
+                              if (e.id == boxNum.id) {
+                                return {
+                                  id: e.id,
+                                  key: e.key,
+                                  Description: e.Description,
+                                  LockerId: e.LockerId,
+                                  BoxType: value,
+                                  Code: e.Code,
+                                  IsFake: e.IsFake,
+                                  BoxSize: e.BoxSize,
+                                  FromTop: e.FromTop,
+                                  FromLeft: e.FromLeft,
+                                };
+                              } else {
+                                return e;
+                              }
+                            });
+
+                            setData((preState) => ({
+                              ...preState,
+                              box: newData ?? [],
+                            }));
+                          }
                         }}
                         renderInput={(params) => (
                           <TextField

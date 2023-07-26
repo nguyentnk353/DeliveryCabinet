@@ -109,6 +109,7 @@ const StoreTable = ({ province, city, district, search, isEnable }) => {
               <TableHead sx={{ backgroundColor: '#f4f6f8' }}>
                 <TableRow>
                   <TableCell>Id</TableCell>
+                  <TableCell>Name</TableCell>
                   <TableCell>Address</TableCell>
                   <TableCell>Description</TableCell>
                   <TableCell>Owner</TableCell>
@@ -138,6 +139,7 @@ const StoreTable = ({ province, city, district, search, isEnable }) => {
                     <TableCell component='th' scope='row'>
                       {row.id}
                     </TableCell>
+                    <TableCell>{row.name}</TableCell>
                     <TableCell>{row.address}</TableCell>
                     <TableCell>{row.description}</TableCell>
                     <TableCell>{row.user.fullName}</TableCell>

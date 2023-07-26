@@ -1,4 +1,4 @@
-import { DeleteOutline, SearchOutlined } from '@mui/icons-material';
+import { Add, DeleteOutline, SearchOutlined } from '@mui/icons-material';
 import {
   Autocomplete,
   Box,
@@ -16,7 +16,7 @@ import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TableAccount from './components/TableAccount';
-
+import CustomBreadcrumb from '../../../components/CustomBreadcrumb';
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -53,8 +53,8 @@ function a11yProps(index) {
 const roleList = [
   { name: 'Admin', id: 1 },
   { name: 'Store Owner', id: 2 },
-  { name: 'Customer', id: 3 },
-  { name: 'Staff', id: 4 },
+  { name: 'Customer', id: 4 },
+  { name: 'Staff', id: 3 },
 ];
 
 const AccountManagement = () => {
@@ -67,29 +67,35 @@ const AccountManagement = () => {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-
+  const bcList = [{ name: 'User', sidebar: 'User', to: '/admin/user' }];
   return (
-    <Box sx={{ p: '5%' }}>
+    <Box>
       <Box
         sx={{
-          marginBottom: '2rem',
+          marginBottom: '1.5rem',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
         }}
       >
-        <Grid container spacing={19} columns={16}>
-          <Grid item xs={12}>
-            <Typography variant='h5' sx={{ fontWeight: '700' }}>
-              Account List
-            </Typography>
-          </Grid>
-          <Grid item xs={4}>
-            <Button
-              variant='contained'
-              onClick={() => navigate('/admin/new-account', { replace: true })}
-            >
-              Add New Account
-            </Button>
-          </Grid>
-        </Grid>
+        <Box>
+          <Typography
+            variant='h5'
+            sx={{ fontWeight: '600', marginBottom: '0.25rem' }}
+          >
+            User List
+          </Typography>
+          <Box>
+            <CustomBreadcrumb list={bcList} />
+          </Box>
+        </Box>
+        <Button
+          variant='contained'
+          startIcon={<Add />}
+          onClick={() => navigate('/admin/new-user', { replace: true })}
+        >
+          New user
+        </Button>
       </Box>
 
       <Paper sx={{ borderRadius: '16px' }}>
@@ -160,7 +166,7 @@ const AccountManagement = () => {
             <Button
               color='error'
               startIcon={<DeleteOutline />}
-              sx={{ marginLeft: '1rem', paddingTop: '15px'}}
+              sx={{ marginLeft: '1rem', paddingTop: '15px' }}
               onClick={() => {
                 setRole({ name: '', id: undefined });
                 setSearchText('');
@@ -172,17 +178,17 @@ const AccountManagement = () => {
         </Box>
         <TabPanel status={''} value={value} index={0}>
           <Box>
-            <TableAccount role={role?.id} search={searchText}/>
+            <TableAccount role={role?.id} search={searchText} />
           </Box>
         </TabPanel>
         <TabPanel value={value} index={1}>
           <Box>
-            <TableAccount status={true} role={role?.id} search={searchText}/>
+            <TableAccount status={true} role={role?.id} search={searchText} />
           </Box>
         </TabPanel>
         <TabPanel value={value} index={2}>
           <Box>
-            <TableAccount status={false} role={role?.id} search={searchText}/>
+            <TableAccount status={false} role={role?.id} search={searchText} />
           </Box>
         </TabPanel>
       </Paper>

@@ -33,6 +33,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import StoreTable from './components/StoreTable';
 import { CloseIcon } from '@mui/icons-material/Close';
 import useNotification from '../../../utils/useNotification';
+import CustomBreadcrumb from '../../../components/CustomBreadcrumb';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -106,25 +107,28 @@ const index = () => {
       setWardList(res.data.wards);
     });
   }
-
+  const bcList = [{ name: 'Store', sidebar: 'Store', to: '/admin/store' }];
   return (
-    <Box sx={{ p: '5%' }}>
+    <Box>
       <Box
         sx={{
+          marginBottom: '1.5rem',
           display: 'flex',
           justifyContent: 'space-between',
-          marginBottom: '2rem',
+          alignItems: 'center',
         }}
       >
-        <Typography variant='h5' sx={{ fontWeight: '700' }}>
-          Store List
-        </Typography>
-        {/* <Button
-          variant='contained'
-          onClick={() => navigate('/admin/new-store', { replace: true })}
-        >
-          + New store
-        </Button> */}
+        <Box>
+          <Typography
+            variant='h5'
+            sx={{ fontWeight: '600', marginBottom: '0.25rem' }}
+          >
+            Store List
+          </Typography>
+          <Box>
+            <CustomBreadcrumb list={bcList} />
+          </Box>
+        </Box>
       </Box>
       <Paper sx={{ borderRadius: '16px' }}>
         <Box

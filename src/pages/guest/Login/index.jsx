@@ -68,8 +68,8 @@ export default function Login() {
 
             switch (decoded.Role) {
               case '1':
-                localStorage.setItem('selected', 'Store');
-                return navigate('/admin/store', { replace: true });
+                localStorage.setItem('selected', 'Dashboard');
+                return navigate('/admin/dashboard', { replace: true });
               case '2':
                 return navigate('/store-owner/home', { replace: true });
               case '3':
@@ -118,14 +118,15 @@ export default function Login() {
                   width: '400px',
                 }}
               >
-                <Box>
-                  <img
-                    src={logo}
-                    width='auto'
-                    height='50px'
-                    style={{ marginBottom: '20px' }}
-                  />
-                </Box>
+                <img
+                  src={logo}
+                  style={{
+                    marginBottom: '20px',
+                    height: '50px',
+                    width: 'auto',
+                  }}
+                />
+
                 <Box>
                   <Typography variant='h5' sx={{ fontWeight: '900' }}>
                     LOGIN

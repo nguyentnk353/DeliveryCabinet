@@ -1,9 +1,17 @@
-import { DeleteOutline, SearchOutlined } from '@mui/icons-material';
+import {
+  Add,
+  DeleteOutline,
+  Home,
+  NavigateNext,
+  SearchOutlined,
+} from '@mui/icons-material';
 import {
   Autocomplete,
   Box,
+  Breadcrumbs,
   Button,
   InputAdornment,
+  Link,
   Paper,
   Tab,
   Tabs,
@@ -15,6 +23,7 @@ import Grid from '@mui/material/Grid';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import CustomBreadcrumb from '../../../components/CustomBreadcrumb';
 import TableAccount from './components/TableAccount';
 
 function TabPanel(props) {
@@ -53,8 +62,8 @@ function a11yProps(index) {
 const roleList = [
   { name: 'Admin', id: 1 },
   { name: 'Store Owner', id: 2 },
-  { name: 'Customer', id: 3 },
-  { name: 'Staff', id: 4 },
+  { name: 'Customer', id: 4 },
+  { name: 'Staff', id: 3 },
 ];
 
 const CustomerManagement = () => {
@@ -68,28 +77,38 @@ const CustomerManagement = () => {
     setValue(newValue);
   };
 
+  const bcList = [
+    { name: 'Customer', sidebar: 'Customer', to: '/admin/customer' },
+  ];
+
   return (
-    <Box sx={{ p: '5%' }}>
+    <Box>
       <Box
         sx={{
-          marginBottom: '2rem',
+          marginBottom: '1.5rem',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
         }}
       >
-        <Grid container spacing={19} columns={16}>
-          <Grid item xs={12}>
-            <Typography variant='h5' sx={{ fontWeight: '700' }}>
-              Account List
-            </Typography>
-          </Grid>
-          <Grid item xs={4}>
-            <Button
-              variant='contained'
-              onClick={() => navigate('/admin/new-account', { replace: true })}
-            >
-              Add New Account
-            </Button>
-          </Grid>
-        </Grid>
+        <Box>
+          <Typography
+            variant='h5'
+            sx={{ fontWeight: '600', marginBottom: '0.25rem' }}
+          >
+            Customer List
+          </Typography>
+          <Box>
+            <CustomBreadcrumb list={bcList} />
+          </Box>
+        </Box>
+        {/* <Button
+          variant='contained'
+          startIcon={<Add />}
+          onClick={() => navigate('/admin/new-user', { replace: true })}
+        >
+          New customer
+        </Button> */}
       </Box>
 
       <Paper sx={{ borderRadius: '16px' }}>
@@ -116,38 +135,18 @@ const CustomerManagement = () => {
             p: '2%',
             display: 'flex',
             justifyContent: 'space-between',
+            alignItems: 'center',
+            gap: 1,
           }}
         >
-          {/* <Autocomplete
-            disablePortal
-            autoFocus
-            id='role'
-            options={roleList}
-            disableClearable
-            value={role}
-            getOptionLabel={(option) => option.name}
-            sx={{ width: '20%' }}
-            onChange={(event, newValue) => {
-              if (newValue) {
-                setRole(newValue);
-              }
-            }}
-            isOptionEqualToValue={(option, value) =>
-              option.name === value.name && option.id === value.id
-            }
-            renderInput={(params) => <TextField {...params} label='Role' />}
-          /> */}
-
           <TextField
             id='search-store-type'
             placeholder='Search...'
             type='search'
+            fullWidth
             variant='outlined'
             onChange={(e) => setSearchText(e.target.value)}
             value={searchText}
-            sx={{
-              width: '67%',
-            }}
             InputProps={{
               startAdornment: (
                 <InputAdornment position='start'>
@@ -160,7 +159,7 @@ const CustomerManagement = () => {
             <Button
               color='error'
               startIcon={<DeleteOutline />}
-              sx={{ marginLeft: '1rem', paddingTop: '15px' }}
+              // sx={{ marginLeft: '1rem', paddingTop: '15px' }}
               onClick={() => {
                 setRole({ name: '', id: undefined });
                 setSearchText('');
