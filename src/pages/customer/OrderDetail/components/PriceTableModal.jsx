@@ -11,7 +11,7 @@ const PriceTableModal = ({ isOpen, setIsOpen, storeId }) => {
                     {/* Modal content */}
                     <div className="px-5 pt-4 pb-1">
                         <div className="text-sm">
-                            <PriceTable storeId={'37'} />
+                            <PriceTable storeId={storeId} />
                         </div>
                     </div>
                     {/* Modal footer */}
