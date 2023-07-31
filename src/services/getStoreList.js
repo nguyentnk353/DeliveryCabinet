@@ -1,27 +1,11 @@
 import { request } from '../utils/request';
 
-export default function getStoreList({
-  PageIndex,
-  PageSize,
-  province,
-  city,
-  district,
-  search,
-  isEnable,
-}) {
+export default function getStoreList(payload) {
   const url = '/stores';
 
   return request
     .get(url, {
-      params: {
-        Province: province,
-        City: city,
-        District: district,
-        Address: search,
-        IsEnable: isEnable,
-        PageIndex: PageIndex + 1,
-        PageSize: PageSize,
-      },
+      params: payload,
     })
     .then((response) => response.data)
     .catch((err) => err.response.data);

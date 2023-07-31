@@ -233,11 +233,6 @@ const index = () => {
       createPriceTable(api)
         .then((res) => {
           if (res.status == 201) {
-            sendNotification({
-              msg: 'Price table create success',
-              variant: 'success',
-            });
-
             formik.resetForm({
               values: {
                 name: '',
@@ -253,6 +248,11 @@ const index = () => {
             });
             setPiList([]);
             setTable([]);
+            navigate('/admin/price-table');
+            sendNotification({
+              msg: 'Price table create success',
+              variant: 'success',
+            });
           } else {
             console.log(res);
             sendNotification({

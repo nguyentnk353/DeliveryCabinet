@@ -25,6 +25,8 @@ import LockerManagement from './pages/admin/LockerManagement';
 import CreateLocker from './pages/admin/CreateLocker';
 import StoreDetail from './pages/admin/StoreDetail';
 import ConfigPage from './pages/admin/ConfigPage';
+import StoreConfig from './pages/admin/StoreConfig';
+import BoxConfig from './pages/admin/BoxConfig';
 import CreatePriceTable from './pages/admin/CreatePriceTable';
 import StoreOwner from './pages/storeOwner/StoreOwner';
 import StoreOwnerHome from './pages/storeOwner/StoreOwnerHome';
@@ -41,8 +43,16 @@ import UpdateAccount from './pages/admin/AccountManagement/components/UpdateAcco
 import ShowAccInfo from './pages/admin/AccountManagement/ShowAccInfo/ShowAccInfo';
 import UpdateCustomer from './pages/admin/CustomerManagement/components/UpdateAccount/UpdateAccount';
 import ShowCustomerInfo from './pages/admin/CustomerManagement/ShowAccInfo/ShowAccInfo';
-import Analytics from './pages/admin/Analytics';
+import AdAnalytics from './pages/admin/Analytics';
+import SOAnalytics from './pages/storeOwner/Analytics';
+import StaffManagement from './pages/storeOwner/AccountManagement/AccountManagement';
+import CreateStaff from './pages/storeOwner/CreateAccount/CreateAccount';
+import UpdateStaff from './pages/storeOwner/AccountManagement/components/UpdateAccount/UpdateAccount';
+import ShowStaffInfo from './pages/storeOwner/AccountManagement/ShowAccInfo/ShowAccInfo';
+import SOStoreManagement from './pages/storeOwner/StoreManagement';
+import SOStoreDetail from './pages/storeOwner/StoreDetail';
 import 'antd/dist/reset.css';
+import 'react-perfect-scrollbar/dist/css/styles.css';
 import './index.css';
 
 function App() {
@@ -79,7 +89,7 @@ function App() {
               }
             >
               <Route path='home' element={<AdminHome />} />
-              <Route path='dashboard' element={<Analytics />} />
+              <Route path='dashboard' element={<AdAnalytics />} />
               <Route path='user' element={<AccountManagement />} />
               <Route path='customer' element={<CustomerManagement />} />
               <Route path='new-user' element={<CreateAccount />} />
@@ -109,6 +119,8 @@ function App() {
               <Route path='cabinet' element={<LockerManagement />} />
               <Route path='new-cabinet' element={<CreateLocker />} />
               <Route path='config' element={<ConfigPage />} />
+              <Route path='store-config' element={<StoreConfig />} />
+              <Route path='box-config' element={<BoxConfig />} />
               <Route path='testUI' element={<TestUI />} />
             </Route>
             <Route
@@ -122,6 +134,16 @@ function App() {
               }
             >
               <Route path='home' element={<StoreOwnerHome />} />
+              <Route path='dashboard' element={<SOAnalytics />} />
+              <Route path='staff' element={<StaffManagement />} />
+              <Route path='new-staff' element={<CreateStaff />} />
+              <Route path='update-staff' element={<UpdateStaff />} />
+              <Route
+                path='staff/staff-information'
+                element={<ShowStaffInfo />}
+              />
+              <Route path='store' element={<SOStoreManagement />} />
+              <Route path='store-detail' element={<SOStoreDetail />} />
             </Route>
             <Route
               path='/staff'
