@@ -1,6 +1,23 @@
-import { useTheme, Box, Typography, IconButton, Divider } from '@mui/material';
+import {
+  useTheme,
+  Box,
+  Typography,
+  IconButton,
+  Divider,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Collapse,
+  List,
+} from '@mui/material';
 import React, { useState } from 'react';
-import { Sidebar, Menu, MenuItem, useProSidebar } from 'react-pro-sidebar';
+import {
+  Sidebar,
+  Menu,
+  MenuItem,
+  useProSidebar,
+  SubMenu,
+} from 'react-pro-sidebar';
 import {
   StoreOutlined,
   PersonOutlineOutlined,
@@ -11,11 +28,14 @@ import {
   SettingsOutlined,
   HomeOutlined,
   ListAltOutlined,
+  StarBorder,
+  ExpandLess,
+  ExpandMore,
 } from '@mui/icons-material';
 import logo from '.././../../../assets/images/DeliveryPNG.png';
 import dlogo from '.././../../../assets/images/DeliveryLogo.png';
 import { blue } from '@mui/material/colors';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 import { BiCabinet, BiMenu, BiMenuAltLeft } from 'react-icons/bi';
 import { BsBox } from 'react-icons/bs';
@@ -23,6 +43,8 @@ import './index.scss';
 
 const index = () => {
   const selected = localStorage.getItem('selected');
+  const subConfig = localStorage.getItem('subConfig');
+  const { pathname: currentPath } = useLocation();
   const { collapseSidebar, toggleSidebar, collapsed, broken } = useProSidebar();
   const theme = useTheme();
   const pcolor = theme.palette.primary.main;
@@ -31,7 +53,15 @@ const index = () => {
   function setSelected(s) {
     localStorage.setItem('selected', s);
   }
+  function setSubOpen() {
+    if (subConfig === true) localStorage.setItem('subConfig', false);
+    if (subConfig === false) localStorage.setItem('subConfig', true);
+  }
+  const [open, setOpen] = React.useState(true);
 
+  const handleClick = () => {
+    setOpen(!open);
+  };
   const Item = ({ title, to, icon, selected, setSelected }) => {
     return (
       <div>
@@ -73,6 +103,46 @@ const index = () => {
     );
   };
 
+  const SubItem = ({ title, to, icon, selected, setSelected }) => {
+    return (
+      <div>
+        {collapsed ? (
+          <MenuItem
+            active={selected === title}
+            icon={icon}
+            onClick={() => {
+              setSelected(title);
+              navigate(to, { replace: true });
+            }}
+            style={{
+              paddingLeft: '10px',
+              borderRadius: '8px',
+              marginBottom: '4px',
+            }}
+          >
+            <Typography variant='body2'>{title}</Typography>
+          </MenuItem>
+        ) : (
+          <MenuItem
+            active={selected === title}
+            icon={icon}
+            routerlink={<Link to={to} />}
+            onClick={() => {
+              setSelected(title);
+              navigate(to, { replace: true });
+            }}
+            style={{
+              // padding: '10px 16px 10px 24px',
+              borderRadius: '8px',
+              marginBottom: '4px',
+            }}
+          >
+            <Typography variant='body2'>{title}</Typography>
+          </MenuItem>
+        )}
+      </div>
+    );
+  };
   return (
     <Box
       sx={{
@@ -95,6 +165,9 @@ const index = () => {
           '& .css-ksh4t7-MuiTypography-root': {
             fontWeight: '600 !important',
           },
+        },
+        '& .ps-submenu-expand-icon': {
+          display: 'none',
         },
       }}
     >
@@ -207,6 +280,59 @@ const index = () => {
                     selected={selected}
                     setSelected={setSelected}
                   />
+                  {/* <SubMenu
+                    icon={<SettingsOutlined />}
+                    label='Config'
+                    defaultOpen={currentPath.startsWith('/admin/store-config')}
+                    onClick={setSubOpen}
+                  >
+                    <Item
+                      title='Store config'
+                      to='/admin/store-config'
+                      selected={selected}
+                      setSelected={setSelected}
+                    />
+                    <Item
+                      title='Box config'
+                      to='/admin/box-config'
+                      selected={selected}
+                      setSelected={setSelected}
+                    />
+                  </SubMenu> */}
+
+                  {/* <ListItemButton onClick={handleClick}>
+                    <ListItemIcon>
+                      <SettingsOutlined />
+                    </ListItemIcon>
+                    <ListItemText primary='Config' />
+                    {open ? <ExpandLess /> : <ExpandMore />}
+                  </ListItemButton>
+                  <Collapse in={open} timeout='auto' unmountOnExit>
+                    <List
+                      component='div'
+                      disablePadding
+                      sx={{
+                        position: 'relative',
+                        '&:after': {
+                          content: "''",
+                          position: 'absolute',
+                          left: '32px',
+                          top: 0,
+                          height: '100%',
+                          width: '1px',
+                          opacity: 1,
+                          background: theme.palette.primary.light,
+                        },
+                      }}
+                    >
+                      <ListItemButton sx={{ pl: 4 }}>
+                        <ListItemIcon>
+                          <StarBorder />
+                        </ListItemIcon>
+                        <ListItemText primary='Starred' />
+                      </ListItemButton>
+                    </List>
+                  </Collapse> */}
                 </Box>
                 <Divider />
 

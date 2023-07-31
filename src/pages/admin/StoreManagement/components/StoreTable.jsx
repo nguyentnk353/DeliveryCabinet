@@ -42,9 +42,9 @@ const StoreTable = ({ province, city, district, search, isEnable }) => {
 
   useMount(() => {
     const payload = {
-      PageIndex: pg,
+      PageIndex: pg + 1,
       PageSize: rpg,
-      isEnable: isEnable,
+      IsEnable: isEnable,
     };
     getStoreList(payload)
       .then((res) => {
@@ -59,22 +59,24 @@ const StoreTable = ({ province, city, district, search, isEnable }) => {
   useEffect(() => {
     const payload = search
       ? {
-          PageIndex: 0,
+          PageIndex: 1,
           PageSize: rpg,
-          province: province.name,
-          city: city.name,
-          district: district.name,
-          search: search,
-          isEnable: isEnable,
+          Province: province.name,
+          City: city.name,
+          District: district.name,
+          Name: search,
+          Address: search,
+          IsEnable: isEnable,
         }
       : {
-          PageIndex: pg,
+          PageIndex: pg + 1,
           PageSize: rpg,
-          province: province.name,
-          city: city.name,
-          district: district.name,
-          search: search,
-          isEnable: isEnable,
+          Province: province.name,
+          City: city.name,
+          District: district.name,
+          Name: search,
+          Address: search,
+          IsEnable: isEnable,
         };
     getStoreList(payload)
       .then((res) => {

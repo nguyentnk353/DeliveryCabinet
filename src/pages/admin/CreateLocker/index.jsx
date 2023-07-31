@@ -44,13 +44,6 @@ const index = () => {
   const location = useLocation();
   // const storeId = location?.state?.storeId ? location?.state?.storeId : 0;
   const storeId = 0;
-  const Item = styled(Paper)(({ theme }) => ({
-    backgroundColor: yellow[100],
-    textAlign: 'center',
-    height: 'auto',
-    paddingBottom: '60%',
-    paddingTop: '10%',
-  }));
 
   const [boxSizeList, setBoxSizeList] = useState([]);
   const [boxTypeList, setBoxTypeList] = useState([]);
@@ -804,22 +797,27 @@ const index = () => {
               </Box>
             </Box>
             <Box sx={{ width: '45%' }}>
-              <Box
+              <div
                 id='grid'
-                sx={{
+                style={{
                   display: 'grid',
                   gridTemplateColumns: `repeat(${data.col}, 1fr)`,
-                  gap: 1,
+                  gridTemplateRows: `repeat(${data.row}, 1fr)`,
+                  gridGap: '8px',
                 }}
               >
                 {data.box &&
                   data.box?.map((e, i) => (
-                    <Item
+                    <Paper
                       className='grid-item'
                       sx={{
                         gridRow: `span ${e.BoxSize.height}`,
                         gridColumn: `span ${e.BoxSize.length}`,
                         cursor: 'pointer',
+                        backgroundColor: yellow[100],
+                        textAlign: 'center',
+                        paddingBottom: '60%',
+                        paddingTop: '10%',
                       }}
                       onClick={() => {
                         setBoxClick(true);
@@ -829,9 +827,9 @@ const index = () => {
                       }}
                     >
                       {e.Code}
-                    </Item>
+                    </Paper>
                   ))}
-              </Box>
+              </div>
             </Box>
           </Paper>
         </Box>

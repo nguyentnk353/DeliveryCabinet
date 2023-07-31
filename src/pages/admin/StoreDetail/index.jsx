@@ -117,7 +117,7 @@ const index = () => {
     { name: 'Store', sidebar: 'Store', to: '/admin/store' },
     { name: 'Store detail', sidebar: 'Store', to: '/admin/store/store-detail' },
   ];
-  console.log(storeInfo);
+
   const table = [
     { name: 'Store owner', info: storeInfo?.user?.fullName },
     { name: 'Province', info: storeInfo?.province },
@@ -160,10 +160,13 @@ const index = () => {
               />
               <Box>
                 <Box>
-                  <Typography variant='h4' sx={{ fontWeight: '500' }}>
+                  <Typography variant='h4' sx={{ fontWeight: '600' }}>
                     {storeInfo?.name}
                   </Typography>
-                  <Typography variant='body1' sx={{ marginBottom: '1rem' }}>
+                  <Typography
+                    variant='body1'
+                    sx={{ marginBottom: '1rem', fontWeight: '700' }}
+                  >
                     Address :{' '}
                     <Typography display='inline' variant='body1'>
                       {storeInfo?.address}
@@ -172,7 +175,7 @@ const index = () => {
                 </Box>
                 <Divider />
                 <Box>
-                  <Typography variant='body1' sx={{ fontWeight: '500' }}>
+                  <Typography variant='body1' sx={{ fontWeight: '700' }}>
                     Description
                   </Typography>
                   <Typography variant='body1' sx={{}}>
@@ -185,7 +188,7 @@ const index = () => {
             <Box>
               <Typography
                 variant='body1'
-                sx={{ fontWeight: '500', marginBottom: '1rem' }}
+                sx={{ fontWeight: '700', marginBottom: '1rem' }}
               >
                 Detail information
               </Typography>
@@ -203,7 +206,7 @@ const index = () => {
                         <TableCell
                           component='th'
                           scope='row'
-                          sx={{ backgroundColor: '#f0f2f5' }}
+                          sx={{ backgroundColor: '#f0f2f5', fontWeight: '600' }}
                         >
                           {row.name}
                         </TableCell>

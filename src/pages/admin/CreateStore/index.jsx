@@ -27,6 +27,8 @@ import { styled, useTheme } from '@mui/material/styles';
 import { FaUpload } from 'react-icons/fa';
 import postImage from '../../../services/postImage';
 import useNotification from '../../../utils/useNotification';
+import { Input } from 'antd';
+const { TextArea } = Input;
 
 const validationSchema = yup.object({
   name: yup.string('Enter name').required('Store name is required'),
@@ -67,38 +69,48 @@ const index = () => {
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      const api = {
-        name: values.name,
-        imgUrl:
-          'https://reviewedu.net/wp-content/uploads/2021/11/dh-1612100077948503798298.jpg',
-        province: province.name,
-        city: district.name,
-        district: ward.name,
-        street: '',
-        address: values.address,
-        description: values.description,
-        storeTypeId: storeType.id,
-        areaId: area.id,
-        serviceTypeId: serviceType.id,
-        userId: userInfo.id,
-      };
-      createStore(api)
+      const formData = new FormData();
+      formData.append('file', fileApi);
+
+      postImage(formData)
         .then((res) => {
-          if (res.status == 201) {
-            sendNotification({
-              msg: 'Store create success',
-              variant: 'success',
-            });
-            navigate('/admin/user/user-information', {
-              state: {
-                accountInfo: userInfo,
-              },
-            });
-          } else {
-            sendNotification({
-              msg: 'Store create fail',
-              variant: 'error',
-            });
+          if (res.status === 200) {
+            const api = {
+              name: values.name,
+              imgUrl: res.data.url,
+              province: province.name,
+              city: district.name,
+              district: ward.name,
+              street: '',
+              address: values.address,
+              description: values.description,
+              storeTypeId: storeType.id,
+              areaId: area.id,
+              serviceTypeId: serviceType.id,
+              userId: userInfo.id,
+            };
+            createStore(api)
+              .then((res) => {
+                if (res.status == 201) {
+                  navigate('/admin/user/user-information', {
+                    state: {
+                      accountInfo: userInfo,
+                    },
+                  });
+                  sendNotification({
+                    msg: 'Store create success',
+                    variant: 'success',
+                  });
+                } else {
+                  sendNotification({
+                    msg: 'Store create fail',
+                    variant: 'error',
+                  });
+                }
+              })
+              .catch((err) => {
+                console.log(err);
+              });
           }
         })
         .catch((err) => {
@@ -196,7 +208,6 @@ const index = () => {
   };
 
   const handleImageChange = (event) => {
-    fileBinary(event);
     const file = dnd ? event.dataTransfer.files[0] : event.target.files[0];
     setFileApi(file);
     const reader = new FileReader();
@@ -205,14 +216,7 @@ const index = () => {
     };
     reader.readAsDataURL(file);
   };
-  const fileBinary = (event) => {
-    const file = dnd ? event.dataTransfer.files[0] : event.target.files[0];
-    const reader = new FileReader();
-    reader.onload = () => {
-      setFileBi(reader.result);
-    };
-    reader.readAsBinaryString(file);
-  };
+
   const handleClick = () => {
     document.getElementById('img-input').click();
   };
@@ -268,9 +272,18 @@ const index = () => {
                 error={formik.touched.name && Boolean(formik.errors.name)}
                 helperText={formik.touched.name && formik.errors.name}
               />
-              <TextField
+              {/* <TextField
                 margin='normal'
                 fullWidth
+                id='description'
+                label='Description'
+                value={formik.values.description}
+                onChange={formik.handleChange}
+              /> */}
+              <TextArea
+                rows={3}
+                placeholder='Description'
+                maxLength={200}
                 id='description'
                 label='Description'
                 value={formik.values.description}
