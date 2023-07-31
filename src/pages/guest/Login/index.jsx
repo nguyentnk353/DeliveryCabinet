@@ -69,9 +69,11 @@ export default function Login() {
             switch (decoded.Role) {
               case '1':
                 localStorage.setItem('selected', 'Dashboard');
+                localStorage.setItem('subConfig', false);
                 return navigate('/admin/dashboard', { replace: true });
               case '2':
-                return navigate('/store-owner/home', { replace: true });
+                localStorage.setItem('selected', 'Dashboard');
+                return navigate('/store-owner/dashboard', { replace: true });
               case '3':
                 return navigate('/staff/home', { replace: true });
               case '4':

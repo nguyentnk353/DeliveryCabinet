@@ -354,7 +354,6 @@ const PriceTableItemTable = ({ searchText, createSuccess, isEnable }) => {
               <TableCell>Id</TableCell>
               <TableCell>Min duration</TableCell>
               <TableCell>Max duration</TableCell>
-              <TableCell>Unit price</TableCell>
               <TableCell>Description</TableCell>
               <TableCell>Status</TableCell>
               <TableCell>Action</TableCell>
@@ -373,7 +372,6 @@ const PriceTableItemTable = ({ searchText, createSuccess, isEnable }) => {
                 </TableCell>
                 <TableCell>{row.minDuration}</TableCell>
                 <TableCell>{row.maxDuration}</TableCell>
-                <TableCell>{row.unitPrice}</TableCell>
                 <TableCell>{row.description}</TableCell>
                 <TableCell>
                   {row.isEnable ? (

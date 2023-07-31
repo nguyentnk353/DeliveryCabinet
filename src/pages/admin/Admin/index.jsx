@@ -2,10 +2,11 @@ import React from 'react';
 import AdminNavBar from '../components/AdminNavBar';
 import AdminSideBar from '../components/AdminSideBar';
 import { Outlet } from 'react-router-dom';
-import './index.scss';
+
 import { Box } from '@mui/material';
 import Footer from '../../../components/Footer';
 
+import './index.scss';
 const index = () => {
   return (
     <Box
@@ -20,6 +21,18 @@ const index = () => {
         <Footer />
       </Box>
     </Box>
+    // <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+    //   <AdminNavBar />
+    //   <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+    //     <AdminSideBar />
+    //     <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+    //       <Box sx={{ backgroundColor: '#fafafb' }}>
+    //         <Outlet />
+    //       </Box>
+    //       <Footer />
+    //     </Box>
+    //   </Box>
+    // </Box>
   );
 };
 
