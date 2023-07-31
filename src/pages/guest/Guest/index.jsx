@@ -66,7 +66,7 @@ const index = () => {
               <div className="md:w-[40%]">
                 <div className='md:bg-white md:px-[18%] md:pb-[25%] md:pt-3'>
                   <WelcomeBanner />
-                  <div className="flex flex-wrap gap-5 justify-between pt-5">
+                  <div className="flex flex-wrap gap-5 justify-between pt-5 my-5">
 
                     <button className="btn border-slate-200 hover:border-slate-300 text-black w-[45%] max-md:bg-white text-base font-bold"
                       onClick={() => navigate('/customer/order')}
@@ -85,7 +85,7 @@ const index = () => {
                       <span className="ml-2">Ví</span>
                     </button>
 
-                    <button className="btn border-slate-200 hover:border-slate-300 text-black w-[100%] max-md:bg-white text-base font-bold"
+                    <button className="btn mb-10 mt-5 border-slate-200 hover:border-slate-300 text-black w-[100%] max-md:bg-white text-base font-bold"
                       onClick={() => navigate('/customer/search-store')}
                     >
                       <img src={Cabinet} alt="Your SVG" width='40px' />

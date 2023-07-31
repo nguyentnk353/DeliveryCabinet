@@ -22,7 +22,7 @@ const CustomerLanding = () => {
                                     <BankCard />
                                     <div className="flex flex-wrap gap-5 justify-between pt-5">
 
-                                        <button className="btn border-slate-200 hover:border-slate-300 text-black w-[45%] max-md:bg-white text-base font-bold"
+                                        <button className="btn my-5 border-slate-200 hover:border-slate-300 text-black w-[45%] max-md:bg-white text-base font-bold"
                                                  onClick={() => navigate('/customer/order')}
                                         >
                                             {/* <svg className="w-4 h-4 fill-current shrink-0" viewBox="0 0 16 16">
@@ -32,14 +32,14 @@ const CustomerLanding = () => {
                                             <span className="ml-2">Đơn hàng</span>
                                         </button>
 
-                                        <button className="btn border-slate-200 hover:border-slate-300 text-black w-[45%] max-md:bg-white text-base font-bold"
+                                        <button className="btn my-5 border-slate-200 hover:border-slate-300 text-black w-[45%] max-md:bg-white text-base font-bold"
                                                  onClick={() => navigate('/customer/wallet')}
                                         >
                                         <img src={Wallet} alt="Your SVG" width='40px'/>
                                             <span className="ml-2">Ví</span>
                                         </button>
 
-                                        <button className="btn border-slate-200 hover:border-slate-300 text-black w-[100%] max-md:bg-white text-base font-bold"
+                                        <button className="btn mb-10 border-slate-200 hover:border-slate-300 text-black w-[100%] max-md:bg-white text-base font-bold"
                                                  onClick={() => navigate('/customer/search-store')}
                                         >
                                         <img src={Cabinet} alt="Your SVG" width='40px'/>

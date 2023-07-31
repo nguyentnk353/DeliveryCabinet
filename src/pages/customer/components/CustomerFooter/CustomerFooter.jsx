@@ -3,16 +3,16 @@ import React from 'react'
 const CustomerFooter = () => {
     return (
         <footer className="bg-white border-t dark:bg-gray-900">
-            <div className="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">
+            <div className="mx-auto w-full max-w-screen-xl p-4 lg:py-8">
                 <div className="md:flex md:justify-between">
-                    <div className="mb-6 md:mb-0">
+                    <div className="mb-6 md:mb-0 max-md:hidden">
                         <a className="flex items-center">
-                            <img src="https://flowbite.com/docs/images/logo.svg" className="h-8 mr-3" alt="FlowBite Logo" />
-                            <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Flowbite</span>
+                            <img src="https://flowbite.com/docs/images/logo.svg" className="h-8 mr-3" alt="DC Logo" />
+                            <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">Delivery Cabinet</span>
                         </a>
                     </div>
                     <div className="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3">
-                        <div>
+                        {/* <div>
                             <h2 className="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">Resources</h2>
                             <ul className="text-gray-600 dark:text-gray-400 font-medium">
                                 <li className="mb-4">
@@ -22,8 +22,8 @@ const CustomerFooter = () => {
                                     <a className="hover:underline">Tailwind CSS</a>
                                 </li>
                             </ul>
-                        </div>
-                        <div>
+                        </div> */}
+                        {/* <div>
                             <h2 className="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">Follow us</h2>
                             <ul className="text-gray-600 dark:text-gray-400 font-medium">
                                 <li className="mb-4">
@@ -33,8 +33,8 @@ const CustomerFooter = () => {
                                     <a className="hover:underline">Discord</a>
                                 </li>
                             </ul>
-                        </div>
-                        <div className='max-md:hidden'>
+                        </div> */}
+                        {/* <div className='max-md:hidden'>
                             <h2 className="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">Legal</h2>
                             <ul className="text-gray-600 dark:text-gray-400 font-medium">
                                 <li className="mb-4">
@@ -44,7 +44,7 @@ const CustomerFooter = () => {
                                     <a  className="hover:underline">Terms &amp; Conditions</a>
                                 </li>
                             </ul>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
                 <hr className="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
