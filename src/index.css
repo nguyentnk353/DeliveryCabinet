@@ -1,4 +1,34 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+/* Buttons */
+.btn,
+.btn-lg,
+.btn-sm,
+.btn-xs {
+    @apply font-medium text-sm inline-flex items-center justify-center border border-transparent rounded leading-5 shadow-sm transition duration-150 ease-in-out;
+}
+
+.btn {
+    @apply px-3 py-2;
+}
+
+.btn-lg {
+    @apply px-4 py-3;
+}
+
+.btn-sm {
+    @apply px-2 py-1;
+}
+
+.btn-xs {
+    @apply px-2 py-0.5;
+}
 
 html,
 body,
@@ -10,4 +40,51 @@ body {
   /* height: 100vh;
   width: 100vw; */
   margin: 0;
+}
+.form-input,
+.form-textarea,
+.form-multiselect,
+.form-select,
+.form-checkbox,
+.form-radio {
+    @apply text-sm text-slate-800 bg-white border;
+}
+
+.form-input,
+.form-textarea,
+.form-multiselect,
+.form-select,
+.form-checkbox {
+    @apply rounded;
+}
+
+.form-input,
+.form-textarea,
+.form-multiselect,
+.form-select {
+    @apply leading-5 py-2 px-3 border-slate-200 hover:border-slate-300 focus:border-indigo-300 shadow-sm;
+}
+
+.form-input,
+.form-textarea {
+    @apply placeholder-slate-400;
+}
+
+.form-select {
+    @apply pr-10;
+}
+
+.form-checkbox,
+.form-radio {
+    @apply text-indigo-500 border border-slate-300;
+}
+
+/* Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }
