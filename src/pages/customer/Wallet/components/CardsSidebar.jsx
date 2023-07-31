@@ -4,11 +4,13 @@ import BankCard from '../../CustomerLanding/components/BankCard';
 import { useMount } from 'ahooks';
 import getLoginUser from '../../../../services/Customer/getLoginUser';
 import getWallet from '../../../../services/Customer/getWallet';
+import TopupZaloModal from './TopupZaloModal';
 
 const CardsSidebar = () => {
     const navigate = useNavigate();
     const [wallet, setWallet] = useState({})
     const [info, setInfo] = useState({})
+    const [isOpenTopup, setIsOpenTopup] = useState(false);
     useMount(() => {
         getLoginUser()
           .then((res) => {
@@ -29,6 +31,7 @@ const CardsSidebar = () => {
       });
     return (
         <>
+            <TopupZaloModal isOpen={isOpenTopup} setIsOpen={setIsOpenTopup} />
             <div>
                 <div className="lg:sticky lg:top-16 bg-white lg:overflow-x-hidden lg:overflow-y-auto no-scrollbar lg:shrink-0 border-t lg:border-t-0 lg:border-l border-slate-200 lg:w-[390px] lg:h-[calc(100vh-64px)]">
                     <div className="py-8 px-4 lg:px-8">
@@ -93,7 +96,13 @@ const CardsSidebar = () => {
                             {/* Button */}
                             <div className="flex items-center space-x-3 mt-6">
                                 <div className="w-1/2">
-                                    <button className="btn w-full border-[#3c50e0] hover:bg-[#3c50e0] hover:text-white text-[#3c50e0]">
+                                    <button className="btn w-full border-[#3c50e0] hover:bg-[#3c50e0] hover:text-white text-[#3c50e0]"
+                                            onClick={(e)=>{
+                                                e.stopPropagation();
+                                                setIsOpenTopup(true);
+                                                }
+                                            }      
+                                    >
                                         <svg
                                             fill="none"
                                             stroke="currentColor"
