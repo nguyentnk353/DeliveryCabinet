@@ -139,7 +139,7 @@ const index = () => {
     },
   });
   return (
-    <Box sx={{ p: '5%' }}>
+    <Box>
       <Modal
         open={open}
         onClose={handleClose}

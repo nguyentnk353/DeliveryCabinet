@@ -25,6 +25,7 @@ import { useNavigate } from 'react-router-dom';
 import paperBg from '../../../assets/images/LoginPaper.png';
 import LoginImg1 from '../../../assets/images/LoginImg1.png';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
+import useNotification from '../../../utils/useNotification';
 
 const validationSchema = yup.object({
   loginName: yup.string('Enter your username').required('Username is required'),
@@ -37,6 +38,7 @@ export default function Login() {
   const navigate = useNavigate();
   const [isInvalid, setIsinvalid] = useState(false);
   const [showPassword, setShowPassword] = React.useState(false);
+  const [msg, sendNotification] = useNotification();
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -66,7 +68,8 @@ export default function Login() {
 
             switch (decoded.Role) {
               case '1':
-                return navigate('/admin/store', { replace: true });
+                localStorage.setItem('selected', 'Dashboard');
+                return navigate('/admin/dashboard', { replace: true });
               case '2':
                 return navigate('/store-owner/home', { replace: true });
               case '3':
@@ -79,7 +82,7 @@ export default function Login() {
           }
         })
         .catch((error) => {
-          console.log(error);
+          sendNotification({ msg: error, variant: 'error' });
         });
     },
   });
@@ -115,14 +118,15 @@ export default function Login() {
                   width: '400px',
                 }}
               >
-                <Box>
-                  <img
-                    src={logo}
-                    width='auto'
-                    height='50px'
-                    style={{ marginBottom: '20px' }}
-                  />
-                </Box>
+                <img
+                  src={logo}
+                  style={{
+                    marginBottom: '20px',
+                    height: '50px',
+                    width: 'auto',
+                  }}
+                />
+
                 <Box>
                   <Typography variant='h5' sx={{ fontWeight: '900' }}>
                     LOGIN

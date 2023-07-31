@@ -1,6 +1,5 @@
 import axios from 'axios';
 export const request = axios.create({
-  // baseURL: 'https://deliver-store.tk/api/v1/',
   baseURL: 'https://deliver-store.tk/admin/api/',
 });
 request.interceptors.request.use(function (config) {

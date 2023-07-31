@@ -6,7 +6,7 @@ export default function getPriceTableList({
   PageSize,
   IsEnable,
 }) {
-  const url = '/priceTables/priceTable-paging';
+  const url = '/price-tables';
 
   return request
     .get(url, {

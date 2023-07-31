@@ -1,10 +1,9 @@
-import axios from 'axios';
-import axiosInstance from './axiosInstance';
+import { request } from '../utils/request';
 
 export default function getAccountList(props) {
-  const url = 'users/public-paging';
+  const url = '/users';
 
-  return axiosInstance
+  return request
     .get(url, {
       params: {
         FullName: props.search,

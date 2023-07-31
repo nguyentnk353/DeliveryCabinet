@@ -1,19 +1,18 @@
-import React, { useState } from "react";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import CircularProgress from "@mui/material/CircularProgress";
-import { styled } from "@mui/material/styles";
+import React, { useState } from 'react';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
+import { styled } from '@mui/material/styles';
 import defaultAvatar from '.././../../../../assets/images/defaultAvatar.png';
-
 
 const StyledAvatar = styled(Avatar)(({ theme }) => ({
   width: theme.spacing(25),
   height: theme.spacing(25),
-  margin: "auto",
+  margin: 'auto',
 }));
 
 const StyledButton = styled(Button)({
-  display: "none",
+  display: 'none',
 });
 
 const UploadAvatar = () => {
@@ -32,7 +31,7 @@ const UploadAvatar = () => {
   };
 
   const handleClick = () => {
-    document.getElementById("avatar-input").click();
+    document.getElementById('avatar-input').click();
   };
 
   return (
@@ -40,19 +39,20 @@ const UploadAvatar = () => {
       <StyledAvatar onClick={handleClick} src={image || defaultAvatar}>
         {loading ? <CircularProgress /> : null}
       </StyledAvatar>
-      <div style={{ textAlign: "center" }}>
+      <div style={{ textAlign: 'center' }}>
         <input
-          id="avatar-input"
-          type="file"
-          accept="image/png, image/jpeg"
+          id='avatar-input'
+          type='file'
+          accept='image/png, image/jpeg'
           onChange={handleImageChange}
-          style={{ display: "none" }}
-        />  
-        <label htmlFor="avatar-input">
-          <StyledButton variant="contained" component="span">
-          </StyledButton>
+          style={{ display: 'none' }}
+        />
+        <label htmlFor='avatar-input'>
+          <StyledButton variant='contained' component='span'></StyledButton>
         </label>
-        <div style={{ fontSize: "1rem", fontWeight:'380', marginTop: '50px' }}>Allowed *.jpg, *.png max size of 3 MB</div>
+        <div style={{ fontSize: '1rem', fontWeight: '380', marginTop: '50px' }}>
+          Allowed *.jpg, *.png max size of 3 MB
+        </div>
       </div>
     </>
   );

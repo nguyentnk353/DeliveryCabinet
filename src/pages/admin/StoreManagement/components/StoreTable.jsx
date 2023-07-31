@@ -57,15 +57,25 @@ const StoreTable = ({ province, city, district, search, isEnable }) => {
       });
   });
   useEffect(() => {
-    const payload = {
-      PageIndex: pg,
-      PageSize: rpg,
-      province: province.name,
-      city: city.name,
-      district: district.name,
-      search: search,
-      isEnable: isEnable,
-    };
+    const payload = search
+      ? {
+          PageIndex: 0,
+          PageSize: rpg,
+          province: province.name,
+          city: city.name,
+          district: district.name,
+          search: search,
+          isEnable: isEnable,
+        }
+      : {
+          PageIndex: pg,
+          PageSize: rpg,
+          province: province.name,
+          city: city.name,
+          district: district.name,
+          search: search,
+          isEnable: isEnable,
+        };
     getStoreList(payload)
       .then((res) => {
         const newTable = res.items.map((e) => e);
@@ -99,6 +109,7 @@ const StoreTable = ({ province, city, district, search, isEnable }) => {
               <TableHead sx={{ backgroundColor: '#f4f6f8' }}>
                 <TableRow>
                   <TableCell>Id</TableCell>
+                  <TableCell>Name</TableCell>
                   <TableCell>Address</TableCell>
                   <TableCell>Description</TableCell>
                   <TableCell>Owner</TableCell>
@@ -118,9 +129,9 @@ const StoreTable = ({ province, city, district, search, isEnable }) => {
                       cursor: 'pointer',
                     }}
                     onClick={() =>
-                      navigate('/admin/locker', {
+                      navigate('/admin/store-detail', {
                         state: {
-                          storeId: row.id,
+                          storeInfo: row,
                         },
                       })
                     }
@@ -128,6 +139,7 @@ const StoreTable = ({ province, city, district, search, isEnable }) => {
                     <TableCell component='th' scope='row'>
                       {row.id}
                     </TableCell>
+                    <TableCell>{row.name}</TableCell>
                     <TableCell>{row.address}</TableCell>
                     <TableCell>{row.description}</TableCell>
                     <TableCell>{row.user.fullName}</TableCell>

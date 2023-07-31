@@ -13,12 +13,17 @@ import {
   Alert,
 } from '@mui/material';
 import PropTypes from 'prop-types';
-import { DeleteOutline, MoreVert, SearchOutlined } from '@mui/icons-material';
+import {
+  Add,
+  DeleteOutline,
+  MoreVert,
+  SearchOutlined,
+} from '@mui/icons-material';
 import LockerTable from './components/LockerTable';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { CloseIcon } from '@mui/icons-material/Close';
 import { useMount } from 'ahooks';
-
+import CustomBreadcrumb from '../../../components/CustomBreadcrumb';
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -53,8 +58,8 @@ function a11yProps(index) {
 }
 const index = () => {
   const location = useLocation();
-  const storeId = location.state.storeId;
-  const notifyState = location.state.notify;
+  // const storeId = location.state.storeId;
+  const notifyState = location?.state?.notify;
   const navigate = useNavigate();
   const [value, setValue] = React.useState(0);
 
@@ -105,30 +110,36 @@ const index = () => {
       </IconButton>
     </React.Fragment>
   );
-
+  const bcList = [
+    { name: 'Cabinet', sidebar: 'Cabinet', to: '/admin/cabinet' },
+  ];
   return (
-    <Box sx={{ p: '5%' }}>
+    <Box>
       <Box
         sx={{
+          marginBottom: '1.5rem',
           display: 'flex',
           justifyContent: 'space-between',
-          marginBottom: '2rem',
+          alignItems: 'center',
         }}
       >
-        <Typography variant='h5' sx={{ fontWeight: '700' }}>
-          Locker List
-        </Typography>
+        <Box>
+          <Typography
+            variant='h5'
+            sx={{ fontWeight: '600', marginBottom: '0.25rem' }}
+          >
+            Cabinet List
+          </Typography>
+          <Box>
+            <CustomBreadcrumb list={bcList} />
+          </Box>
+        </Box>
         <Button
           variant='contained'
-          onClick={() =>
-            navigate('/admin/new-locker', {
-              state: {
-                storeId: storeId,
-              },
-            })
-          }
+          startIcon={<Add />}
+          onClick={() => navigate('/admin/new-cabinet', { replace: true })}
         >
-          + New locker
+          New cabinet
         </Button>
       </Box>
       <Paper sx={{ borderRadius: '16px' }}>
@@ -155,8 +166,8 @@ const index = () => {
             p: '2%',
             display: 'flex',
             justifyContent: 'space-between',
-            gap: '0.5rem',
             alignItems: 'center',
+            gap: 1,
           }}
         >
           <TextField
@@ -164,9 +175,9 @@ const index = () => {
             placeholder='Search...'
             type='search'
             variant='outlined'
+            fullWidth
             onChange={(e) => setSearchText(e.target.value)}
             value={searchText}
-            sx={{ width: '30%' }}
             InputProps={{
               startAdornment: (
                 <InputAdornment position='start'>

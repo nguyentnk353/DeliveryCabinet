@@ -1,14 +1,13 @@
-import axios from 'axios';
-import axiosInstance from './axiosInstance';
+import { request } from '../utils/request';
 
 export default function updateStoreType(props) {
-  const url = 'storeTypes';
-  return axiosInstance
-    .put(url, {  
-        id: props.id,
-        name: props.name,
-        description: props.description,
-        isEnable: props.isEnable,
+  const url = 'store-types';
+  return request
+    .put(url, {
+      id: props.id,
+      name: props.name,
+      description: props.description,
+      isEnable: props.isEnable,
     })
     .then((response) => response)
     .catch((err) => err.response);

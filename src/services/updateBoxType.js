@@ -1,7 +1,7 @@
 import { request } from '../utils/request';
 
 export default function updateBoxType({ id, name, isEnable }) {
-  const url = '/boxTypes/';
+  const url = '/box-types/';
 
   return request
     .put(url, {

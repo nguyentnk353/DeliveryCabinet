@@ -28,8 +28,15 @@ import getServiceTypeList from '../../../services/getServiceTypeList';
 import createStore from '../../../services/createStore';
 import updateStore from '../../../services/updateStore';
 import useNotification from '../../../utils/useNotification';
+import CustomBreadcrumb from '../../../components/CustomBreadcrumb';
+import uploadImg from '../../../assets/images/uploadImg.png';
+import download from '../../../assets/images/download.png';
+import { styled, useTheme } from '@mui/material/styles';
+import { FaUpload } from 'react-icons/fa';
+import postImage from '../../../services/postImage';
 
 const validationSchema = yup.object({
+  name: yup.string('Enter name').required('Store name is required'),
   address: yup
     .string('Enter detail address')
     .required('Detail address is required'),
@@ -38,23 +45,43 @@ const validationSchema = yup.object({
 const index = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [province, setProvince] = useState({ name: 'Choose province', key: 0 });
-  const [district, setDistrict] = useState({ name: 'Choose district', key: 0 });
-  const [ward, setWard] = useState({ name: 'Choose ward', key: 0 });
+  const theme = useTheme();
+  const [province, setProvince] = useState({
+    name: location?.state?.storeInfo?.province,
+    key: 0,
+  });
+  const [district, setDistrict] = useState({
+    name: location?.state?.storeInfo?.city,
+    key: 0,
+  });
+  const [ward, setWard] = useState({
+    name: location?.state?.storeInfo?.district,
+    key: 0,
+  });
   const [provinceList, setProvinceList] = useState([]);
   const [districtList, setDistrictList] = useState([]);
   const [wardList, setWardList] = useState([]);
   const [storeTypeList, setStoreTypeList] = useState([]);
   const [areaList, setAreaList] = useState([]);
   const [serviceTypeList, setServiceTypeList] = useState([]);
-  const [storeType, setStoreType] = useState({});
-  const [area, setArea] = useState({});
-  const [serviceType, setServiceType] = useState({});
+  const [storeType, setStoreType] = useState(
+    location?.state?.storeInfo?.storeType
+  );
+  const [area, setArea] = useState(location?.state?.storeInfo?.area);
+  const [serviceType, setServiceType] = useState(
+    location?.state?.storeInfo?.serviceType
+  );
   const [status, setStatus] = useState(location?.state?.storeInfo?.isEnable);
   const [msg, sendNotification] = useNotification();
+  const [image, setImage] = useState(location?.state?.storeInfo?.imgUrl);
+  const [fileApi, setFileApi] = useState(null);
+  const [fileBi, setFileBi] = useState(null);
+  const [dnd, setDnd] = useState(false);
+  const pcolor = theme.palette.primary.main;
 
   const formik = useFormik({
     initialValues: {
+      name: location?.state?.storeInfo?.name,
       address: location?.state?.storeInfo?.address,
       description: location?.state?.storeInfo?.description,
     },
@@ -154,94 +181,301 @@ const index = () => {
       setWardList(res.data.wards);
     });
   }
+  const bcList = [
+    { name: 'Store', sidebar: 'Store', to: '/admin/store' },
+    {
+      name: 'Update store',
+      sidebar: 'Store',
+      to: '/admin/update-store',
+    },
+  ];
+  const handleDragOver = (event) => {
+    event.preventDefault();
+    setDnd(true);
+  };
+  const handleDragEnter = (event) => {
+    event.preventDefault();
+  };
+  const handleDrop = (event) => {
+    event.preventDefault();
+    handleImageChange(event);
+
+    setDnd(false);
+  };
+  const handleDragLeave = (event) => {
+    event.preventDefault();
+    setDnd(false);
+  };
+
+  const handleImageChange = (event) => {
+    fileBinary(event);
+    const file = dnd ? event.dataTransfer.files[0] : event.target.files[0];
+    setFileApi(file);
+    const reader = new FileReader();
+    reader.onload = () => {
+      setImage(reader.result);
+    };
+    reader.readAsDataURL(file);
+  };
+  const fileBinary = (event) => {
+    const file = dnd ? event.dataTransfer.files[0] : event.target.files[0];
+    const reader = new FileReader();
+    reader.onload = () => {
+      setFileBi(reader.result);
+    };
+    reader.readAsBinaryString(file);
+  };
+  const handleClick = () => {
+    document.getElementById('img-input').click();
+  };
 
   return (
-    <Box sx={{ p: '5%' }}>
+    <Box>
+      <Box
+        sx={{
+          marginBottom: '1.5rem',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}
+      >
+        <Box>
+          <Typography
+            variant='h5'
+            sx={{ fontWeight: '600', marginBottom: '0.25rem' }}
+          >
+            New Store
+          </Typography>
+          <Box>
+            <CustomBreadcrumb list={bcList} />
+          </Box>
+        </Box>
+      </Box>
       <Box
         component='form'
         onSubmit={formik.handleSubmit}
         noValidate
         sx={{ mt: 1 }}
       >
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            marginBottom: '2rem',
-          }}
-        >
-          <Typography variant='h5' sx={{ fontWeight: '700' }}>
-            Update Store #{location.state.storeInfo.id}
-          </Typography>
-          <Button type='submit' variant='contained'>
-            Update store
-          </Button>
-        </Box>
-
-        <Box sx={{ display: 'flex', gap: '3rem' }}>
-          <Paper sx={{ width: '50%', p: '2rem' }}>
-            <Typography
-              variant='h6'
-              fontWeight='bold'
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                flexWrap: 'wrap',
-                gap: 1,
-              }}
-            >
-              <FmdGood sx={{ color: blue[500] }} />
-              <span>Store Location</span>
-            </Typography>
-            <Divider />
-            <Box
-              sx={{
-                paddingTop: '2rem',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '1rem',
-              }}
-            >
-              <Autocomplete
-                disablePortal
-                id='province'
+        <Paper sx={{ padding: '2% 4%', width: '80%', margin: '2% auto' }}>
+          <Box>
+            <Box sx={{ marginBottom: '2rem' }}>
+              <Typography
+                variant='h6'
+                sx={{
+                  fontWeight: '700',
+                }}
+              >
+                Basic information
+              </Typography>
+              <TextField
+                margin='normal'
+                fullWidth
+                required
                 autoFocus
-                options={provinceList}
-                getOptionLabel={(option) => option.name}
-                onChange={(_, e) => {
-                  setProvince(e);
-                  callApiDistrict(host + 'p/' + e.code + '?depth=2');
-                }}
-                sx={{ width: '100%' }}
-                renderInput={(params) => (
-                  <TextField {...params} label='Province' />
-                )}
+                id='name'
+                label='Name'
+                value={formik.values.name}
+                onChange={formik.handleChange}
+                error={formik.touched.name && Boolean(formik.errors.name)}
+                helperText={formik.touched.name && formik.errors.name}
               />
-              <Autocomplete
-                disablePortal
-                id='district'
-                options={districtList}
-                getOptionLabel={(option) => option.name}
-                onChange={(_, e) => {
-                  setDistrict(e);
-                  callApiWard(host + 'd/' + e.code + '?depth=2');
-                }}
-                sx={{ width: '100%' }}
-                renderInput={(params) => (
-                  <TextField {...params} label='District' />
-                )}
+              <TextField
+                margin='normal'
+                fullWidth
+                id='description'
+                label='Description'
+                value={formik.values.description}
+                onChange={formik.handleChange}
               />
-              <Autocomplete
-                disablePortal
-                id='ward'
-                options={wardList}
-                getOptionLabel={(option) => option.name}
-                onChange={(value) => {
-                  setWard(value);
+              <Box sx={{ marginTop: '1rem' }}>
+                <Typography
+                  variant='body1'
+                  sx={{
+                    fontWeight: '600',
+                    marginBottom: '0.5rem',
+                  }}
+                >
+                  Cover image
+                  {/* <span style={{ color: 'red' }}>*</span> */}
+                </Typography>
+                <Box
+                  onClick={handleClick}
+                  onDragOver={handleDragOver}
+                  onDragEnter={handleDragEnter}
+                  onDragLeave={handleDragLeave}
+                  onDrop={handleDrop}
+                  sx={{
+                    textAlign: 'center',
+                    alignItems: 'center',
+                    width: '100%',
+                    padding: '0 3%',
+                    border: ' 2px lightgrey dashed',
+                    borderRadius: '8px',
+                    ':hover': {
+                      cursor: 'pointer',
+                    },
+                    backgroundColor: dnd ? '#fafafa' : 'white',
+                  }}
+                >
+                  <input
+                    id='img-input'
+                    type='file'
+                    hidden
+                    accept='image/png, image/jpeg'
+                    onChange={handleImageChange}
+                  />
+                  {image ? (
+                    <Box sx={{ padding: '2% 0' }}>
+                      <img
+                        src={image}
+                        alt='upload image'
+                        style={{ width: '400px', margin: 'auto' }}
+                      />
+                      <Box
+                        sx={{
+                          color: pcolor,
+                          fontWeight: '400',
+                          marginTop: '0.5rem',
+                        }}
+                      >
+                        Choose another image
+                      </Box>
+                    </Box>
+                  ) : (
+                    <Box>
+                      {dnd ? (
+                        <Box
+                          sx={{
+                            width: '100%',
+                            padding: '5.5% 0',
+                          }}
+                        >
+                          <img
+                            src={download}
+                            alt='upload image'
+                            style={{
+                              height: '60px',
+                              margin: 'auto',
+                              opacity: '45%',
+                            }}
+                          />
+                          <Box
+                            sx={{
+                              color: '#454545',
+                              fontWeight: '400',
+                              marginTop: '0.5rem',
+                            }}
+                          >
+                            Drop image here to upload
+                          </Box>
+                        </Box>
+                      ) : (
+                        <Box sx={{ padding: '3% 0' }}>
+                          <img
+                            src={uploadImg}
+                            alt='upload image'
+                            style={{
+                              height: '60px',
+                              margin: 'auto',
+                              opacity: '45%',
+                            }}
+                          />
+                          <Button
+                            variant='contained'
+                            size='large'
+                            startIcon={<FaUpload />}
+                            sx={{
+                              borderRadius: '99px',
+                              // fontSize: '1.25rem',
+                              // lineheight: '1.5',
+                              padding: '0.5rem 1.5rem',
+                              fontWeight: '700',
+                              marginTop: '0.5rem',
+                            }}
+                          >
+                            Upload Image
+                          </Button>
+
+                          <Box
+                            sx={{
+                              color: '#454545',
+                              fontWeight: '400',
+                              marginTop: '0.5rem',
+                            }}
+                          >
+                            Or drop a file
+                          </Box>
+                        </Box>
+                      )}
+                    </Box>
+                  )}
+                </Box>
+              </Box>
+            </Box>
+            <Divider />
+            <Box sx={{ margin: '1rem 0 2rem 0' }}>
+              <Typography
+                variant='h6'
+                sx={{
+                  fontWeight: '700',
+                  marginBottom: '0.5rem',
                 }}
-                sx={{ width: '100%' }}
-                renderInput={(params) => <TextField {...params} label='Ward' />}
-              />
+              >
+                Location
+              </Typography>
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  gap: 3,
+                }}
+              >
+                <Autocomplete
+                  disablePortal
+                  id='province'
+                  options={provinceList}
+                  getOptionLabel={(option) => option.name}
+                  value={province}
+                  onChange={(_, e) => {
+                    setProvince(e);
+                    callApiDistrict(host + 'p/' + e.code + '?depth=2');
+                  }}
+                  sx={{ width: '100%' }}
+                  renderInput={(params) => (
+                    <TextField {...params} label='Province' />
+                  )}
+                />
+                <Autocomplete
+                  disablePortal
+                  id='district'
+                  options={districtList}
+                  getOptionLabel={(option) => option.name}
+                  value={district}
+                  onChange={(_, e) => {
+                    setDistrict(e);
+                    callApiWard(host + 'd/' + e.code + '?depth=2');
+                  }}
+                  sx={{ width: '100%' }}
+                  renderInput={(params) => (
+                    <TextField {...params} label='District' />
+                  )}
+                />
+                <Autocomplete
+                  disablePortal
+                  id='ward'
+                  options={wardList}
+                  getOptionLabel={(option) => option.name}
+                  value={ward}
+                  onChange={(_, e) => {
+                    setWard(e);
+                  }}
+                  sx={{ width: '100%' }}
+                  renderInput={(params) => (
+                    <TextField {...params} label='Ward' />
+                  )}
+                />
+              </Box>
               <TextField
                 margin='normal'
                 fullWidth
@@ -254,38 +488,22 @@ const index = () => {
                 helperText={formik.touched.address && formik.errors.address}
               />
             </Box>
-          </Paper>
-
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              width: '50%',
-              gap: '2rem',
-            }}
-          >
-            <Paper sx={{ p: '2rem' }}>
+            <Divider />
+            <Box sx={{ margin: '1rem 0 2rem 0' }}>
               <Typography
                 variant='h6'
-                fontWeight='bold'
                 sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  flexWrap: 'wrap',
-                  gap: 1,
+                  fontWeight: '700',
+                  marginBottom: '0.5rem',
                 }}
               >
-                <AddCircleOutline sx={{ color: blue[500] }} />
-                <span>Other</span>
+                Other
               </Typography>
-              <Divider />
               <Box
                 sx={{
-                  paddingTop: '2rem',
                   display: 'flex',
-                  flexDirection: 'column',
-
-                  gap: 2,
+                  justifyContent: 'space-between',
+                  gap: 3,
                 }}
               >
                 <Autocomplete
@@ -293,6 +511,7 @@ const index = () => {
                   id='storeType'
                   options={storeTypeList}
                   getOptionLabel={(option) => option.name}
+                  value={storeType}
                   onChange={(_, e) => {
                     setStoreType(e);
                   }}
@@ -306,6 +525,7 @@ const index = () => {
                   id='area'
                   options={areaList}
                   getOptionLabel={(option) => option.name}
+                  value={area}
                   onChange={(_, e) => {
                     setArea(e);
                   }}
@@ -319,7 +539,8 @@ const index = () => {
                   required
                   id='serviceType'
                   options={serviceTypeList}
-                  getOptionLabel={(option) => option.description}
+                  getOptionLabel={(option) => option.name}
+                  value={serviceType}
                   onChange={(_, e) => {
                     setServiceType(e);
                   }}
@@ -328,33 +549,29 @@ const index = () => {
                     <TextField {...params} label='Service type' />
                   )}
                 />
-                <TextField
-                  margin='normal'
-                  fullWidth
-                  id='description'
-                  label='Description'
-                  value={formik.values.description}
-                  onChange={formik.handleChange}
-                />
-                <FormControl>
-                  <InputLabel id='selectStatusLabel'>Status</InputLabel>
-                  <Select
-                    labelId='selectStatusLabel'
-                    id='selectStatus'
-                    value={status}
-                    label='Status'
-                    onChange={(e) => {
-                      setStatus(e.target.value);
-                    }}
-                  >
-                    <MenuItem value={true}>Active</MenuItem>
-                    <MenuItem value={false}>Inactive</MenuItem>
-                  </Select>
-                </FormControl>
               </Box>
-            </Paper>
+            </Box>
           </Box>
-        </Box>
+          <Divider />
+          <Box
+            sx={{
+              marginTop: '1rem',
+              display: 'flex',
+              justifyContent: 'flex-end',
+              gap: 2,
+            }}
+          >
+            <Button
+              variant='outlined'
+              onClick={() => navigate('/admin/store', {})}
+            >
+              Cancel
+            </Button>
+            <Button type='submit' variant='contained'>
+              Update store
+            </Button>
+          </Box>
+        </Paper>
       </Box>
     </Box>
   );

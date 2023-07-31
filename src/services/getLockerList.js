@@ -5,14 +5,16 @@ export default function getLockerList({
   PageSize,
   search,
   isEnable,
+  StoreId,
 }) {
-  const url = '/lockers/locker-paging';
+  const url = '/lockers';
 
   return request
     .get(url, {
       params: {
         Name: search,
         IsEnable: isEnable,
+        StoreId: StoreId,
         PageIndex: PageIndex + 1,
         PageSize: PageSize,
       },

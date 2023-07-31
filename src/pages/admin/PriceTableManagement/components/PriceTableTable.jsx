@@ -11,7 +11,7 @@ import {
   Chip,
   useTheme,
   IconButton,
-  Modal,
+  // Modal,
   Button,
   TextField,
   MenuItem,
@@ -33,11 +33,15 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import updateBoxType from './../../../../services/updateBoxType';
 import getPriceTableList from './../../../../services/getPriceTableList';
-import moment from 'moment/moment';
+import moment from 'moment-timezone';
 import deletePriceTable from './../../../../services/deletePriceTable';
-import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+// import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import updatePriceTable from './../../../../services/updatePriceTable';
+import { useNavigate } from 'react-router-dom';
+import { DatePicker, Space, Modal } from 'antd';
+const { RangePicker } = DatePicker;
+import * as dayjs from 'dayjs';
 
 const validationSchema = yup.object({
   name: yup.string('Enter box size name').required('Name is required'),
@@ -47,6 +51,8 @@ const PriceTableTable = ({ searchText, createSuccess, isEnable }) => {
   const [pg, setpg] = React.useState(0);
   const [rpg, setrpg] = React.useState(5);
   const [msg, sendNotification] = useNotification();
+  const [picker, setPicker] = useState([]);
+  const navigate = useNavigate();
   function handleChangePage(event, newpage) {
     setpg(newpage);
   }
@@ -76,12 +82,19 @@ const PriceTableTable = ({ searchText, createSuccess, isEnable }) => {
       });
   });
   useEffect(() => {
-    const api = {
-      Name: searchText,
-      PageIndex: pg + 1,
-      PageSize: rpg,
-      IsEnable: isEnable,
-    };
+    const api = searchText
+      ? {
+          Name: searchText,
+          PageIndex: 1,
+          PageSize: rpg,
+          IsEnable: isEnable,
+        }
+      : {
+          Name: searchText,
+          PageIndex: pg + 1,
+          PageSize: rpg,
+          IsEnable: isEnable,
+        };
     getPriceTableList(api)
       .then((res) => {
         const newTable = res.items.map((e) => e);
@@ -93,14 +106,14 @@ const PriceTableTable = ({ searchText, createSuccess, isEnable }) => {
         sendNotification({ msg: err, variant: 'error' });
       });
   }, [createSuccess, pg, rpg, searchText, msg]);
+
   const [open, setOpen] = React.useState(false);
 
   const [field, setField] = React.useState({
     id: '',
     name: '',
     status: true,
-    applyFrom: null,
-    applyTo: null,
+    rangePicker: [],
     mon: false,
     tue: false,
     wed: false,
@@ -115,8 +128,7 @@ const PriceTableTable = ({ searchText, createSuccess, isEnable }) => {
       values: {
         name: '',
         status: '',
-        applyFrom: null,
-        applyTo: null,
+        rangePicker: null,
         mon: false,
         tue: false,
         wed: false,
@@ -166,11 +178,12 @@ const PriceTableTable = ({ searchText, createSuccess, isEnable }) => {
       const api = {
         id: field.id,
         name: val.name,
-        applyFrom: moment(new Date(moment(val.applyFrom).format())).format(),
-        applyTo: moment(new Date(moment(val.applyTo).format())).format(),
-        dateFilter: parseInt(bi.join(''), 2),
+        applyFrom: dayjs(val.rangePicker[0].$d).format('YYYY-MM-DDTHH:mm[Z]'),
+        applyTo: dayjs(val.rangePicker[1].$d).format('YYYY-MM-DDTHH:mm[Z]'),
+        dateFilter: bi.join(''),
         isEnable: field.status,
       };
+
       updatePriceTable(api)
         .then((res) => {
           if (res.status == 200) {
@@ -192,15 +205,13 @@ const PriceTableTable = ({ searchText, createSuccess, isEnable }) => {
     },
   });
 
-  function openUpdateBoxType(row) {
-    const binary = parseInt((+row.dateFilter).toString(2)).toString();
-    const b = binary.split('').map(Number);
+  function openUpdate(row) {
+    const b = row?.dateFilter?.split('').map(Number);
     setField({
-      id: row.id,
-      name: row.name,
-      status: row.isEnable,
-      applyFrom: moment(row.applyFrom),
-      applyTo: moment(row.applyTo),
+      id: row?.id,
+      name: row?.name,
+      status: row?.isEnable,
+      rangePicker: [dayjs(row?.applyFrom), dayjs(row?.applyTo)],
       mon: b[0] == 1,
       tue: b[1] == 1,
       wed: b[2] == 1,
@@ -232,25 +243,26 @@ const PriceTableTable = ({ searchText, createSuccess, isEnable }) => {
   }
 
   function showDateFilter(date) {
-    const binary = parseInt((+date).toString(2)).toString();
-    const b = binary.split('').map(Number);
-    const filter = [0, 0, 0, 0, 0, 0, 0];
-    const checkFilter = filter.map((e, i) => {
-      if (b[i]) {
-        return b[i];
-      } else return e;
+    const b = date?.split('').map(Number);
+    const tf = b?.map((e) => {
+      if (e == 1) {
+        return true;
+      } else {
+        return false;
+      }
     });
-    const check = checkFilter.map((e, i) => {
+    const check = tf?.map((e, i) => {
       let d = i + 2;
       if (d == 8) d = 'Sun';
-
-      if (e == 1)
-        return (
-          <FormControlLabel disabled control={<Checkbox checked />} label={d} />
-        );
-      else
-        return <FormControlLabel disabled control={<Checkbox />} label={d} />;
+      return (
+        <FormControlLabel
+          disabled
+          control={<Checkbox checked={e} />}
+          label={d}
+        />
+      );
     });
+
     return check;
   }
   return (
@@ -259,10 +271,11 @@ const PriceTableTable = ({ searchText, createSuccess, isEnable }) => {
         <Modal
           open={open}
           onClose={handleClose}
-          aria-labelledby='modal-modal-title'
-          aria-describedby='modal-modal-description'
+          footer={null}
+          closable={false}
+          width={700}
         >
-          <Box sx={style}>
+          <Box sx={{ padding: '2rem 7rem' }}>
             <Typography
               id='modal-modal-title'
               variant='h5'
@@ -279,11 +292,18 @@ const PriceTableTable = ({ searchText, createSuccess, isEnable }) => {
               noValidate
               sx={{ mt: 1 }}
             >
-              <Box sx={{ padding: '2rem' }}>
-                <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+              <Box>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    gap: 2,
+                    alignItems: 'center',
+                    marginBottom: '1rem',
+                  }}
+                >
                   <TextField
                     margin='normal'
-                    fullWidth
+                    sx={{ width: '260px' }}
                     required
                     id='name'
                     label='Name'
@@ -294,19 +314,16 @@ const PriceTableTable = ({ searchText, createSuccess, isEnable }) => {
                     helperText={formik.touched.name && formik.errors.name}
                   />
 
-                  <Box sx={{ width: '50%', paddingTop: '1%' }}>
+                  <Box sx={{ width: '130px', paddingTop: '1.5%' }}>
                     <FormControl fullWidth>
                       <InputLabel id='statusLabel'>Status</InputLabel>
                       <Select
                         labelId='statusLabel'
                         id='status'
-                        value={field.status}
                         label='Status'
+                        value={formik.values.status}
                         onChange={(e) => {
-                          setField((preState) => ({
-                            ...preState,
-                            status: e.target.value,
-                          }));
+                          formik.setFieldValue('status', e.target.value);
                         }}
                       >
                         <MenuItem value={true}>Active</MenuItem>
@@ -315,33 +332,24 @@ const PriceTableTable = ({ searchText, createSuccess, isEnable }) => {
                     </FormControl>
                   </Box>
                 </Box>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <LocalizationProvider dateAdapter={AdapterMoment}>
-                    <DatePicker
-                      label='Apply from'
-                      id='applyFrom'
-                      name='applyFrom'
-                      required
-                      value={formik.values.applyFrom}
-                      onChange={(value) => {
-                        formik.setFieldValue('applyFrom', value);
-                      }}
-                      renderInput={(params) => <TextField {...params} />}
-                    />
-                  </LocalizationProvider>
-                  <LocalizationProvider dateAdapter={AdapterMoment}>
-                    <DatePicker
-                      label='Apply to'
-                      id='applyTo'
-                      name='applyTo'
-                      required
-                      value={formik.values.applyTo}
-                      onChange={(value) => {
-                        formik.setFieldValue('applyTo', value);
-                      }}
-                      renderInput={(params) => <TextField {...params} />}
-                    />
-                  </LocalizationProvider>
+
+                <Box sx={{ marginBottom: '1rem' }}>
+                  <RangePicker
+                    size='large'
+                    // value={picker}
+                    // onChange={(value) => {
+                    //   setPicker(value);
+                    // }}
+                    value={formik.values.rangePicker}
+                    onChange={(value) => {
+                      formik.setFieldValue('rangePicker', value);
+                    }}
+                    style={{
+                      zIndex: 10,
+                      padding: '0.75rem 1rem',
+                      width: '410px',
+                    }}
+                  />
                 </Box>
                 <Box>
                   <Typography variant='body1' fontWeight='bold'>
@@ -428,23 +436,34 @@ const PriceTableTable = ({ searchText, createSuccess, isEnable }) => {
           <TableBody>
             {table.map((row) => (
               <TableRow
-                key={row.id}
+                key={row?.id}
                 sx={{
                   '&:last-child td,&:last-child th': { border: 0 },
+                  '&:hover': {
+                    backgroundColor: '#f5f5f5',
+                  },
+                  cursor: 'pointer',
                 }}
+                onClick={() =>
+                  navigate('/admin/price-table-item', {
+                    state: {
+                      priceTable: row,
+                    },
+                  })
+                }
               >
                 <TableCell component='th' scope='row'>
-                  {row.name}
+                  {row?.name}
                 </TableCell>
                 <TableCell>
-                  {moment(row.applyFrom).format('DD /MM /YYYY')}
+                  {moment(row?.applyFrom).format('DD /MM /YYYY')}
                 </TableCell>
                 <TableCell>
-                  {moment(row.applyTo).format('DD /MM /YYYY')}
+                  {moment(row?.applyTo).format('DD /MM /YYYY')}
                 </TableCell>
-                <TableCell>{showDateFilter(row.dateFilter)}</TableCell>
+                <TableCell>{showDateFilter(row?.dateFilter)}</TableCell>
                 <TableCell>
-                  {row.isEnable ? (
+                  {row?.isEnable ? (
                     <Chip
                       label='Active'
                       size='small'
@@ -469,7 +488,7 @@ const PriceTableTable = ({ searchText, createSuccess, isEnable }) => {
                     <IconButton
                       onClick={(e) => {
                         e.stopPropagation();
-                        openUpdateBoxType(row);
+                        openUpdate(row);
                       }}
                     >
                       <Edit sx={{ color: blue[500] }} />

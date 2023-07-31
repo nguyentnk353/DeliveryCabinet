@@ -6,7 +6,7 @@ export default function getBoxSizeList({
   PageSize,
   IsEnable,
 }) {
-  const url = '/boxSizes/boxSize-paging';
+  const url = '/box-sizes';
 
   return request
     .get(url, {

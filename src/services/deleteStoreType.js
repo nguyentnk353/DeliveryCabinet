@@ -1,9 +1,9 @@
-import axiosInstance from './axiosInstance';
+import { request } from '../utils/request';
 
 export default function deleteStoreType(id) {
-  const url = 'storeTypes/' + id;
+  const url = '/store-types/' + id;
 
-  return axiosInstance
+  return request
     .delete(url)
     .then((response) => response)
     .catch((err) => err);

@@ -69,12 +69,19 @@ const BoxSizeTable = ({ searchText, createSuccess, isEnable }) => {
       });
   });
   useEffect(() => {
-    const api = {
-      Name: searchText,
-      PageIndex: pg + 1,
-      PageSize: rpg,
-      IsEnable: isEnable,
-    };
+    const api = searchText
+      ? {
+          Name: searchText,
+          PageIndex: 1,
+          PageSize: rpg,
+          IsEnable: isEnable,
+        }
+      : {
+          Name: searchText,
+          PageIndex: pg + 1,
+          PageSize: rpg,
+          IsEnable: isEnable,
+        };
     getBoxSizeList(api)
       .then((res) => {
         const newTable = res.items.map((e) => e);
@@ -224,13 +231,10 @@ const BoxSizeTable = ({ searchText, createSuccess, isEnable }) => {
                       <Select
                         labelId='statusLabel'
                         id='status'
-                        value={field.status}
                         label='Status'
+                        value={formik.values.status}
                         onChange={(e) => {
-                          setField((preState) => ({
-                            ...preState,
-                            status: e.target.value,
-                          }));
+                          formik.setFieldValue('status', e.target.value);
                         }}
                       >
                         <MenuItem value={true}>Active</MenuItem>

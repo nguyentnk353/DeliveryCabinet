@@ -1,5 +1,4 @@
-import axios from 'axios';
-import { request } from '../utils/request';
+import { loginRequest } from '../utils/loginRequest';
 
 export default function login(props) {
   const url = 'https://deliver-store.tk/api/v1/user/authenticate';
@@ -7,7 +6,7 @@ export default function login(props) {
   const Password = props.password;
   const postData = {};
   const error = { error: 'login-fail' };
-  return axios
+  return loginRequest
     .post(url, postData, {
       params: {
         loginName: LoginName,

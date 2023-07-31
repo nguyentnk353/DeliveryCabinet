@@ -5,20 +5,28 @@ import { ProSidebarProvider } from 'react-pro-sidebar';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { RolesAuthRoute } from './context/RolesAuthRoute';
 import AccountManagement from './pages/admin/AccountManagement/AccountManagement';
-import ShowAccInfo from './pages/admin/AccountManagement/ShowAccInfo/ShowAccInfo';
-import UpdateAccount from './pages/admin/AccountManagement/components/UpdateAccount/UpdateAccount';
 import Admin from './pages/admin/Admin';
 import AdminHome from './pages/admin/AdminHome';
 import AreaManagement from './pages/admin/AreaManagement/AreaManagement';
-import BoxSizeManagement from './pages/admin/BoxSizeManagement';
-import BoxTypeManagement from './pages/admin/BoxTypeManagement';
-import CreateAccount from './pages/admin/CreateAccount/CreateAccount';
-import CreateLocker from './pages/admin/CreateLocker';
-import CreateStore from './pages/admin/CreateStore';
-import LockerManagement from './pages/admin/LockerManagement';
-import PriceTableManagement from './pages/admin/PriceTableManagement';
-import ServiceTypeManagement from './pages/admin/ServiceTypeManagement';
+import DashboardPage from './pages/admin/DashboardPage';
+import CustomerManagement from './pages/admin/CustomerManagement/CustomerManagement';
 import StoreManagement from './pages/admin/StoreManagement';
+import BoxSizeManagement from './pages/admin/BoxSizeManagement';
+import ServiceTypeManagement from './pages/admin/ServiceTypeManagement';
+import ServiceConfig from './pages/admin/ServiceConfig';
+import CreateStore from './pages/admin/CreateStore';
+import BoxTypeManagement from './pages/admin/BoxTypeManagement';
+import PriceTableManagement from './pages/admin/PriceTableManagement';
+import PriceTableItemManagement from './pages/admin/PriceTableItemManagement';
+import LockerManagement from './pages/admin/LockerManagement';
+import CreateLocker from './pages/admin/CreateLocker';
+import StoreDetail from './pages/admin/StoreDetail';
+import ConfigPage from './pages/admin/ConfigPage';
+import CreatePriceTable from './pages/admin/CreatePriceTable';
+import StoreOwner from './pages/storeOwner/StoreOwner';
+import StoreOwnerHome from './pages/storeOwner/StoreOwnerHome';
+import Staff from './pages/staff/Staff';
+import StaffHome from './pages/staff/StaffHome';
 import StoreTypeManagement from './pages/admin/StoreTypeManagement/StoreTypeManagement';
 import TestUI from './pages/admin/TestUI/TestUI';
 import UpdateStore from './pages/admin/UpdateStore';
@@ -31,14 +39,18 @@ import StoreInformation from './pages/customer/StoreInfomartion/StoreInformation
 import Guest from './pages/guest/Guest';
 import LoginCustomer from './pages/guest/Guest/LoginCustomer/LoginCustomer';
 import Login from './pages/guest/Login';
-import Staff from './pages/staff/Staff';
-import StaffHome from './pages/staff/StaffHome';
-import StoreOwner from './pages/storeOwner/StoreOwner';
-import StoreOwnerHome from './pages/storeOwner/StoreOwnerHome';
 import theme from './theme';
 import Wallet from './pages/customer/Wallet/Wallet';
 import CustomerLanding from './pages/customer/CustomerLanding/CustomerLanding';
 
+import UpdateAccount from './pages/admin/AccountManagement/components/UpdateAccount/UpdateAccount';
+import ShowAccInfo from './pages/admin/AccountManagement/ShowAccInfo/ShowAccInfo';
+import UpdateCustomer from './pages/admin/CustomerManagement/components/UpdateAccount/UpdateAccount';
+import ShowCustomerInfo from './pages/admin/CustomerManagement/ShowAccInfo/ShowAccInfo';
+import Analytics from './pages/admin/Analytics';
+import 'antd/dist/reset.css';
+import './index.css';
+import CreateAccount from './pages/admin/CreateAccount/CreateAccount';
 
 function App() {
   return (
@@ -73,21 +85,36 @@ function App() {
               }
             >
               <Route path='home' element={<AdminHome />} />
-              <Route path='account' element={<AccountManagement />} />
-              <Route path='new-account' element={<CreateAccount />} />
-              <Route path='update-account' element={<UpdateAccount />} />
-              <Route path='account/account-information' element={<ShowAccInfo />} />
+              <Route path='dashboard' element={<Analytics />} />
+              <Route path='user' element={<AccountManagement />} />
+              <Route path='customer' element={<CustomerManagement />} />
+              <Route path='new-user' element={<CreateAccount />} />
+              <Route path='update-user' element={<UpdateAccount />} />
+              <Route path='user/user-information' element={<ShowAccInfo />} />
+              <Route path='update-customer' element={<UpdateCustomer />} />
+              <Route
+                path='customer/customer-information'
+                element={<ShowCustomerInfo />}
+              />
               <Route path='store' element={<StoreManagement />} />
+              <Route path='store-detail' element={<StoreDetail />} />
               <Route path='new-store' element={<CreateStore />} />
               <Route path='update-store' element={<UpdateStore />} />
               <Route path='store-type' element={<StoreTypeManagement />} />
               <Route path='area' element={<AreaManagement />} />
               <Route path='box-size' element={<BoxSizeManagement />} />
               <Route path='service-type' element={<ServiceTypeManagement />} />
+              <Route path='service-config' element={<ServiceConfig />} />
               <Route path='box-type' element={<BoxTypeManagement />} />
               <Route path='price-table' element={<PriceTableManagement />} />
-              <Route path='locker' element={<LockerManagement />} />
-              <Route path='new-locker' element={<CreateLocker />} />
+              <Route path='new-price-table' element={<CreatePriceTable />} />
+              <Route
+                path='price-table-item'
+                element={<PriceTableItemManagement />}
+              />
+              <Route path='cabinet' element={<LockerManagement />} />
+              <Route path='new-cabinet' element={<CreateLocker />} />
+              <Route path='config' element={<ConfigPage />} />
               <Route path='testUI' element={<TestUI />} />
             </Route>
             <Route

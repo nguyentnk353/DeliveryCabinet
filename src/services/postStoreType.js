@@ -1,8 +1,8 @@
-import axios from 'axios';
+import { request } from '../utils/request';
 export default function postStoreType(props) {
-  const url = 'https://deliver-store.tk/api/v1/storeTypes';
+  const url = '/v1/store-types';
 
-  return axios
+  return request
     .post(url, {
       name: props.name,
       description: props.description,

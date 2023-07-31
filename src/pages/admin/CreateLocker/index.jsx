@@ -27,19 +27,23 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import createLocker from '../../../services/createLocker';
 import CloseIcon from '@mui/icons-material/Close';
 import { yellow } from '@mui/material/colors';
+import CustomBreadcrumb from '../../../components/CustomBreadcrumb';
 
 const validationSchema = yup.object({
-  name: yup.string('Enter locker name').required('Name of locker is required'),
-  row: yup.string('Enter locker rows').required('Rows of locker is required'),
+  name: yup
+    .string('Enter cabinet name')
+    .required('Name of cabinet is required'),
+  row: yup.string('Enter cabinet rows').required('Rows of cabinet is required'),
   col: yup
-    .string('Enter locker columns')
-    .required('Columns of locker is required'),
+    .string('Enter cabinet columns')
+    .required('Columns of cabinet is required'),
 });
 
 const index = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const storeId = location.state.storeId;
+  // const storeId = location?.state?.storeId ? location?.state?.storeId : 0;
+  const storeId = 0;
   const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: yellow[100],
     textAlign: 'center',
@@ -51,7 +55,7 @@ const index = () => {
   const [boxSizeList, setBoxSizeList] = useState([]);
   const [boxTypeList, setBoxTypeList] = useState([]);
   const boxSize1 = boxSizeList.find((e) => e.id == 1);
-  const boxType1 = boxTypeList.find((e) => e.id == 1);
+  const boxType1 = boxTypeList.find((e) => e.name === 'Normal');
   const [boxClick, setBoxClick] = useState(false);
   const [createButton, setCreateButton] = useState(false);
   const [boxNum, setBoxNum] = useState({
@@ -171,7 +175,7 @@ const index = () => {
             Description: values.boxDescription,
             LockerId: 1,
             BoxType: boxType1,
-            Code: 'Box ' + index1,
+            Code: 'B' + index1,
             IsFake: false,
             BoxSize: boxSize1,
             FromTop: top,
@@ -215,7 +219,7 @@ const index = () => {
             Description: values.boxDescription,
             LockerId: 1,
             BoxType: boxType1,
-            Code: 'Box ' + index1,
+            Code: 'B' + index1,
             IsFake: false,
             BoxSize: boxSize1,
             FromTop: top,
@@ -241,7 +245,7 @@ const index = () => {
           setNotify((preState) => ({
             ...preState,
             isOpen: true,
-            msg: 'Box is bigger than locker',
+            msg: 'Box is bigger than cabinet',
             type: 'warning',
           }));
         } else {
@@ -352,7 +356,7 @@ const index = () => {
                     Description: 'Box ' + index1,
                     LockerId: 1,
                     BoxType: boxType1,
-                    Code: 'Box ' + index1,
+                    Code: 'B' + index1,
                     IsFake: false,
                     BoxSize: boxSize1,
                     FromTop: top,
@@ -408,7 +412,7 @@ const index = () => {
         Description: '',
         LockerId: 1,
         BoxType: boxType1,
-        Code: 'Box ' + index1,
+        Code: 'B' + index1,
         IsFake: false,
         BoxSize: boxSize1,
         FromTop: top,
@@ -475,11 +479,11 @@ const index = () => {
     createLocker(data)
       .then((res) => {
         if (res.status == 201) {
-          navigate('/admin/locker', {
+          navigate('/admin/cabinet', {
             state: {
               notify: {
                 isOpen: true,
-                msg: 'Create locker successfully',
+                msg: 'Create cabinet successfully',
                 type: 'success',
               },
             },
@@ -488,7 +492,7 @@ const index = () => {
           setNotify((preState) => ({
             ...preState,
             isOpen: true,
-            msg: 'Create locker fail',
+            msg: 'Create cabinet fail',
             type: 'error',
           }));
         }
@@ -497,14 +501,18 @@ const index = () => {
         setNotify((preState) => ({
           ...preState,
           isOpen: true,
-          msg: 'Create locker fail',
+          msg: err,
           type: 'error',
         }));
       });
   }
+  const bcList = [
+    { name: 'Cabinet', sidebar: 'Cabinet', to: '/admin/cabinet' },
+    { name: 'New cabinet', sidebar: 'Cabinet', to: '/admin/new-cabinet' },
+  ];
 
   return (
-    <Box sx={{ p: '5%' }}>
+    <Box>
       <Box
         component='form'
         onSubmit={formik.handleSubmit}
@@ -513,21 +521,23 @@ const index = () => {
       >
         <Box
           sx={{
+            marginBottom: '1.5rem',
             display: 'flex',
             justifyContent: 'space-between',
-            marginBottom: '2rem',
+            alignItems: 'center',
           }}
         >
-          <Typography variant='h5' sx={{ fontWeight: '700' }}>
-            New Locker
-          </Typography>
-          {/* <Button
-            type='submit'
-            variant='contained'
-            // onClick={() => navigate('/admin/new-store', { replace: true })}
-          >
-            Create new locker
-          </Button> */}
+          <Box>
+            <Typography
+              variant='h5'
+              sx={{ fontWeight: '600', marginBottom: '0.25rem' }}
+            >
+              New Cabinet
+            </Typography>
+            <Box>
+              <CustomBreadcrumb list={bcList} />
+            </Box>
+          </Box>
         </Box>
         <Box>
           <Paper
@@ -595,7 +605,7 @@ const index = () => {
               <Box>
                 <FormControlLabel
                   control={<Checkbox checked={formik.values.isPattern} />}
-                  label='Use this as layout for other locker'
+                  label='Use this as layout for other cabinet'
                   id='isPattern'
                   name='isPattern'
                   onChange={formik.handleChange}
@@ -706,6 +716,31 @@ const index = () => {
                         style={{ width: '40%' }}
                         onChange={(e, value) => {
                           setBoxType(value);
+                          if (boxNum.BoxType.id != value.id) {
+                            const newData = data.box.map((e, i) => {
+                              if (e.id == boxNum.id) {
+                                return {
+                                  id: e.id,
+                                  key: e.key,
+                                  Description: e.Description,
+                                  LockerId: e.LockerId,
+                                  BoxType: value,
+                                  Code: e.Code,
+                                  IsFake: e.IsFake,
+                                  BoxSize: e.BoxSize,
+                                  FromTop: e.FromTop,
+                                  FromLeft: e.FromLeft,
+                                };
+                              } else {
+                                return e;
+                              }
+                            });
+
+                            setData((preState) => ({
+                              ...preState,
+                              box: newData ?? [],
+                            }));
+                          }
                         }}
                         renderInput={(params) => (
                           <TextField
@@ -764,7 +799,7 @@ const index = () => {
                   onClick={() => setCreateButton(true)}
                   sx={{ marginLeft: 1 }}
                 >
-                  Create Locker
+                  Create Cabinet
                 </Button>
               </Box>
             </Box>
@@ -808,11 +843,14 @@ const index = () => {
         aria-describedby='alert-dialog-description'
       >
         <DialogTitle id='alert-dialog-title'>
-          {'Confirm create locker'}
+          {'Confirm create cabinet'}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id='alert-dialog-description'>
-            Please check locker's information is correct
+            Please check cabinet's information is correct.
+            <br />
+            You will not be able to change boxes's information after created
+            cabinet.
           </DialogContentText>
         </DialogContent>
         <DialogActions>

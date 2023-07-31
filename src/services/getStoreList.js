@@ -9,7 +9,7 @@ export default function getStoreList({
   search,
   isEnable,
 }) {
-  const url = '/stores/store-paging';
+  const url = '/stores';
 
   return request
     .get(url, {

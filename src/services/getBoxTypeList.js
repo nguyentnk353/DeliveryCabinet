@@ -6,7 +6,7 @@ export default function getBoxTypeList({
   PageSize,
   IsEnable,
 }) {
-  const url = '/boxTypes/boxType-paging';
+  const url = '/box-types';
 
   return request
     .get(url, {

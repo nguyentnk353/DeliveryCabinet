@@ -19,7 +19,7 @@ import {
   Chip,
   useTheme,
   IconButton,
-  Modal,
+  // Modal,
   FormControlLabel,
   Checkbox,
 } from '@mui/material';
@@ -37,9 +37,15 @@ import PriceTableTable from './components/PriceTableTable';
 import createPriceTable from './../../../services/createPriceTable';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import moment from 'moment';
+// import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
+// import moment from 'moment';
+import moment from 'moment-timezone';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DatePicker, Space, Modal } from 'antd';
+const { RangePicker } = DatePicker;
+
+moment.tz.setDefault('America/Los_Angeles');
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -73,10 +79,12 @@ function a11yProps(index) {
   };
 }
 
-const validationSchema = yup.object({
-  name: yup.string('Enter price table name').required('Name is required'),
-});
 const index = () => {
+  const validationSchema = yup.object({
+    name: yup.string('Enter price table name').required('Name is required'),
+    applyFrom: yup.date().typeError('Invalid Date!'),
+    applyTo: yup.date().typeError('Invalid Date!'),
+  });
   const navigate = useNavigate();
   const [value, setValue] = React.useState(0);
   const [open, setOpen] = React.useState(false);
@@ -86,7 +94,14 @@ const index = () => {
     formik.resetForm({
       values: {
         name: '',
-        price: 0,
+        rangePicker: null,
+        mon: false,
+        tue: false,
+        wed: false,
+        thu: false,
+        fri: false,
+        sat: false,
+        sun: false,
       },
     });
     setOpen(false);
@@ -113,8 +128,7 @@ const index = () => {
   const formik = useFormik({
     initialValues: {
       name: '',
-      applyFrom: null,
-      applyTo: null,
+      rangePicker: null,
       mon: false,
       tue: false,
       wed: false,
@@ -143,9 +157,9 @@ const index = () => {
 
       const api = {
         name: val.name,
-        applyFrom: moment(new Date(moment(val.applyFrom).format())).format(),
-        applyTo: moment(new Date(moment(val.applyTo).format())).format(),
-        dateFilter: parseInt(bi.join(''), 2),
+        applyFrom: moment(val.rangePicker[0].$d).utc().format(),
+        applyTo: moment(val.rangePicker[1].$d).utc().format(),
+        dateFilter: bi.join(''),
       };
 
       createPriceTable(api)
@@ -169,15 +183,18 @@ const index = () => {
         });
     },
   });
+
   return (
-    <Box sx={{ p: '5%' }}>
+    <Box>
       <Modal
         open={open}
         onClose={handleClose}
-        aria-labelledby='modal-modal-title'
-        aria-describedby='modal-modal-description'
+        footer={null}
+        closable={false}
+        width={700}
       >
-        <Box sx={style}>
+        <Box sx={{ padding: '2rem 7rem' }}>
+          {/* <Box sx={style}> */}
           <Typography
             id='modal-modal-title'
             variant='h5'
@@ -194,48 +211,37 @@ const index = () => {
             noValidate
             sx={{ mt: 1 }}
           >
-            <Box sx={{ padding: '2rem' }}>
-              <TextField
-                margin='normal'
-                fullWidth
-                required
-                id='name'
-                label='Name'
-                autoFocus
-                value={formik.values.name}
-                onChange={formik.handleChange}
-                error={formik.touched.name && Boolean(formik.errors.name)}
-                helperText={formik.touched.name && formik.errors.name}
-              />
-              <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                <LocalizationProvider dateAdapter={AdapterMoment}>
-                  <DatePicker
-                    label='Apply from'
-                    id='applyFrom'
-                    name='applyFrom'
-                    required
-                    value={formik.values.applyFrom}
-                    onChange={(value) => {
-                      formik.setFieldValue('applyFrom', value);
-                    }}
-                    renderInput={(params) => <TextField {...params} />}
-                  />
-                </LocalizationProvider>
-                <LocalizationProvider dateAdapter={AdapterMoment}>
-                  <DatePicker
-                    label='Apply to'
-                    id='applyTo'
-                    name='applyTo'
-                    required
-                    value={formik.values.applyTo}
-                    onChange={(value) => {
-                      formik.setFieldValue('applyTo', value);
-                    }}
-                    renderInput={(params) => <TextField {...params} />}
-                  />
-                </LocalizationProvider>
+            {/* <Box sx={{ padding: '2rem' }}> */}
+            <Box>
+              <Box sx={{ marginBottom: '1rem' }}>
+                <TextField
+                  margin='normal'
+                  sx={{ width: '410px' }}
+                  required
+                  id='name'
+                  label='Name'
+                  autoFocus
+                  value={formik.values.name}
+                  onChange={formik.handleChange}
+                  error={formik.touched.name && Boolean(formik.errors.name)}
+                  helperText={formik.touched.name && formik.errors.name}
+                />
               </Box>
-              <Box>
+              <Box sx={{ marginBottom: '1rem' }}>
+                <RangePicker
+                  size='large'
+                  value={formik.values.rangePicker}
+                  onChange={(value) => {
+                    formik.setFieldValue('rangePicker', value);
+                  }}
+                  style={{
+                    zIndex: 10,
+                    padding: '0.75rem 1rem',
+                    width: '410px',
+                  }}
+                />
+              </Box>
+              <Box sx={{ marginBottom: '1rem' }}>
                 <Typography variant='body1' fontWeight='bold'>
                   Date apply *
                 </Typography>
@@ -314,7 +320,10 @@ const index = () => {
         <Typography variant='h6' fontWeight='bold'>
           Price table management
         </Typography>
-        <Button variant='contained' onClick={handleOpen}>
+        <Button
+          variant='contained'
+          onClick={() => navigate('/admin/new-price-table', { replace: true })}
+        >
           + New price table
         </Button>
       </Box>

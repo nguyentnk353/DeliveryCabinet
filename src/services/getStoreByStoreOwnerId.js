@@ -1,4 +1,4 @@
-import axiosInstance from "./axiosInstance";
+import { request } from '../utils/request';
 
 export default function getStoreByStoreOwnerId({
   PageIndex,
@@ -10,9 +10,9 @@ export default function getStoreByStoreOwnerId({
   isEnable,
   UserId,
 }) {
-  const url = '/stores/store-paging';
+  const url = '/stores';
 
-  return axiosInstance
+  return request
     .get(url, {
       params: {
         Province: province,

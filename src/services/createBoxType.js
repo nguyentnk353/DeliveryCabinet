@@ -1,7 +1,7 @@
 import { request } from '../utils/request';
 
 export default function createBoxType({ name, multiplyPrice }) {
-  const url = '/boxTypes';
+  const url = '/box-types';
 
   return request
     .post(url, {
