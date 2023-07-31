@@ -43,7 +43,7 @@ const validationSchema = yup.object({
   name: yup.string('Enter box size name').required('Name is required'),
 });
 
-const LockerTable = ({ isEnable, storeId }) => {
+const LockerTable = ({ isEnable, storeId, storeInfo }) => {
   const [pg, setpg] = React.useState(0);
   const [rpg, setrpg] = React.useState(5);
   const [msg, sendNotification] = useNotification();
@@ -349,13 +349,14 @@ const LockerTable = ({ isEnable, storeId }) => {
                       },
                       cursor: 'pointer',
                     }}
-                    // onClick={() =>
-                    //   navigate('/admin/locker', {
-                    //     state: {
-                    //       storeId: row.id,
-                    //     },
-                    //   })
-                    // }
+                    onClick={() =>
+                      navigate('/store-owner/cabinet-detail', {
+                        state: {
+                          cabinetInfo: row,
+                          storeInfo: storeInfo,
+                        },
+                      })
+                    }
                   >
                     <TableCell component='th' scope='row'>
                       {row.name}

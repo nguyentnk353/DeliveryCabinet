@@ -23,6 +23,7 @@ import {
   TablePagination,
   TableRow,
   TextField,
+  Typography,
 } from '@mui/material';
 import { useMount } from 'ahooks';
 import React, { useEffect, useState } from 'react';
@@ -90,13 +91,14 @@ const TableAccount = ({ status, role, storeId, storeInfo }) => {
     // if (searchText || role) {
     //   setPage(0);
     // }
+
     const payload = searchText
       ? {
           PageIndex: 1,
           PageSize: rpg,
           StoreId: storeId,
           Role: 3,
-          Name: searchText,
+          FullName: searchText,
           IsEnable: status,
         }
       : {
@@ -104,7 +106,7 @@ const TableAccount = ({ status, role, storeId, storeInfo }) => {
           PageSize: rpg,
           StoreId: storeId,
           Role: 3,
-          Name: searchText,
+          FullName: searchText,
           IsEnable: status,
         };
     getStaffByStore(payload)
@@ -193,48 +195,64 @@ const TableAccount = ({ status, role, storeId, storeInfo }) => {
           alignItems: 'center',
         }}
       >
-        <TextField
-          id='filled-search'
-          placeholder='Search...'
-          type='search'
-          variant='outlined'
-          onChange={(e) => setSearchText(e.target.value)}
-          value={searchText}
-          sx={{ width: '30%' }}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position='start'>
-                <SearchOutlined />
-              </InputAdornment>
-            ),
+        <Typography
+          variant='h5'
+          sx={{ fontWeight: '500', marginBottom: '0.25rem' }}
+        >
+          Staff list
+        </Typography>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'flex-end',
+            gap: 2,
+            width: '70%',
+            alignItems: 'center',
           }}
-        />
-        <Box>
-          <Button
-            color='error'
-            startIcon={<DeleteOutline />}
-            sx={{ marginLeft: '1rem' }}
-            onClick={() => {
-              setSearchText('');
+        >
+          <TextField
+            id='filled-search'
+            placeholder='Search...'
+            type='search'
+            variant='outlined'
+            onChange={(e) => setSearchText(e.target.value)}
+            value={searchText}
+            sx={{ width: '60%' }}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position='start'>
+                  <SearchOutlined />
+                </InputAdornment>
+              ),
             }}
-          >
-            Clear
-          </Button>
-        </Box>
-        <Box>
-          <Button
-            variant='contained'
-            startIcon={<Add />}
-            onClick={() =>
-              navigate('/store-owner/new-staff', {
-                state: {
-                  storeInfo: storeInfo,
-                },
-              })
-            }
-          >
-            New staff
-          </Button>
+          />
+          <Box>
+            <Button
+              color='error'
+              startIcon={<DeleteOutline />}
+              sx={{ marginLeft: '1rem' }}
+              onClick={() => {
+                setSearchText('');
+              }}
+            >
+              Clear
+            </Button>
+          </Box>
+          <Box>
+            <Button
+              variant='contained'
+              startIcon={<Add />}
+              onClick={() =>
+                navigate('/store-owner/new-staff', {
+                  state: {
+                    storeInfo: storeInfo,
+                  },
+                })
+              }
+            >
+              New staff
+            </Button>
+          </Box>
         </Box>
       </Box>
       <Box>
@@ -263,6 +281,7 @@ const TableAccount = ({ status, role, storeId, storeInfo }) => {
                     navigate('/store-owner/staff/staff-information', {
                       state: {
                         accountInfo: row,
+                        storeInfo: storeInfo,
                       },
                     })
                   }
@@ -307,7 +326,7 @@ const TableAccount = ({ status, role, storeId, storeInfo }) => {
                           navigate('/store-owner/update-staff', {
                             state: {
                               accountInfo: row,
-                              storeInfo:storeInfo,
+                              storeInfo: storeInfo,
                             },
                           });
                         }}

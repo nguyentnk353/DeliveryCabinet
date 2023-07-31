@@ -41,6 +41,7 @@ import StoreInformation from './pages/customer/StoreInfomartion/StoreInformation
 import Guest from './pages/guest/Guest';
 import LoginCustomer from './pages/guest/Guest/LoginCustomer/LoginCustomer';
 import Login from './pages/guest/Login';
+import OpenBox from './pages/guest/OpenBox';
 import theme from './theme';
 import Wallet from './pages/customer/Wallet/Wallet';
 import CustomerLanding from './pages/customer/CustomerLanding/CustomerLanding';
@@ -53,10 +54,11 @@ import AdAnalytics from './pages/admin/Analytics';
 import SOAnalytics from './pages/storeOwner/Analytics';
 import StaffManagement from './pages/storeOwner/AccountManagement/AccountManagement';
 import CreateStaff from './pages/storeOwner/CreateAccount/CreateAccount';
-import UpdateStaff from './pages/storeOwner/AccountManagement/components/UpdateAccount/UpdateAccount';
-import ShowStaffInfo from './pages/storeOwner/AccountManagement/ShowAccInfo/ShowAccInfo';
+import UpdateStaff from './pages/storeOwner/StoreDetail/components/UpdateAccount/UpdateAccount';
+import ShowStaffInfo from './pages/storeOwner/StoreDetail/ShowAccInfo/ShowAccInfo';
 import SOStoreManagement from './pages/storeOwner/StoreManagement';
 import SOStoreDetail from './pages/storeOwner/StoreDetail';
+import CabinetDetail from './pages/storeOwner/CabinetDetail';
 import 'antd/dist/reset.css';
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import './index.css';
@@ -82,6 +84,8 @@ function App() {
             <Route path='/login' element={<Login />} />
             <Route path='/login-admin' element={<Login />} />
             <Route path='/login-customer' element={<LoginCustomer />} />
+            <Route path='/open-box/39' element={<OpenBox />} />
+
             {/* <Route path='*' element={<MissingPage />} /> */}
             {/* protected routes */}
             <Route
@@ -150,6 +154,7 @@ function App() {
               />
               <Route path='store' element={<SOStoreManagement />} />
               <Route path='store-detail' element={<SOStoreDetail />} />
+              <Route path='cabinet-detail' element={<CabinetDetail />} />
             </Route>
             <Route
               path='/staff'
@@ -181,7 +186,6 @@ function App() {
               <Route path='order-detail' element={<OrderDetail />} />
               <Route path='profile' element={<Account />} />
               <Route path='wallet' element={<Wallet />} />
-             
             </Route>
           </Routes>
         </SnackbarProvider>
