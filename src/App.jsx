@@ -1,23 +1,20 @@
-import { useState, Suspense } from 'react';
 import { CssBaseline, ThemeProvider } from '@mui/material';
-import Login from './pages/guest/Login';
-import { RolesAuthRoute } from './context/RolesAuthRoute';
-import theme from './theme';
+import { SnackbarProvider } from 'notistack';
+import { Suspense } from 'react';
 import { ProSidebarProvider } from 'react-pro-sidebar';
-import { Route, Routes, Navigate } from 'react-router-dom';
-import Guest from './pages/guest/Guest';
-import GuestHome from './pages/guest/GuestHome';
+import { Navigate, Route, Routes } from 'react-router-dom';
+import { RolesAuthRoute } from './context/RolesAuthRoute';
+import AccountManagement from './pages/admin/AccountManagement/AccountManagement';
 import Admin from './pages/admin/Admin';
 import AdminHome from './pages/admin/AdminHome';
+import AreaManagement from './pages/admin/AreaManagement/AreaManagement';
 import DashboardPage from './pages/admin/DashboardPage';
-import AccountManagement from './pages/admin/AccountManagement/AccountManagement';
 import CustomerManagement from './pages/admin/CustomerManagement/CustomerManagement';
 import StoreManagement from './pages/admin/StoreManagement';
 import BoxSizeManagement from './pages/admin/BoxSizeManagement';
 import ServiceTypeManagement from './pages/admin/ServiceTypeManagement';
 import ServiceConfig from './pages/admin/ServiceConfig';
 import CreateStore from './pages/admin/CreateStore';
-import UpdateStore from './pages/admin/UpdateStore';
 import BoxTypeManagement from './pages/admin/BoxTypeManagement';
 import PriceTableManagement from './pages/admin/PriceTableManagement';
 import PriceTableItemManagement from './pages/admin/PriceTableItemManagement';
@@ -30,13 +27,22 @@ import StoreOwner from './pages/storeOwner/StoreOwner';
 import StoreOwnerHome from './pages/storeOwner/StoreOwnerHome';
 import Staff from './pages/staff/Staff';
 import StaffHome from './pages/staff/StaffHome';
+import StoreTypeManagement from './pages/admin/StoreTypeManagement/StoreTypeManagement';
+import TestUI from './pages/admin/TestUI/TestUI';
+import UpdateStore from './pages/admin/UpdateStore';
+import Account from './pages/customer/Account/Account';
 import Customer from './pages/customer/Customer';
 import CustomerHome from './pages/customer/CustomerHome';
-import StoreTypeManagement from './pages/admin/StoreTypeManagement/StoreTypeManagement';
-import AreaManagement from './pages/admin/AreaManagement/AreaManagement';
-import CreateAccount from './pages/admin/CreateAccount/CreateAccount';
-import TestUI from './pages/admin/TestUI/TestUI';
-import { SnackbarProvider } from 'notistack';
+import Order from './pages/customer/Order/Order';
+import OrderDetail from './pages/customer/OrderDetail/OrderDetail';
+import StoreInformation from './pages/customer/StoreInfomartion/StoreInformation';
+import Guest from './pages/guest/Guest';
+import LoginCustomer from './pages/guest/Guest/LoginCustomer/LoginCustomer';
+import Login from './pages/guest/Login';
+import theme from './theme';
+import Wallet from './pages/customer/Wallet/Wallet';
+import CustomerLanding from './pages/customer/CustomerLanding/CustomerLanding';
+
 import UpdateAccount from './pages/admin/AccountManagement/components/UpdateAccount/UpdateAccount';
 import ShowAccInfo from './pages/admin/AccountManagement/ShowAccInfo/ShowAccInfo';
 import UpdateCustomer from './pages/admin/CustomerManagement/components/UpdateAccount/UpdateAccount';
@@ -44,6 +50,7 @@ import ShowCustomerInfo from './pages/admin/CustomerManagement/ShowAccInfo/ShowA
 import Analytics from './pages/admin/Analytics';
 import 'antd/dist/reset.css';
 import './index.css';
+import CreateAccount from './pages/admin/CreateAccount/CreateAccount';
 
 function App() {
   return (
@@ -61,11 +68,10 @@ function App() {
           <Routes>
             {/* public routes */}
             <Route path='/' element={<Navigate to='/home' />} />
-            <Route path='/' element={<Guest />}>
-              <Route path='home' element={<GuestHome />} />
-            </Route>
+            <Route path='/home' element={<Guest />} />
             <Route path='/login' element={<Login />} />
             <Route path='/login-admin' element={<Login />} />
+            <Route path='/login-customer' element={<LoginCustomer />} />
             {/* <Route path='*' element={<MissingPage />} /> */}
             {/* protected routes */}
             <Route
@@ -145,7 +151,15 @@ function App() {
                 </Suspense>
               }
             >
-              <Route path='home' element={<CustomerHome />} />
+              <Route path='' element={<CustomerLanding />} />
+              <Route path='home' element={<CustomerLanding />} />
+              <Route path='search-store' element={<CustomerHome />} />
+              <Route path='store-information' element={<StoreInformation />} />
+              <Route path='order' element={<Order />} />
+              <Route path='order-detail' element={<OrderDetail />} />
+              <Route path='profile' element={<Account />} />
+              <Route path='wallet' element={<Wallet />} />
+             
             </Route>
           </Routes>
         </SnackbarProvider>
