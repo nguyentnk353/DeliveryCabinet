@@ -42,7 +42,6 @@ const TableAccount = ({ status, role, storeId, storeInfo }) => {
   const navigate = useNavigate();
   const [msg, sendNotification] = useNotification();
   const [searchText, setSearchText] = useState('');
-
   function handleChangePage(e, newpage) {
     setPage(newpage);
   }
@@ -88,9 +87,9 @@ const TableAccount = ({ status, role, storeId, storeInfo }) => {
   });
 
   useEffect(() => {
-    if (searchText || role) {
-      setPage(0);
-    }
+    // if (searchText || role) {
+    //   setPage(0);
+    // }
     const payload = searchText
       ? {
           PageIndex: 1,
@@ -308,6 +307,7 @@ const TableAccount = ({ status, role, storeId, storeInfo }) => {
                           navigate('/store-owner/update-staff', {
                             state: {
                               accountInfo: row,
+                              storeInfo:storeInfo,
                             },
                           });
                         }}

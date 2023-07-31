@@ -29,6 +29,7 @@ import CustomBreadcrumb from '../../../../../components/CustomBreadcrumb';
 const UpdateAccount = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const storeInfo=location?.state?.storeInfo;
   const [userInfo, setUserInfo] = useState({
     id: '',
     fullName: '',
@@ -120,11 +121,12 @@ const UpdateAccount = () => {
       });
   }
   const bcList = [
-    { name: 'User', sidebar: 'User', to: '/admin/user' },
+    { name: 'Store', sidebar: 'Store', to: '/store-owner/store' },
     {
-      name: 'Update user',
-      sidebar: 'User',
-      to: '/admin/user/user-information',
+      name: 'Store detail',
+      sidebar: 'Store',
+      state:storeInfo,
+      to: '/store-owner/staff/staff-information',
     },
   ];
   return (
