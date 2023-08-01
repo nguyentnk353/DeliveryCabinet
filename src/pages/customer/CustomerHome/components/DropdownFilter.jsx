@@ -62,7 +62,7 @@ function DropdownFilter({
         leaveEnd="opacity-0"
       >
         <div ref={dropdown}>
-          <div className="text-xs font-semibold text-slate-400 uppercase pt-1.5 pb-2 px-4">Filters</div>
+          <div className="text-xs font-semibold text-slate-400 uppercase pt-1.5 pb-2 px-4">Tìm kiếm</div>
           {/* <ul className="mb-4">
             <li className="py-1 px-3">
               <label className="flex items-center">
@@ -105,10 +105,10 @@ function DropdownFilter({
           <div className="py-2 px-3 border-t border-slate-200 bg-slate-50">
             <ul className="flex items-center justify-between">
               <li>
-                <button className="btn-xs bg-white border-slate-200 hover:border-slate-300 text-slate-500 hover:text-slate-600" onClick={() => {setClear(true); console.log(getClear)}}>Clear</button>
+                <button className="btn-xs bg-white border-slate-200 hover:border-slate-300 text-slate-500 hover:text-slate-600" onClick={() => {setClear(true); console.log(getClear)}}>Hủy tìm kiếm</button>
               </li>
               <li>
-                <button className="btn-xs bg-indigo-500 hover:bg-indigo-600 text-white" onClick={() => setDropdownOpen(false)} onBlur={() => setDropdownOpen(false)}>Apply</button>
+                <button className="btn-xs bg-indigo-500 hover:bg-indigo-600 text-white" onClick={() => setDropdownOpen(false)} onBlur={() => setDropdownOpen(false)}>Bắt đầu lọc</button>
               </li>
             </ul>
           </div>

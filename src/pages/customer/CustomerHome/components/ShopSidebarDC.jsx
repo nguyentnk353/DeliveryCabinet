@@ -56,18 +56,18 @@ function ShopSidebarDC({ clear, setClear, setProvinceDropdown, setDistrictDropdo
       <div className="bg-white shadow-lg rounded-sm border border-slate-200 p-5">
         <div className="grid md:grid-cols-2 xl:grid-cols-1 gap-6">
           <div>
-            <div className="text-sm text-slate-800 font-semibold mb-3">Address</div>
-            <label className="sr-only">Address</label>
+            <div className="text-sm text-slate-800 font-semibold mb-3">Địa chỉ</div>
+            <label className="sr-only">Địa chỉ</label>
             <select
               className="form-select w-64 mb-3"
-              defaultValue="Province"
+              defaultValue="Chọn tỉnh/tp"
               onChange={(e) => {
                 setProvince(provinceList.find((item) => item.code == e.target.value))
                 callApiDistrict(host + 'p/' + e.target.value + '?depth=2');
                 setProvinceDropdown(provinceList.find((item) => item.code == e.target.value))
               }}
             >
-              <option hidden>Province</option>
+              <option hidden>Chọn tỉnh</option>
               {provinceList.map((item) => (
                   <option key={item.code} value={item.code}>{item.name}</option>
                 ))    
@@ -77,14 +77,14 @@ function ShopSidebarDC({ clear, setClear, setProvinceDropdown, setDistrictDropdo
             </select>
             <select
               className="form-select w-64 mb-3"
-              defaultValue="District"
+              defaultValue="Chọn quận/huyện"
               onChange={(e) => {
                 setDistrict(districtList.find((item) => item.code == e.target.value));
                 callApiWard(host + 'd/' + e.target.value + '?depth=2');
                 setDistrictDropdown(districtList.find((item) => item.code == e.target.value))
               }}
             >
-              <option hidden>District</option>
+              <option hidden>Chọn quận/huyện</option>
               {districtList.map((item) => (
                 <option key={item.code} value={item.code}>{item.name}</option>
               ))
@@ -92,13 +92,13 @@ function ShopSidebarDC({ clear, setClear, setProvinceDropdown, setDistrictDropdo
             </select>
             <select
               className="form-select w-64 mb-3"
-              defaultValue="Ward"
+              defaultValue="Chọn phường/xã"
               onChange={(e) => {
                 setWard(wardList.find((item) => item.code == e.target.value));
                 setWardDropdown(wardList.find((item) => item.code == e.target.value))
               }}
             >
-              <option hidden>Ward</option>
+              <option hidden>Chọn phường/xã</option>
               {wardList.map((item) => (
                 <option key={item.code} value={item.code}>{item.name}</option>
               ))
