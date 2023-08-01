@@ -19,36 +19,34 @@ const StoreInformation = () => {
   const location = useLocation();
 
   const [showMoreModal, setShowMoreModal] = useState(false);
-  const [listLocker, setListLocker] = useState([]);
   const [orderBoxInfo, setOrderBoxInfo] = useState();
-  const [getLockerId, setLockerId] = useState();
   const [rentBoxModalOpen, setRentBoxModalOpen] = useState(false);
+  const [listBox, setListBox] = useState([]);
 
   useMount(() => {
-    // getAllBox(location.state?.storeInfo?.id)
-    //   .then((res) => {
-    //     const newListBoxApi = res.map((e) => e);
-    //     setListBox(newListBoxApi);
-    //     setTotalBox(res.length)
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
-
-    getAllLocker(location.state?.storeInfo?.id)
+    getAllBox(location.state?.storeInfo?.id)
       .then((res) => {
-        const newListLockerApi = res.items.map((e) => e);
-        setListLocker(newListLockerApi);
-        // setTotalBox(res.length)
+        const newListBoxApi = res.map((e) => e);
+        setListBox(newListBoxApi);
       })
       .catch((err) => {
         console.log(err);
       });
+
+    // getAllLocker(location.state?.storeInfo?.id)
+    //   .then((res) => {
+    //     const newListLockerApi = res.items.map((e) => e);
+    //     setListLocker(newListLockerApi);
+    //     // setTotalBox(res.length)
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
   });
   return (
     <>
       <ShowMoreModal isOpen={showMoreModal} setIsOpen={setShowMoreModal} storeId={location.state.storeInfo.id} />
-      <RentBoxModal isOpen={rentBoxModalOpen} setIsOpen={setRentBoxModalOpen} boxInfo={orderBoxInfo} lockerId={getLockerId} serviceTypeId={location.state.storeInfo.serviceTypeId} />
+      <RentBoxModal isOpen={rentBoxModalOpen} setIsOpen={setRentBoxModalOpen} boxInfo={orderBoxInfo} storeId={location.state?.storeInfo?.id} serviceTypeId={location.state.storeInfo.serviceTypeId} />
       <div className="border-t border-gray-300 bg-slate-100">
 
         {/* Mobile sidebar */}
@@ -68,32 +66,30 @@ const StoreInformation = () => {
                   {/* <PriceTable storeId={location.state.storeInfo.id} /> */}
 
                 </div>
-                {/* <div className='flex items-start'>
+                <div className='flex items-start'>
                   <div className='font-bold	mb-4 w-fit lg:text-[20px] sm:text-base pr-3'>Chọn tủ muốn thuê</div>
                   <img className="pt-1" src={QRCode} alt="Your SVG" width='20px' />
-                </div> */}
+                </div>
 
 
                 {/*Product*/}
-                {listLocker.map((row, index) => {
-                  return (
-                    <div key={index}>
-                      <div className='flex font-bold my-4 w-fit lg:text-[20px] sm:text-base pr-3'>{row?.name}</div>
-                      <div>
-                        <div className="grid grid-cols-2 gap-x-3 gap-y-3 sm:grid-cols-3 lg:gap-x-5 xl:grid-cols-4 xl:gap-x-7 xl:gap-y-5 2xl:grid-cols-5 2xl:gap-y-8">
-                          <CustomerBox                      
+                <div className="grid grid-cols-2 gap-x-3 gap-y-3 sm:grid-cols-3 lg:gap-x-5 xl:grid-cols-4 xl:gap-x-7 xl:gap-y-5 2xl:grid-cols-5 2xl:gap-y-8">
+                  {listBox.map((row, index) => {
+                    if (row.boxSize.isEnable == true && row.boxType.isEnable == true && row.count != 0) {
+                      return (
+                        <div key={index}>
+                          <CustomerBox
                             isOpen={rentBoxModalOpen}
                             setIsOpen={setRentBoxModalOpen}
-                            lockerId={row?.id}
-                            setLockerId={setLockerId}
-                            setInfoModal={setOrderBoxInfo} />
+                            setInfoModal={setOrderBoxInfo}
+                            box={row}
+                          />
                         </div>
-                      </div>
-                    </div>
-                  );
-                })}
-
-
+                      )
+                    }
+                    return null;
+                  })}
+                </div>
 
                 <div className="pt-8 text-center xl:pt-14 hidden">
                   <button

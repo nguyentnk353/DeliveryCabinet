@@ -33,7 +33,7 @@ const OrderDetail = () => {
   );
   const locker = location.state?.orderInfo?.box?.locker;
   //location.state?.orderInfo
-  console.log(order);
+  // console.log(order);
   useMount(() => {
     getOrderById(orderId)
       .then((res) => {
@@ -219,16 +219,16 @@ const OrderDetail = () => {
 
           <div className='-mx-4 md:mx-4 flex flex-wrap'>
             <div className='max-md:border bg-white p-4 w-full max-md:m-4'>
-              <p className='font-semibold text-[#14df14] text-2xl'>
+              {/* <p className='font-semibold text-[#14df14] text-2xl'>
                 Locker here
-              </p>
+              </p> */}
               <br />
               <div
                 id='grid'
                 style={{
                   display: 'grid',
-                  gridTemplateColumns: `repeat(${locker.col}, 1fr)`,
-                  gridTemplateRows: `repeat(${locker.row}, 1fr)`,
+                  gridTemplateColumns: `repeat(${locker?.col}, 1fr)`,
+                  gridTemplateRows: `repeat(${locker?.row}, 1fr)`,
                   gridGap: '8px',
                 }}
               >
@@ -238,6 +238,7 @@ const OrderDetail = () => {
                       return (
                         <Paper
                           className='grid-item'
+                          key={i}
                           sx={{
                             gridRow: `span ${e.boxSize.height}`,
                             gridColumn: `span ${e.boxSize.length}`,
@@ -257,6 +258,7 @@ const OrderDetail = () => {
                       return (
                         <Paper
                           className='grid-item'
+                          key={i}
                           sx={{
                             gridRow: `span ${e.boxSize.height}`,
                             gridColumn: `span ${e.boxSize.length}`,
@@ -292,7 +294,7 @@ const OrderDetail = () => {
                   </div>
                 </div>
                 <p>
-                  DC Pay Wallet
+                  Ví DC Pay 
                   <br />
                   {orderInfo?.user?.fullName}
                 </p>
@@ -339,7 +341,7 @@ const OrderDetail = () => {
                         handleCompleteOrder();
                       }}
                     >
-                      Ngừng thuê
+                      Lấy hàng
                     </button>
                   </div>
                 ) : (

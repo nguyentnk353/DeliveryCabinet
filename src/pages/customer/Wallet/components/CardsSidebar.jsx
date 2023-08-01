@@ -2,24 +2,15 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import BankCard from '../../CustomerLanding/components/BankCard';
 import { useMount } from 'ahooks';
-import getLoginUser from '../../../../services/Customer/getLoginUser';
 import getWallet from '../../../../services/Customer/getWallet';
 import TopupZaloModal from './TopupZaloModal';
 
-const CardsSidebar = () => {
+const CardsSidebar = ({info}) => {
     const navigate = useNavigate();
     const [wallet, setWallet] = useState({})
-    const [info, setInfo] = useState({})
+    
     const [isOpenTopup, setIsOpenTopup] = useState(false);
     useMount(() => {
-        getLoginUser()
-          .then((res) => {
-            setInfo(res)
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-    
         getWallet()
           .then((res) => {
             const newWallet = res.items[0];
