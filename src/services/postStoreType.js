@@ -1,6 +1,6 @@
 import { request } from '../utils/request';
 export default function postStoreType(props) {
-  const url = '/v1/store-types';
+  const url = '/store-types';
 
   return request
     .post(url, {

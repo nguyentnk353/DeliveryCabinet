@@ -1,13 +1,10 @@
 import { request } from '../utils/request';
 
-export default function createBoxType({ name, multiplyPrice }) {
+export default function createBoxType(payload) {
   const url = '/box-types';
 
   return request
-    .post(url, {
-      name: name,
-      multiplyPrice: multiplyPrice,
-    })
+    .post(url, payload)
     .then((response) => response)
     .catch((err) => err);
 }

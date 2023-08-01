@@ -65,10 +65,6 @@ const validationSchema = yup.object({
     .required('Height is required')
     .positive('Accept only positive integer > 0')
     .integer('Accept only positive integer > 0'),
-  price: yup
-    .number('Accept only positive number > 0')
-    .required('Price is required')
-    .positive('Accept only positive number > 0'),
 });
 const index = () => {
   const navigate = useNavigate();
@@ -84,7 +80,6 @@ const index = () => {
         length: 0,
         height: 0,
         description: '',
-        price: 0,
       },
     });
     setOpen(false);
@@ -114,16 +109,15 @@ const index = () => {
       length: 0,
       height: 0,
       description: '',
-      price: 0,
     },
     validationSchema: validationSchema,
     onSubmit: (val) => {
+      console.log('test');
       const api = {
         name: val.name,
         length: val.length,
         height: val.height,
         description: val.description,
-        multiplyPrice: val.price,
       };
 
       createBoxSize(api)
@@ -208,18 +202,6 @@ const index = () => {
                   onChange={formik.handleChange}
                   error={formik.touched.height && Boolean(formik.errors.height)}
                   helperText={formik.touched.height && formik.errors.height}
-                />
-                <TextField
-                  margin='normal'
-                  fullWidth
-                  required
-                  id='price'
-                  label='Price'
-                  autoFocus
-                  value={formik.values.price}
-                  onChange={formik.handleChange}
-                  error={formik.touched.price && Boolean(formik.errors.price)}
-                  helperText={formik.touched.price && formik.errors.price}
                 />
               </Box>
               <TextField

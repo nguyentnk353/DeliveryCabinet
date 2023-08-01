@@ -280,7 +280,6 @@ const BoxSizeTable = ({ searchText, createSuccess, isEnable }) => {
               <TableCell>Name</TableCell>
               <TableCell>Length</TableCell>
               <TableCell>Height</TableCell>
-              <TableCell>Price</TableCell>
               <TableCell>Description</TableCell>
               <TableCell>Status</TableCell>
               <TableCell>Action</TableCell>
@@ -299,7 +298,6 @@ const BoxSizeTable = ({ searchText, createSuccess, isEnable }) => {
                 </TableCell>
                 <TableCell>{row.length}</TableCell>
                 <TableCell>{row.height}</TableCell>
-                <TableCell>{row.multiplyPrice}</TableCell>
                 <TableCell>{row.description}</TableCell>
                 <TableCell>
                   {row.isEnable ? (

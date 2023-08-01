@@ -289,7 +289,6 @@ const ServiceTypeTable = ({ searchText, createSuccess, isEnable }) => {
             <TableRow>
               <TableCell>Id</TableCell>
               <TableCell>Name</TableCell>
-              <TableCell>Base price</TableCell>
               <TableCell>Status</TableCell>
               <TableCell>Action</TableCell>
             </TableRow>
@@ -306,7 +305,6 @@ const ServiceTypeTable = ({ searchText, createSuccess, isEnable }) => {
                   {row.id}
                 </TableCell>
                 <TableCell>{row.name}</TableCell>
-                <TableCell>{row.price}</TableCell>
                 <TableCell>
                   {row.isEnable ? (
                     <Chip

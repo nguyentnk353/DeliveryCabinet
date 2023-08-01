@@ -258,7 +258,7 @@ const index = () => {
         </Box>
 
         <TabPanel value={value} index={0}>
-          <LockerTable storeId={storeId} isEnable={''} />
+          <LockerTable storeId={storeId} isEnable={''} storeInfo={storeInfo} />
         </TabPanel>
         <TabPanel value={value} index={1}>
           <TableAccount

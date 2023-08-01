@@ -1,12 +1,9 @@
 import { request } from '../utils/request';
-export default function createServiceType({ price, description }) {
+export default function createServiceType(payload) {
   const url = '/service-types';
 
   return request
-    .post(url, {
-      price: price,
-      name: description,
-    })
+    .post(url, payload)
     .then((response) => response)
     .catch((err) => err);
 }

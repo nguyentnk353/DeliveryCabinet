@@ -221,9 +221,6 @@ const OrderDetail = () => {
 
           <div className='-mx-4 md:mx-4 flex flex-wrap'>
             <div className='max-md:border bg-white p-4 w-full max-md:m-4'>
-              {/* <p className='font-semibold text-[#14df14] text-2xl'>
-                Locker here
-              </p> */}
               <br />
               <div
                 id='grid'
@@ -296,7 +293,7 @@ const OrderDetail = () => {
                   </div>
                 </div>
                 <p>
-                  Ví DC Pay 
+                  Ví DC Pay
                   <br />
                   {orderInfo?.user?.fullName}
                 </p>

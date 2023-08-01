@@ -229,13 +229,13 @@ const index = () => {
                     selected={selected}
                     setSelected={setSelected}
                   />
-                  <Item
+                  {/* <Item
                     title='Staff'
                     icon={<PersonOutlineOutlined />}
                     to='/store-owner/staff'
                     selected={selected}
                     setSelected={setSelected}
-                  />
+                  /> */}
                 </Box>
                 <Divider />
 
@@ -247,59 +247,14 @@ const index = () => {
                   <Item
                     title='Dashboard'
                     icon={<HomeOutlined />}
-                    to='/admin/dashboard'
-                    selected={selected}
-                    setSelected={setSelected}
-                  />
-                  <Item
-                    title='Order'
-                    icon={<ListAltOutlined />}
-                    to='/admin/dashboard'
-                    selected={selected}
-                    setSelected={setSelected}
-                  />
-                  <Item
-                    title='Customer'
-                    icon={<PersonOutlineOutlined />}
-                    to='/admin/customer'
-                    selected={selected}
-                    setSelected={setSelected}
-                  />
-                  <Item
-                    title='Cabinet'
-                    icon={<BiCabinet />}
-                    to='/admin/cabinet'
+                    to='/store-owner/dashboard'
                     selected={selected}
                     setSelected={setSelected}
                   />
                   <Item
                     title='Store'
                     icon={<StoreOutlined />}
-                    to='/admin/store'
-                    selected={selected}
-                    setSelected={setSelected}
-                  />
-                </Box>
-                <Divider />
-                <Box>
-                  <Item
-                    title='Service price'
-                    icon={<RequestQuoteOutlined />}
-                    to='/admin/price-table'
-                    selected={selected}
-                    setSelected={setSelected}
-                  />
-                  <Item
-                    title='User'
-                    icon={<PersonOutlineOutlined />}
-                    to='/admin/user'
-                    selected={selected}
-                    setSelected={setSelected}
-                  />
-                  <Item
-                    title='Config'
-                    icon={<SettingsOutlined />}
-                    to='/admin/config'
+                    to='/store-owner/store'
                     selected={selected}
                     setSelected={setSelected}
                   />

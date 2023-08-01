@@ -31,18 +31,25 @@ const ShowAccInfo = () => {
     : location?.state?.stateLink
     ? location?.state?.stateLink
     : null;
-
+  const storeInfo = location?.state?.storeInfo;
   const StyledAvatar = styled(Avatar)(({ theme }) => ({
     width: theme.spacing(25),
     height: theme.spacing(25),
     margin: 'auto',
   }));
   const bcList = [
-    { name: 'User', sidebar: 'User', to: '/admin/user' },
+    { name: 'Store', sidebar: 'Store', to: '/store-owner/store' },
     {
-      name: 'User detail',
-      sidebar: 'User',
-      to: '/admin/user/user-information',
+      name: 'Store detail',
+      sidebar: 'Store',
+      state: storeInfo,
+      to: '/store-owner/store-detail',
+    },
+    {
+      name: 'Staff detail',
+      sidebar: 'Store',
+      // state: storeInfo,
+      to: '/store-owner/staff/staff-information',
     },
   ];
   return (
@@ -123,9 +130,10 @@ const ShowAccInfo = () => {
                     variant='text'
                     sx={{ p: '0 20px 0 0' }}
                     onClick={() =>
-                      navigate('/admin/update-user', {
+                      navigate('/store-owner/update-staff', {
                         state: {
                           accountInfo: userInfo,
+                          storeInfo: storeInfo,
                         },
                       })
                     }

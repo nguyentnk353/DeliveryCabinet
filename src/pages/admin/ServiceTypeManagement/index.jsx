@@ -68,10 +68,7 @@ function a11yProps(index) {
 }
 
 const validationSchema = yup.object({
-  price: yup
-    .number('Accept only positive number > 0')
-    .required('Price is required')
-    .positive('Accept only positive number > 0'),
+  name: yup.string('Enter name').required('Name is required'),
 });
 const index = () => {
   const navigate = useNavigate();
@@ -83,7 +80,6 @@ const index = () => {
     formik.resetForm({
       values: {
         name: '',
-        price: 0,
       },
     });
     setOpen(false);
@@ -109,14 +105,12 @@ const index = () => {
 
   const formik = useFormik({
     initialValues: {
-      price: 0,
-      description: '',
+      name: '',
     },
     validationSchema: validationSchema,
     onSubmit: (val) => {
       const api = {
-        price: val.price,
-        description: val.description,
+        name: val.name,
       };
       createServiceType(api)
         .then((res) => {
@@ -167,31 +161,13 @@ const index = () => {
             <Box sx={{ padding: '2rem' }}>
               <TextField
                 margin='normal'
-                width='20%'
-                required
-                id='price'
-                label='Base price'
-                autoFocus
-                value={formik.values.price}
-                onChange={formik.handleChange}
-                error={formik.touched.price && Boolean(formik.errors.price)}
-                helperText={formik.touched.price && formik.errors.price}
-              />
-
-              <TextField
-                margin='normal'
                 fullWidth
-                id='description'
-                label='Description'
-                value={formik.values.description}
+                id='name'
+                label='Name'
+                value={formik.values.name}
                 onChange={formik.handleChange}
-                error={
-                  formik.touched.description &&
-                  Boolean(formik.errors.description)
-                }
-                helperText={
-                  formik.touched.description && formik.errors.description
-                }
+                error={formik.touched.name && Boolean(formik.errors.name)}
+                helperText={formik.touched.name && formik.errors.name}
               />
             </Box>
             <Box

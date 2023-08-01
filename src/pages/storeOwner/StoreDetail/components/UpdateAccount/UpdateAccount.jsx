@@ -29,7 +29,7 @@ import CustomBreadcrumb from '../../../../../components/CustomBreadcrumb';
 const UpdateAccount = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const storeInfo=location?.state?.storeInfo;
+  const storeInfo = location?.state?.storeInfo;
   const [userInfo, setUserInfo] = useState({
     id: '',
     fullName: '',
@@ -125,8 +125,13 @@ const UpdateAccount = () => {
     {
       name: 'Store detail',
       sidebar: 'Store',
-      state:storeInfo,
-      to: '/store-owner/staff/staff-information',
+      state: storeInfo,
+      to: '/store-owner/store-detail',
+    },
+    {
+      name: 'Staff edit',
+      sidebar: 'Store',
+      to: '/store-owner/update-staff',
     },
   ];
   return (
