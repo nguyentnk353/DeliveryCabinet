@@ -1,15 +1,24 @@
 import React, { useState } from 'react'
 import TransactionPanel from './TransactionPanel';
+import moment from 'moment';
 
-const CartTransaction = () => {
-    const [transactionPanelOpen, setTransactionPanelOpen] = useState(true);
+const CartTransaction = ({ transaction, key }) => {
+    const [tranDetail, setTranDetail] = useState({})
+    const [transactionOpen, setTransactionOpen] = useState(false);
     return (
         <>
-             <TransactionPanel transactionPanelOpen={transactionPanelOpen} setTransactionPanelOpen={setTransactionPanelOpen} />
+            <TransactionPanel transactionPanelOpen={transactionOpen} setTransactionPanelOpen={setTransactionOpen} transactionDetail={tranDetail}/>
             <label className="relative block cursor-pointer text-left w-full bg-white">
                 <input type="radio" name="radio-buttons" className="peer sr-only" defaultChecked />
                 <div className="p-4 rounded border border-slate-200 hover:border-slate-300 shadow-sm duration-150 ease-in-out">
-                    <div className="grid grid-cols-12 items-center gap-x-2">
+                    <div 
+                        className="grid grid-cols-12 items-center gap-x-2" 
+                        onClick={(e)=>{
+                            e.stopPropagation();
+                            setTranDetail(transaction);
+                            setTransactionOpen(true);
+                        }}
+                    >
                         {/* Card */}
                         <div className="col-span-6 order-1 sm:order-none sm:col-span-3 flex items-center space-x-4 lg:sidebar-expanded:col-span-6 xl:sidebar-expanded:col-span-3">
                             <svg className="shrink-0" width="32" height="24" xmlns="http://www.w3.org/2000/svg">
@@ -32,22 +41,22 @@ const CartTransaction = () => {
                                 </g>
                             </svg>
                             <div>
-                                <div className="text-sm font-medium text-slate-800">_Metal</div>
-                                <div className="text-xs">**7328</div>
+                                <div className="text-sm font-medium text-slate-800">Nạp tiền</div>
+                                <div className="text-xs text-[#A9A9A9]">ZaloPay</div>
                             </div>
                         </div>
                         {/* Name */}
                         <div className="col-span-6 order-2 sm:order-none sm:col-span-3 text-left sm:text-center lg:sidebar-expanded:hidden xl:sidebar-expanded:block">
-                            <div className="text-sm font-medium text-slate-800 truncate">Dominik Lamakani</div>
+                            <div className="text-sm font-normal text-slate-800 truncate">{moment(transaction?.createTime).format('DD-MM-YYYY H:mm')}</div>
                         </div>
                         {/* Card limits */}
                         <div className="col-span-6 order-1 sm:order-none sm:col-span-4 text-right sm:text-center lg:sidebar-expanded:col-span-6 xl:sidebar-expanded:col-span-4">
-                            <div className="text-sm">$780,00 / $20,000</div>
+                            <div className="text-sm">{transaction?.amount} / VNĐ</div>
                         </div>
                         {/* Card status */}
                         <div className="col-span-6 order-2 sm:order-none sm:col-span-2 text-right lg:sidebar-expanded:hidden xl:sidebar-expanded:block">
                             <div className="text-xs inline-flex font-medium bg-emerald-100 text-emerald-600 rounded-full text-center px-2.5 py-1">
-                                Active
+                                Thành công
                             </div>
                         </div>
                     </div>

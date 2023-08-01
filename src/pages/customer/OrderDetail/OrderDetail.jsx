@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import getOrderById from '../../../services/Customer/getOrderById';
 import getStoreById from './../../../services/Customer/getStoreById';
-import completeOrder from './../../../services/Customer/completeOrder';
 import getOpenCode from '../../../services/Customer/getOpenCode';
 import StepOrder from './components/StepOrder';
 import PriceTableModal from './components/PriceTableModal';
@@ -11,6 +10,7 @@ import GetOpenCodeModal from './components/GetOpenCodeModal';
 import { Paper } from '@mui/material';
 import moment from 'moment';
 import { blue, yellow } from '@mui/material/colors';
+import ConfirmFinishRentModal from './components/ConfirmFinishRentModal';
 
 const OrderDetail = () => {
   const location = useLocation();
@@ -22,6 +22,7 @@ const OrderDetail = () => {
   const [statusName, setStatusName] = useState('');
   const [isOpenPriceTable, setIsOpenPriceTable] = useState(false);
   const [isOpenOpenCode, setIsOpenOpenCode] = useState(false);
+  const [isFinishOrder, setIsFinishOrder] = useState(false);
 
   const orderId = location.state?.orderInfo?.id;
   const order = location.state?.orderInfo;
@@ -33,7 +34,7 @@ const OrderDetail = () => {
   );
   const locker = location.state?.orderInfo?.box?.locker;
   //location.state?.orderInfo
-  console.log(order);
+  // console.log(order);
   useMount(() => {
     getOrderById(orderId)
       .then((res) => {
@@ -80,10 +81,6 @@ const OrderDetail = () => {
         console.log(err);
       });
   };
-  const handleCompleteOrder = () => {
-    completeOrder(orderInfo?.id);
-    navigate('/customer');
-  };
 
   return (
     <div className='bg-[#f1f5f9] md:px-[7%] md:py-[3%]'>
@@ -96,6 +93,11 @@ const OrderDetail = () => {
         isOpen={isOpenOpenCode}
         setIsOpen={setIsOpenOpenCode}
         openCode={openCode}
+      />
+      <ConfirmFinishRentModal
+        isOpen={isFinishOrder}
+        setIsOpen={setIsFinishOrder}
+        orderId={orderInfo?.id}
       />
       <div className='mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10'>
         <div className='mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between'>
@@ -224,8 +226,8 @@ const OrderDetail = () => {
                 id='grid'
                 style={{
                   display: 'grid',
-                  gridTemplateColumns: `repeat(${locker.col}, 1fr)`,
-                  gridTemplateRows: `repeat(${locker.row}, 1fr)`,
+                  gridTemplateColumns: `repeat(${locker?.col}, 1fr)`,
+                  gridTemplateRows: `repeat(${locker?.row}, 1fr)`,
                   gridGap: '8px',
                 }}
               >
@@ -235,6 +237,7 @@ const OrderDetail = () => {
                       return (
                         <Paper
                           className='grid-item'
+                          key={i}
                           sx={{
                             gridRow: `span ${e.boxSize.height}`,
                             gridColumn: `span ${e.boxSize.length}`,
@@ -254,6 +257,7 @@ const OrderDetail = () => {
                       return (
                         <Paper
                           className='grid-item'
+                          key={i}
                           sx={{
                             gridRow: `span ${e.boxSize.height}`,
                             gridColumn: `span ${e.boxSize.length}`,
@@ -289,7 +293,7 @@ const OrderDetail = () => {
                   </div>
                 </div>
                 <p>
-                  DC Pay Wallet
+                  Ví DC Pay
                   <br />
                   {orderInfo?.user?.fullName}
                 </p>
@@ -333,10 +337,10 @@ const OrderDetail = () => {
                     <button
                       className='bg-[#3c50e0] text-white flex items-center justify-center rounded px-8 py-2.5 text-center font-medium hover:bg-opacity-90'
                       onClick={() => {
-                        handleCompleteOrder();
+                        setIsFinishOrder(true);
                       }}
                     >
-                      Ngừng thuê
+                      Lấy hàng
                     </button>
                   </div>
                 ) : (

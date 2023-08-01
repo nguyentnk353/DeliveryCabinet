@@ -1,26 +1,14 @@
 import React from 'react'
-import ModalBasic from './../../components/ModalBasic/ModalBasic';
 import { useNavigate } from 'react-router-dom';
-import rentBox from '../../../../services/Customer/rentBox';
+import ModalBasic from './../../components/ModalBasic/ModalBasic';
+import completeOrder from '../../../../services/Customer/completeOrder';
 
-const RentBoxModal = ({ isOpen, setIsOpen, boxInfo, storeId, serviceTypeId }) => {
+const ConfirmFinishRentModal = ({isOpen, setIsOpen, orderId}) => {
     const navigate = useNavigate();
-   
-    const handleRentBox = () => {
-        const payload = {
-            storeId: storeId,
-            boxSizeId: boxInfo?.boxSize?.id,
-            boxTypeId: boxInfo?.boxType?.id,
-            servicetypeId: serviceTypeId,
-        }
-        rentBox(payload)
+    const handleFinishOrder = () => {
+        completeOrder(orderId)
             .then((res) => {
-                navigate('/customer/order-detail', {
-                    state: {
-                        orderInfo: res,
-                    },
-                })
-                // console.log(res);
+                navigate('/customer');  
             })
             .catch((err) => {
                 console.log(err);
@@ -28,18 +16,15 @@ const RentBoxModal = ({ isOpen, setIsOpen, boxInfo, storeId, serviceTypeId }) =>
     }
     return (
         <>
-            <ModalBasic modalOpen={isOpen} setModalOpen={setIsOpen} title="XÁC NHẬN THUÊ BOX">
+            <ModalBasic modalOpen={isOpen} setModalOpen={setIsOpen} title="XÁC NHẬN LẤY HÀNG">
                 <>
                     {/* Modal content */}
                     <div className="px-5 pt-4 pb-1">
                         <div className="text-sm">
-                            <div className="font-medium text-slate-800 mb-2">Xác nhận thuê box có thông tin sau:</div>
-                            <div className="space-y-2">
-                                <p>Chiều dài: {boxInfo?.boxSize?.length}</p>
-                                <p>Chiều rộng: {boxInfo?.boxSize?.height}</p>
-                                <p>Loại  box: {boxInfo?.boxType?.name}</p>
-                                <input></input>
+                            <div className="font-medium text-slate-800 mb-2">
+                                Sau khi nhấn xác nhận, bạn có <span className='text-red-500'>10</span> giây để lấy hàng trước khi tủ tự đóng.
                             </div>
+                            <div className="font-medium text-slate-800 mb-2">Xác nhận ngừng thuê box và lấy hàng ?</div>
                         </div>
                     </div>
                     {/* Modal footer */}
@@ -50,7 +35,7 @@ const RentBoxModal = ({ isOpen, setIsOpen, boxInfo, storeId, serviceTypeId }) =>
                                 onClick={(e) => {
                                     e.stopPropagation();
                                     setIsOpen(false);
-                                    handleRentBox();
+                                    handleFinishOrder();
                                 }}>
                                 Xác nhận
                             </button>
@@ -62,4 +47,4 @@ const RentBoxModal = ({ isOpen, setIsOpen, boxInfo, storeId, serviceTypeId }) =>
     )
 }
 
-export default RentBoxModal
+export default ConfirmFinishRentModal

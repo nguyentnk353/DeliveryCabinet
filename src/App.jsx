@@ -59,10 +59,10 @@ import ShowStaffInfo from './pages/storeOwner/StoreDetail/ShowAccInfo/ShowAccInf
 import SOStoreManagement from './pages/storeOwner/StoreManagement';
 import SOStoreDetail from './pages/storeOwner/StoreDetail';
 import CabinetDetail from './pages/storeOwner/CabinetDetail';
+import CreateAccount from './pages/admin/CreateAccount/CreateAccount';
 import 'antd/dist/reset.css';
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import './index.css';
-import CreateAccount from './pages/admin/CreateAccount/CreateAccount';
 
 function App() {
   return (

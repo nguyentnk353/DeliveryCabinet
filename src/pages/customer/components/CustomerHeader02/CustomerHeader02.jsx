@@ -112,21 +112,25 @@ export default function CustomerHeader02() {
       <MenuItem onClick={(e) => {
         e.stopPropagation();
         handleMenuClose
-        navigate('/customer/profile', {
-          state: {
-            accInfo: { name: 'ahihi', price: '1000' },
-          },
-        })
-      }}>Profile</MenuItem>
+        navigate('/customer/profile', 
+        // {
+        //   state: {
+        //     accInfo: { name: 'ahihi', price: '1000' },
+        //   },
+        // }
+        )
+      }}>Hồ sơ</MenuItem>
       <MenuItem onClick={(e) => {
         e.stopPropagation();
         handleMenuClose
-        navigate('/customer/wallet', {
-          state: {
-            accInfo: { name: 'ahihi', price: '1000' },
-          },
-        })
-      }}>Wallet</MenuItem>
+        navigate('/customer/wallet', 
+        // {
+        //   state: {
+        //     accInfo: { name: 'ahihi', price: '1000' },
+        //   },
+        // }
+        )
+      }}>Ví</MenuItem>
     </Menu>
   );
 
@@ -178,7 +182,7 @@ export default function CustomerHeader02() {
         >
           <AccountCircle />
         </IconButton>
-        <p>Account</p>
+        <p>Tài khoản</p>
       </MenuItem>
       <MenuItem onClick={logout} className='text-red-500'>
         <IconButton
@@ -190,7 +194,7 @@ export default function CustomerHeader02() {
         >
           <LogoutIcon />
         </IconButton>
-        <p>Logout</p>
+        <p>Đăng xuất</p>
       </MenuItem>
     </Menu>
   );

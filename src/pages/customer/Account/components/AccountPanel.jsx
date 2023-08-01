@@ -30,7 +30,7 @@ function AccountPanel() {
     <div className="grow">
       {/* Panel body */}
       <div className="p-6 space-y-6">
-        <h2 className="text-2xl text-slate-800 font-bold mb-5">My Profile</h2>
+        <h2 className="text-2xl text-slate-800 font-bold mb-5">Hồ sơ của tôi</h2>
         {/* Picture */}
         <section>
           <div className="flex items-center">
@@ -39,31 +39,31 @@ function AccountPanel() {
                   src={imgSrc} onError = {() => setImgSrc(Image)}
               />
             </div>
-            <button className="btn-sm bg-indigo-500 hover:bg-indigo-600 text-white">Change</button>
+            <button className="btn-sm bg-indigo-500 hover:bg-indigo-600 text-white">Thay đổi</button>
           </div>
         </section>
         {/*Profile */}
         <section>
-          <h2 className="text-xl leading-snug text-slate-800 font-bold mb-1">Personal Information</h2>
+          <h2 className="text-xl leading-snug text-slate-800 font-bold mb-1">Thông tin cá nhân</h2>
           {/* <div className="text-sm">Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit.</div> */}
           <div className="sm:flex sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 mt-5">
             <div className="sm:w-1/3">
-              <label className="block text-sm font-medium mb-1" htmlFor="name">Full Name</label>
+              <label className="block text-sm font-medium mb-1" htmlFor="name">Họ và tên</label>
               <input id="name" className="form-input w-full" type="text" defaultValue={info.fullName} onChange={()=>{handleChangName()}}/>
             </div>
             <div className="sm:w-1/3">
-              <label className="block text-sm font-medium mb-1" htmlFor="business-id">Birthday</label>
+              <label className="block text-sm font-medium mb-1" htmlFor="business-id">Ngày sinh</label>
               <input id="business-id" className="form-input w-full" type="text" defaultValue={'24-04-2001'}/>
             </div>
             <div className="sm:w-1/3">
-              <label className="block text-sm font-medium mb-1" htmlFor="location">Role</label>
+              <label className="block text-sm font-medium mb-1" htmlFor="location">Tài khoản</label>
               <input disabled id="location" className="form-input w-full cursor-not-allowed" type="text" defaultValue={'Customer'} />
             </div>
           </div>
         </section>
          {/*Profile */}
          <section>
-          <h2 className="text-xl leading-snug text-slate-800 font-bold mb-1">Account Information</h2>
+          <h2 className="text-xl leading-snug text-slate-800 font-bold mb-1">Thông tin tài khoản</h2>
           {/* <div className="text-sm">Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit.</div> */}
           <div className="sm:flex sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 mt-5">
             <div className="sm:w-1/3">
@@ -71,12 +71,12 @@ function AccountPanel() {
               <input id="name" className="form-input w-full" type="text" defaultValue={info.email}/>
             </div>
             <div className="sm:w-1/3">
-              <label className="block text-sm font-medium mb-1" htmlFor="business-id">Phone</label>
+              <label className="block text-sm font-medium mb-1" htmlFor="business-id">Số điện thoại</label>
               <input id="business-id" className="form-input w-full" type="text" defaultValue={info.phone}/>
             </div>
             <div className="sm:w-1/3">
-              <label className="block text-sm font-medium mb-1" htmlFor="location">Status</label>
-              <input id="location" className="form-input w-full" type="text" defaultValue={'Active'}/>
+              <label className="block text-sm font-medium mb-1" htmlFor="location">Trạng thái</label>
+              <input id="location" className="form-input w-full" type="text" defaultValue={'Đang hoạt động'}/>
             </div>
           </div>
         </section>
@@ -120,8 +120,8 @@ function AccountPanel() {
       <footer>
         <div className="flex flex-col px-6 py-5 border-t border-slate-200">
           <div className="flex self-end">
-            <button className="btn border-slate-200 hover:border-slate-300 text-slate-600">Cancel</button>
-            <button className="btn bg-indigo-500 hover:bg-indigo-600 text-white ml-3" type='submit' onClick={(e)=>{handleSumit(e)}}>Save Changes</button>
+            <button className="btn border-slate-200 hover:border-slate-300 text-slate-600">Hủy</button>
+            <button className="btn bg-indigo-500 hover:bg-indigo-600 text-white ml-3" type='submit' onClick={(e)=>{handleSumit(e)}}>Lưu thay đổi</button>
           </div>
         </div>
       </footer>

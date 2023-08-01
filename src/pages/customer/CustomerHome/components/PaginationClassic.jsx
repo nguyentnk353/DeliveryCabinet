@@ -16,7 +16,7 @@ function PaginationClassic({currentPage, onPageChange}) {
                   onPageChange(currentPage - 1)
                 }}
               >
-                <WestIcon fontSize='smalla' sx={{margin: '0 5px 0 0'}} /> Previous
+                <WestIcon fontSize='smalla' sx={{margin: '0 5px 0 0'}} /> Trở về trước
               </button>
             ) : (
               <></>
@@ -31,7 +31,7 @@ function PaginationClassic({currentPage, onPageChange}) {
                 onPageChange(currentPage + 1)
               }}
             >
-              Next <EastIcon fontSize='smalla' sx={{margin: '0 0 0 5px'}}/>
+              Trang kế tiếp <EastIcon fontSize='smalla' sx={{margin: '0 0 0 5px'}}/>
             </button>
           </li>
         </ul>
