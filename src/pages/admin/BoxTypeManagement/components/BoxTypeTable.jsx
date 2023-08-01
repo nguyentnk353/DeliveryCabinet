@@ -253,7 +253,6 @@ const BoxTypeTable = ({ searchText, createSuccess, isEnable }) => {
           <TableHead sx={{ backgroundColor: '#f4f6f8' }}>
             <TableRow>
               <TableCell>Name</TableCell>
-              <TableCell>Price</TableCell>
               <TableCell>Status</TableCell>
               <TableCell>Action</TableCell>
             </TableRow>
@@ -269,7 +268,6 @@ const BoxTypeTable = ({ searchText, createSuccess, isEnable }) => {
                 <TableCell component='th' scope='row'>
                   {row.name}
                 </TableCell>
-                <TableCell>{row.multiplyPrice}</TableCell>
                 <TableCell>
                   {row.isEnable ? (
                     <Chip

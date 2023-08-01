@@ -70,10 +70,6 @@ function a11yProps(index) {
 
 const validationSchema = yup.object({
   name: yup.string('Enter box type name').required('Name is required'),
-  price: yup
-    .number('Accept only positive number > 0')
-    .required('Price is required')
-    .positive('Accept only positive number > 0'),
 });
 const index = () => {
   const navigate = useNavigate();
@@ -85,7 +81,6 @@ const index = () => {
     formik.resetForm({
       values: {
         name: '',
-        price: 0,
       },
     });
     setOpen(false);
@@ -112,13 +107,11 @@ const index = () => {
   const formik = useFormik({
     initialValues: {
       name: '',
-      price: 0,
     },
     validationSchema: validationSchema,
     onSubmit: (val) => {
       const api = {
         name: val.name,
-        multiplyPrice: val.price,
       };
       createBoxType(api)
         .then((res) => {
@@ -166,7 +159,7 @@ const index = () => {
             <Box sx={{ padding: '2rem', display: 'flex', gap: 2 }}>
               <TextField
                 margin='normal'
-                // width='80%'
+                fullWidth
                 id='name'
                 label='Name'
                 autoFocus
@@ -174,17 +167,6 @@ const index = () => {
                 onChange={formik.handleChange}
                 error={formik.touched.name && Boolean(formik.errors.name)}
                 helperText={formik.touched.name && formik.errors.name}
-              />
-              <TextField
-                margin='normal'
-                // width='20%'
-                required
-                id='price'
-                label='Price'
-                value={formik.values.price}
-                onChange={formik.handleChange}
-                error={formik.touched.price && Boolean(formik.errors.price)}
-                helperText={formik.touched.price && formik.errors.price}
               />
             </Box>
             <Box
