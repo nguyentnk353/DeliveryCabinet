@@ -2,6 +2,7 @@ import { useMount } from 'ahooks';
 import React, { useState } from 'react';
 import getLockerIdGuest from '../../../services/getLockerIdGuest';
 import {
+  Alert,
   Box,
   Button,
   Chip,
@@ -18,6 +19,7 @@ import * as yup from 'yup';
 import { useFormik } from 'formik';
 import postOpenBox from '../../../services/postOpenBox';
 import useNotification from '../../../utils/useNotification';
+import { useEffect } from 'react';
 
 const validationSchema = yup.object({
   code: yup
@@ -35,6 +37,8 @@ const index = () => {
   const [box, setBox] = useState({});
   const [locker, setLocker] = useState({});
   const [msg, sendNotification] = useNotification();
+  const [dialogTitle, setDialogTitle] = useState('');
+  const [alert, setAlert] = useState(false);
 
   useMount(() => {
     if (count === null) {
@@ -54,6 +58,21 @@ const index = () => {
       })
       .catch((err) => console.log(err));
   });
+  useEffect(() => {
+    const api = {
+      id: lockerId,
+    };
+    getLockerIdGuest(api)
+      .then((res) => {
+        if (res.status == 200) {
+          const resData = res.data.items.map((e) => e);
+          setLocker(resData[0]);
+        } else {
+          console.log(res);
+        }
+      })
+      .catch((err) => console.log(err));
+  }, [sendNotification, setDialogTitle]);
   function colorStatus(s) {
     switch (s) {
       case 0:
@@ -95,29 +114,38 @@ const index = () => {
         };
     }
   }
-  function dialogTitle(s) {
-    switch (s) {
-      case 0:
-        return {
-          title: 'Tủ đã được mở',
-        };
+  // function dialogTitle(s) {
+  //   switch (s) {
+  //     case 0:
+  //       return {
+  //         title: 'Tủ đã được mở',
+  //       };
 
-      case 1:
-        return {
-          title: 'Tủ này không được mở',
-        };
-      case 2:
-        return {
-          title: 'Tủ này đã bị khóa do nhập sai 4 lần',
-        };
-      default:
-        return {
-          title: 'Tủ này không hoạt động',
-        };
+  //     case 1:
+  //       return {
+  //         title: 'Tủ này không được mở',
+  //       };
+  //     case 2:
+  //       return {
+  //         title: 'Tủ này đã bị khóa do nhập sai 4 lần',
+  //       };
+  //     default:
+  //       return {
+  //         title: 'Tủ này không hoạt động',
+  //       };
+  //   }
+  // }
+  const handleWrongBox = (s) => {
+    if (s != 2) {
+      setDialogTitle('Tủ này đã không được mở');
+      handleOpenD();
+    } else {
+      handleOpen();
     }
-  }
+  };
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
+    setAlert(false);
     formik.resetForm({
       values: {
         code: '',
@@ -126,10 +154,12 @@ const index = () => {
     setOpen(false);
   };
   const handleOpenD = (s) => {
-    dialogTitle(s);
+    setAlert(false);
     setOpenD(true);
   };
   const handleCloseD = () => {
+    setAlert(false);
+    setDialogTitle('');
     setOpenD(false);
   };
   const style = {
@@ -159,14 +189,17 @@ const index = () => {
         };
         postOpenBox(payload)
           .then((res) => {
+            setAlert(false);
             handleClose();
             if (res.status == 201) {
-              handleOpenD(0);
+              setDialogTitle('Tủ này đã được mở');
+              handleOpenD();
               sendNotification({
                 msg: `Box #${box.id} open success`,
                 variant: 'success',
               });
             } else {
+              setDialogTitle('Tủ này đã không mở được');
               sendNotification({
                 msg: `Box #${box.id} open fail`,
                 variant: 'error',
@@ -174,11 +207,16 @@ const index = () => {
             }
           })
           .catch((err) => console.log(err));
-      } else if (count == 4) {
-        handleOpenD(2);
+      } else if (count > 4) {
+        setAlert(false);
+        setDialogTitle(
+          'Tủ này đã bị khóa sau 4 lần nhập sai, hay liên lạc với người phụ trách để lấy lại đồ dùng trong tủ'
+        );
+        handleOpenD();
+        handleClose();
         const api = {
           boxid: box.id,
-          ActionType: 4,
+          ActionType: 3,
         };
         postOpenBox(api)
           .then((res) => {
@@ -188,6 +226,7 @@ const index = () => {
           })
           .catch((err) => console.log(err));
       } else if (!checkOpenCode) {
+        setAlert(true);
         localStorage.setItem('countCode', count + 1);
       } else {
         console.log(count);
@@ -222,7 +261,7 @@ const index = () => {
         aria-labelledby='alert-dialog-title'
         aria-describedby='alert-dialog-description'
       >
-        <DialogTitle id='alert-dialog-title'>{dialogTitle().title}</DialogTitle>
+        <DialogTitle id='alert-dialog-title'>{dialogTitle}</DialogTitle>
         {/* <DialogContent>
           <DialogContentText id="alert-dialog-description">
             Let Google help apps determine location. This means sending anonymous
@@ -258,6 +297,7 @@ const index = () => {
           >
             <Box sx={{ padding: '2rem' }}>
               <Typography variant='body1'>Bạn chỉ có 4 lần nhập *</Typography>
+              {alert && <Alert severity='warning'>Sai mã mở tủ</Alert>}
               <TextField
                 margin='normal'
                 fullWidth
@@ -295,7 +335,7 @@ const index = () => {
       >
         <Paper sx={{ width: '90%', padding: '5%', margin: 'auto' }}>
           <Box>
-            <Typography variant='h6'>Cabinet #{locker.id}</Typography>
+            <Typography variant='h6'>{locker.name}</Typography>
             <Button
               onClick={(c) => {
                 c.stopPropagation();
@@ -335,9 +375,9 @@ const index = () => {
                       gap: '1rem',
                     }}
                     onClick={(c) => {
-                      c.stopPropagation();
+                      // c.stopPropagation();
                       setBox(e);
-                      handleOpen();
+                      handleWrongBox(e.status);
                     }}
                   >
                     {e.code}
