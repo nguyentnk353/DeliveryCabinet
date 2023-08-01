@@ -4,12 +4,12 @@ import { useNavigate } from 'react-router-dom';
 import rentBox from '../../../../services/Customer/rentBox';
 import { useState } from 'react';
 
-const RentBoxModal = ({ isOpen, setIsOpen, boxInfo, lockerId, serviceTypeId }) => {
+const RentBoxModal = ({ isOpen, setIsOpen, boxInfo, storeId, serviceTypeId }) => {
     const navigate = useNavigate();
    
     const handleRentBox = () => {
         const payload = {
-            lockerId: lockerId,
+            storeId: storeId,
             boxSizeId: boxInfo?.boxSize?.id,
             boxTypeId: boxInfo?.boxType?.id,
             servicetypeId: serviceTypeId,
@@ -36,8 +36,8 @@ const RentBoxModal = ({ isOpen, setIsOpen, boxInfo, lockerId, serviceTypeId }) =
                         <div className="text-sm">
                             <div className="font-medium text-slate-800 mb-2">Xác nhận thuê box có thông tin sau:</div>
                             <div className="space-y-2">
-                                <p>Chiều dài: {boxInfo?.boxSize?.length} cm</p>
-                                <p>Chiều rộng: {boxInfo?.boxSize?.height} cm</p>
+                                <p>Chiều dài: {boxInfo?.boxSize?.length}</p>
+                                <p>Chiều rộng: {boxInfo?.boxSize?.height}</p>
                                 <p>Loại  box: {boxInfo?.boxType?.name}</p>
                                 <input></input>
                             </div>

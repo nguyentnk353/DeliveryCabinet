@@ -1,7 +1,7 @@
 import axiosInstance from '../axiosInstance';
 
-export default function getAllBox(storeId) {
-  const url = `boxs/store/${storeId}/typebox`;
+export default function getTransaction(walletId) {
+  const url = `/wallets/${walletId}/transactions`;
   return axiosInstance
     .get(url)
     .then((response) => response.data)
