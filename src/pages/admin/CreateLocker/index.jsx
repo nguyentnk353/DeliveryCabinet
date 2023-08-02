@@ -84,7 +84,7 @@ const index = () => {
     isPattern: false,
     box: [],
   });
-
+  console.log(boxSizeList);
   const [gridData, setGridData] = useState({
     row: 0,
     col: 0,

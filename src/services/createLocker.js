@@ -11,6 +11,7 @@ export default function createLocker(data) {
       boxSizeId: e.BoxSize.id,
       fromLeft: e.FromLeft,
       fromTop: e.FromTop,
+      status: 1,
     };
   });
   const locker = {

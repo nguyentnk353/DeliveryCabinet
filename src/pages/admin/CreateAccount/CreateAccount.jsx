@@ -18,10 +18,16 @@ import * as Yup from 'yup';
 import moment from 'moment/moment';
 import postAccount from './../../../services/postAccount';
 import CustomBreadcrumb from '../../../components/CustomBreadcrumb';
+import postImage from '../../../services/postImage';
+import useNotification from '../../../utils/useNotification';
+import { useNavigate } from 'react-router-dom';
 
 const CreateAccount = () => {
+  const navigate = useNavigate();
   const [role, setRole] = useState({ name: 'Role', id: 0 });
   const [dob, setDob] = useState();
+  const [fileImg, setFileImg] = useState();
+  const [msg, sendNotification] = useNotification();
   const phoneRegExp =
     /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 
@@ -61,20 +67,41 @@ const CreateAccount = () => {
         .required('Required!'),
     }),
     onSubmit: (values) => {
-      const api = {
-        loginName: values.login_name,
-        password: values.password,
-        confirmPassword: values.confirm_password,
-        fullName: values.full_name,
-        email: values.email,
-        phone: values.phone,
-        dob: dob,
-        role: role,
-      };
-
-      postAccount(api)
+      const formData = new FormData();
+      formData.append('file', fileImg);
+      postImage(formData)
         .then((res) => {
-          console.log(res);
+          if (res.status == 200) {
+            const api = {
+              loginName: values.login_name,
+              password: values.password,
+              confirmPassword: values.confirm_password,
+              fullName: values.full_name,
+              email: values.email,
+              phone: values.phone,
+              dob: dob,
+              role: role,
+            };
+
+            postAccount(api)
+              .then((res) => {
+                if (res.status == 201) {
+                  navigate('/admin/user');
+                  sendNotification({
+                    msg: 'User create success',
+                    variant: 'success',
+                  });
+                } else {
+                  sendNotification({
+                    msg: 'User create fail',
+                    variant: 'error',
+                  });
+                }
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          }
         })
         .catch((err) => {
           console.log(err);
@@ -85,6 +112,7 @@ const CreateAccount = () => {
     { name: 'User', sidebar: 'User', to: '/admin/user' },
     { name: 'New user', sidebar: 'User', to: '/admin/new-user' },
   ];
+
   return (
     <Box>
       <Box
@@ -119,7 +147,7 @@ const CreateAccount = () => {
                   padding: '10% 0',
                 }}
               >
-                <UploadAvatar />
+                <UploadAvatar setFileImg={setFileImg} />
               </Box>
             </Paper>
 
