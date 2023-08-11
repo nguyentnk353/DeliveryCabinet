@@ -195,64 +195,48 @@ const TableAccount = ({ status, role, storeId, storeInfo }) => {
           alignItems: 'center',
         }}
       >
-        <Typography
-          variant='h5'
-          sx={{ fontWeight: '500', marginBottom: '0.25rem' }}
-        >
-          Staff list
-        </Typography>
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'flex-end',
-            gap: 2,
-            width: '70%',
-            alignItems: 'center',
+        <TextField
+          id='filled-search'
+          placeholder='Search...'
+          type='search'
+          variant='outlined'
+          onChange={(e) => setSearchText(e.target.value)}
+          value={searchText}
+          sx={{ width: '75%' }}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position='start'>
+                <SearchOutlined />
+              </InputAdornment>
+            ),
           }}
-        >
-          <TextField
-            id='filled-search'
-            placeholder='Search...'
-            type='search'
-            variant='outlined'
-            onChange={(e) => setSearchText(e.target.value)}
-            value={searchText}
-            sx={{ width: '60%' }}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position='start'>
-                  <SearchOutlined />
-                </InputAdornment>
-              ),
+        />
+        <Box>
+          <Button
+            color='error'
+            startIcon={<DeleteOutline />}
+            sx={{ marginLeft: '1rem' }}
+            onClick={() => {
+              setSearchText('');
             }}
-          />
-          <Box>
-            <Button
-              color='error'
-              startIcon={<DeleteOutline />}
-              sx={{ marginLeft: '1rem' }}
-              onClick={() => {
-                setSearchText('');
-              }}
-            >
-              Clear
-            </Button>
-          </Box>
-          <Box>
-            <Button
-              variant='contained'
-              startIcon={<Add />}
-              onClick={() =>
-                navigate('/store-owner/new-staff', {
-                  state: {
-                    storeInfo: storeInfo,
-                  },
-                })
-              }
-            >
-              New staff
-            </Button>
-          </Box>
+          >
+            Clear
+          </Button>
+        </Box>
+        <Box>
+          <Button
+            variant='contained'
+            startIcon={<Add />}
+            onClick={() =>
+              navigate('/store-owner/new-staff', {
+                state: {
+                  storeInfo: storeInfo,
+                },
+              })
+            }
+          >
+            New staff
+          </Button>
         </Box>
       </Box>
       <Box>

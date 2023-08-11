@@ -25,10 +25,12 @@ import { useMount } from 'ahooks';
 import getAccountById from '../../../../../services/getAccountById';
 import { useEffect } from 'react';
 import CustomBreadcrumb from '../../../../../components/CustomBreadcrumb';
+import dayjs from 'dayjs';
 
 const UpdateAccount = () => {
   const location = useLocation();
   const navigate = useNavigate();
+
   const [userInfo, setUserInfo] = useState({
     id: '',
     fullName: '',
@@ -38,6 +40,9 @@ const UpdateAccount = () => {
     isEnable: false,
     imgUrl: '',
   });
+  const [date, setDate] = React.useState(
+    dayjs(location?.state?.accountInfo?.dob)
+  );
   const [msg, sendNotification] = useNotification();
   const statusList = [
     { name: 'Active', id: true },
@@ -50,11 +55,13 @@ const UpdateAccount = () => {
     getAccountById(location?.state?.accountInfo?.id)
       .then((res) => {
         setUserInfo(res);
+        // setDate(res?.dob);
       })
       .catch((err) => {
         console.log(err);
       });
   });
+
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
@@ -62,7 +69,7 @@ const UpdateAccount = () => {
       email: userInfo.email,
       phone: userInfo.phone,
       // login_name: userInfo.loginName,
-      dob: moment(userInfo?.dob),
+      // dob: moment(userInfo?.dob),
     },
     validationSchema: Yup.object({
       full_name: Yup.string()
@@ -81,13 +88,14 @@ const UpdateAccount = () => {
         fullName: values.full_name,
         email: values.email,
         phone: values.phone,
-        dob: values.dob._i,
+        dob: dayjs(date.$d).format('YYYY-MM-DDTHH:mm[Z]'),
         isEnable: userInfo?.isEnable,
         imgUrl: userInfo?.imgUrl,
       };
       updateAccount(api)
         .then((res) => {
           if (res.status == 200) {
+            navigate('/admin/user', { replace: true });
             sendNotification({
               msg: 'Account update success',
               variant: 'success',
@@ -106,11 +114,11 @@ const UpdateAccount = () => {
     deleteAccount(userInfo?.id)
       .then((res) => {
         if (res.status == 200) {
+          navigate('/admin/user', { replace: true });
           sendNotification({
             msg: 'Account delete success',
             variant: 'success',
           });
-          navigate('/admin/user', { replace: true });
         } else {
           sendNotification({ msg: 'Account delete fail', variant: 'error' });
         }
@@ -229,7 +237,7 @@ const UpdateAccount = () => {
                           />
                         </DemoContainer>
                       </LocalizationProvider> */}
-                      <LocalizationProvider dateAdapter={AdapterMoment}>
+                      {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker
                           label='Date Of Birth'
                           sx={{ width: '100%' }}
@@ -249,6 +257,18 @@ const UpdateAccount = () => {
                               fullWidth
                             />
                           )}
+                        />
+                      </LocalizationProvider> */}
+                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DatePicker
+                          label='Date of birth'
+                          // id='dob'
+                          // name='dob'
+                          required
+                          // defaultValue={dayjs(userInfo?.dob)}
+                          // defaultValue={dayjs('2022-04-17')}
+                          value={date}
+                          onChange={(newValue) => setDate(newValue)}
                         />
                       </LocalizationProvider>
                     </Box>

@@ -1,23 +1,11 @@
 import { request } from '../utils/request';
 
-export default function getPriceTableItemList({
-  search,
-  PageIndex,
-  PageSize,
-  IsEnable,
-  PriceTableId,
-}) {
+export default function getPriceTableItemList(payload) {
   const url = '/price-table-items';
 
   return request
     .get(url, {
-      params: {
-        Id: search,
-        PageIndex: PageIndex,
-        PageSize: PageSize,
-        IsEnable: IsEnable,
-        PriceTableId: PriceTableId,
-      },
+      params: payload,
     })
     .then((response) => response.data)
     .catch((err) => err.response.data);

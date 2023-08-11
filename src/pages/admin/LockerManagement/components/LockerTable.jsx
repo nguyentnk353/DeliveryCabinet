@@ -61,9 +61,11 @@ const LockerTable = ({ search, isEnable }) => {
 
   useMount(() => {
     const payload = {
-      PageIndex: pg,
+      Name: '',
+      IsEnable: isEnable,
+      StoreId: '',
+      PageIndex: pg + 1,
       PageSize: rpg,
-      isEnable: isEnable,
     };
     getLockerList(payload)
       .then((res) => {
@@ -81,18 +83,18 @@ const LockerTable = ({ search, isEnable }) => {
     }
     const payload = search
       ? {
-          StoreId: '',
-          PageIndex: 0,
+          Name: search,
+          IsEnable: isEnable,
+          StoreId: search,
+          PageIndex: 1,
           PageSize: rpg,
-          search: search,
-          isEnable: isEnable,
         }
       : {
-          StoreId: '',
-          PageIndex: pg,
+          Name: search,
+          IsEnable: isEnable,
+          StoreId: search,
+          PageIndex: pg + 1,
           PageSize: rpg,
-          search: search,
-          isEnable: isEnable,
         };
     getLockerList(payload)
       .then((res) => {

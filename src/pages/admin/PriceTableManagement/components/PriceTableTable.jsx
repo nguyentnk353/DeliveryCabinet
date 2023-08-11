@@ -42,6 +42,7 @@ import { useNavigate } from 'react-router-dom';
 import { DatePicker, Space, Modal } from 'antd';
 const { RangePicker } = DatePicker;
 import * as dayjs from 'dayjs';
+import ModalPriceTable from './ModalPriceTable';
 
 const validationSchema = yup.object({
   name: yup.string('Enter box size name').required('Name is required'),
@@ -108,7 +109,15 @@ const PriceTableTable = ({ searchText, createSuccess, isEnable }) => {
   }, [createSuccess, pg, rpg, searchText, msg]);
 
   const [open, setOpen] = React.useState(false);
-
+  const [openPrice, setOpenPrice] = React.useState(false);
+  const [priceId, setPriceId] = React.useState(null);
+  const handleOpenPrice = (id) => {
+    setPriceId(id);
+    setOpenPrice(true);
+  };
+  const handleClosePrice = () => {
+    setOpenPrice(false);
+  };
   const [field, setField] = React.useState({
     id: '',
     name: '',
@@ -267,6 +276,11 @@ const PriceTableTable = ({ searchText, createSuccess, isEnable }) => {
   }
   return (
     <Box>
+      <ModalPriceTable
+        open={openPrice}
+        setOpen={setOpenPrice}
+        priceId={priceId}
+      />
       <Box>
         <Modal
           open={open}
@@ -444,13 +458,7 @@ const PriceTableTable = ({ searchText, createSuccess, isEnable }) => {
                   },
                   cursor: 'pointer',
                 }}
-                onClick={() =>
-                  navigate('/admin/price-table-item', {
-                    state: {
-                      priceTable: row,
-                    },
-                  })
-                }
+                onClick={() => handleOpenPrice(row.id)}
               >
                 <TableCell component='th' scope='row'>
                   {row?.name}

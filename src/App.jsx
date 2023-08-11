@@ -25,6 +25,8 @@ import ConfigPage from './pages/admin/ConfigPage';
 import StoreConfig from './pages/admin/StoreConfig';
 import BoxConfig from './pages/admin/BoxConfig';
 import CreatePriceTable from './pages/admin/CreatePriceTable';
+import OrderManagement from './pages/admin/OrderManagement';
+import OrderDetailAdmin from './pages/admin/OrderDetail';
 import StoreOwner from './pages/storeOwner/StoreOwner';
 import StoreOwnerHome from './pages/storeOwner/StoreOwnerHome';
 import Staff from './pages/staff/Staff';
@@ -131,6 +133,8 @@ function App() {
               <Route path='config' element={<ConfigPage />} />
               <Route path='store-config' element={<StoreConfig />} />
               <Route path='box-config' element={<BoxConfig />} />
+              <Route path='order' element={<OrderManagement />} />
+              <Route path='order-detail' element={<OrderDetailAdmin />} />
               <Route path='testUI' element={<TestUI />} />
             </Route>
             <Route
