@@ -4,6 +4,7 @@ import BankCard from '../../CustomerLanding/components/BankCard';
 import { useMount } from 'ahooks';
 import getWallet from '../../../../services/Customer/getWallet';
 import TopupZaloModal from './TopupZaloModal';
+import currency from 'currency.js';
 
 const CardsSidebar = ({info}) => {
     const navigate = useNavigate();
@@ -46,7 +47,7 @@ const CardsSidebar = ({info}) => {
                                         <div className="text-sm">Số dư: </div>
                                         <div className="flex items-center whitespace-nowrap">
                                             {/* <div className="w-2 h-2 rounded-full bg-emerald-500 mr-2" /> */}    
-                                            <div className="text-sm font-medium text-slate-800">{wallet.balance} VNĐ</div>
+                                            <div className="text-sm font-medium text-slate-800">{new Intl.NumberFormat("nb-NO").format(wallet?.balance)} VNĐ</div>
                                         </div>
                                     </li>
                                 </ul>

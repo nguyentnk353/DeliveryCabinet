@@ -48,8 +48,8 @@ function WelcomeBanner() {
 
       {/* Content */}
       <div className="relative">
-        <h1 className="text-2xl md:text-3xl text-slate-800 font-bold mb-1">Chào mừng đến với DC 👋</h1>
-        <p>Mong bạn sẽ có những trải nghiệm tốt khi sử dụng website</p>
+        <h1 className="text-2xl md:text-[25px] text-slate-800 font-bold mb-1">Chào mừng đến với DC 👋</h1>
+        <p>Mong bạn sẽ có những trải nghiệm tốt khi sử dụng dịch vụ</p>
       </div>
     </div>
   );

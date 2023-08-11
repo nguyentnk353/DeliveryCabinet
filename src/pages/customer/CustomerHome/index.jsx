@@ -19,39 +19,12 @@ const CustomerHome = () => {
   const [value, setValue] = React.useState(0);
   const [msg, sendNotification] = useNotification();
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
-
   const [pg, setPg] = useState(1);
   const [searchText, setSearchText] = useState('');
   const [province, setProvince] = useState({ name: '', key: 0 });
   const [district, setDistrict] = useState({ name: '', key: 0 });
   const [ward, setWard] = useState({ name: '', key: 0 });
-  const [provinceList, setProvinceList] = useState([]);
-  const [districtList, setDistrictList] = useState([]);
-  const [wardList, setWardList] = useState([]);
 
-  const host = 'https://provinces.open-api.vn/api/';
-
-  useMount(() => {
-    if (location?.state?.notifyState?.msg) {
-      sendNotification(location?.state?.notifyState);
-    }
-    return axios.get(host).then((res) => {
-      setProvinceList(res.data);
-    });
-  });
-  function callApiDistrict(api) {
-    return axios.get(api).then((res) => {
-      setDistrictList(res.data.districts);
-    });
-  }
-  function callApiWard(api) {
-    return axios.get(api).then((res) => {
-      setWardList(res.data.wards);
-    });
-  }
   return (
     <>
       <div className="flex overflow-hidden bg-slate-100">
@@ -63,15 +36,15 @@ const CustomerHome = () => {
             <div className="px-4 sm:px-6 lg:px-8 md:py-8 w-full max-w-9xl mx-auto">
 
               {/* Page header */}
-              <div className="md:mb-5">
+              <div className="md:mb-5 max-md:mt-4">
 
                 {/* Title */}
-                <h1 className="text-2xl md:text-3xl text-slate-800 font-bold max-md:hidden">Find the suitable store for you ✨</h1>
+                <div className="max-md:text-lg md:text-3xl text-slate-800 font-bold">Chọn địa điểm thuê tủ ✨</div>
               
               </div>
 
               {/* Page content */}
-              <div className="flex flex-col space-y-10 sm:flex-row sm:space-x-6 sm:space-y-0 md:flex-col md:space-x-0 md:space-y-10 xl:flex-row xl:space-x-6 xl:space-y-0 md:mt-9">
+              <div className="flex flex-col max-md:space-y-5 sm:flex-row sm:space-x-6 sm:space-y-0 md:flex-col md:space-x-0 md:space-y-10 xl:flex-row xl:space-x-6 xl:space-y-0 md:mt-9">
 
                 {/* Sidebar */}
                 <div className="max-w-xs pl-4 max-md:hidden">
@@ -95,7 +68,7 @@ const CustomerHome = () => {
                       </form>
                     </div>
                     <div className='md:hidden'>
-                      <DropdownFilter align={'right'} setProvince={setProvince} setDistrict={setDistrict} setWard={setWard}/>
+                      <DropdownFilter align={'right'} province={province} district={district} ward={ward} setProvinceDropdown={setProvince} setDistrictDropdown={setDistrict} setWardDropdown={setWard}/>
                     </div>
                   </div>
                   <StoreCard search={searchText} pg={pg} onPageChange={setPg} province={province} district={district} ward={ward}/>

@@ -61,6 +61,7 @@ import CreateAccount from './pages/admin/CreateAccount/CreateAccount';
 import 'antd/dist/reset.css';
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import './index.css';
+import { CusAuthRoute } from './context/CusAuthRoute';
 
 
 function App() {
@@ -168,9 +169,9 @@ function App() {
               path='/customer'
               element={
                 <Suspense fallback={<></>}>
-                  <RolesAuthRoute roles={['4']}>
+                  <CusAuthRoute roles={['4']}>
                     <Customer />
-                  </RolesAuthRoute>
+                  </CusAuthRoute>
                 </Suspense>
               }
             >

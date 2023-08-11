@@ -11,28 +11,32 @@ import { Paper } from '@mui/material';
 import moment from 'moment';
 import { blue, yellow } from '@mui/material/colors';
 import ConfirmFinishRentModal from './components/ConfirmFinishRentModal';
+import getCurrentPrice from './../../../services/Customer/getCurrentPrice';
+import getLockerById from '../../../services/Customer/getLockerById';
 
 const OrderDetail = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
   const [orderInfo, setOrderInfo] = useState();
-  const [storeInfo, setStoreInfo] = useState();
   const [openCode, SetOpenCode] = useState('xxxx');
+  const [currentPrice, setCurrentPrice] = useState();
   const [statusName, setStatusName] = useState('');
+  const [locker, setLocker] = useState([]);
   const [isOpenPriceTable, setIsOpenPriceTable] = useState(false);
   const [isOpenOpenCode, setIsOpenOpenCode] = useState(false);
   const [isFinishOrder, setIsFinishOrder] = useState(false);
 
   const orderId = location.state?.orderInfo?.id;
   const order = location.state?.orderInfo;
+  const store = location.state?.storeInfo;
   const createTime = moment(location.state?.orderInfo?.createTime).format(
     'H:mm DD-MM-YYYY'
   );
   const endTime = moment(location.state?.orderInfo?.endTime).format(
     'H:mm DD-MM-YYYY'
   );
-  const locker = location.state?.orderInfo?.box?.locker;
+  const lockerId = location.state?.orderInfo?.box?.lockerId;
   //location.state?.orderInfo
   // console.log(order);
   useMount(() => {
@@ -61,7 +65,7 @@ const OrderDetail = () => {
         console.log(err);
       });
 
-    // getStoreById(order?.box?.locker?.store?.id)
+    // getStoreById(store?.id)
     //   .then((res) => {
     //     setStoreInfo(res);
     //     // console.log(storeInfo)
@@ -69,6 +73,22 @@ const OrderDetail = () => {
     //   .catch((err) => {
     //     console.log(err);
     //   });
+    getLockerById(lockerId)
+      .then((res) => {
+        setLocker(res.items[0]);
+        
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    getCurrentPrice(order?.id)
+      .then((res) => {
+        setCurrentPrice(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   });
 
   // console.log(location.state?.orderInfo)
@@ -87,7 +107,10 @@ const OrderDetail = () => {
       <PriceTableModal
         isOpen={isOpenPriceTable}
         setIsOpen={setIsOpenPriceTable}
-        storeId={order?.box?.locker?.store?.id}
+        storeId={store?.id}
+        length={order?.box?.boxSize?.length}
+        height={order?.box?.boxSize?.height}
+        boxType={order?.box?.boxType?.name}
       />
       <GetOpenCodeModal
         isOpen={isOpenOpenCode}
@@ -142,7 +165,7 @@ const OrderDetail = () => {
                   </p>
 
                   <h4 className='mb-4 text-base font-medium text-black dark:text-white'>
-                    {order?.box?.locker?.store?.name}
+                    {store?.name}
                   </h4>
                   <div className='block'>
                     <span className='font-semibold'>Liên hệ:</span>{' '}
@@ -150,7 +173,7 @@ const OrderDetail = () => {
                   </div>
                   <span className='mt-2 block'>
                     <span className='font-semibold'>Địa chỉ:</span>{' '}
-                    {order?.box?.locker?.store?.address}
+                    {store?.address}
                     {/* Davis Anenue */}
                   </span>
                 </div>
@@ -242,8 +265,8 @@ const OrderDetail = () => {
                           className='grid-item'
                           key={i}
                           sx={{
-                            gridRow: `span ${e.boxSize.height}`,
-                            gridColumn: `span ${e.boxSize.length}`,
+                            gridRow: `span ${e.boxSize?.height}`,
+                            gridColumn: `span ${e.boxSize?.length}`,
                             cursor: 'pointer',
                             backgroundColor: blue[100],
                             textAlign: 'center',
@@ -262,8 +285,8 @@ const OrderDetail = () => {
                           className='grid-item'
                           key={i}
                           sx={{
-                            gridRow: `span ${e.boxSize.height}`,
-                            gridColumn: `span ${e.boxSize.length}`,
+                            gridRow: `span ${e.boxSize?.height}`,
+                            gridColumn: `span ${e.boxSize?.length}`,
                             cursor: 'pointer',
                             backgroundColor: yellow[100],
                             textAlign: 'center',
@@ -321,9 +344,16 @@ const OrderDetail = () => {
                     <span> $10.00 </span>
                   </p> */}
                   <p className='border-stroke dark:border-strokedark mb-4 mt-2 flex justify-between border-t pt-6 font-medium text-black dark:text-white'>
-                    <span> Tổng tiền: </span>
+                    <span> Đã thanh toán: </span>
                     <span> {order?.total} VNĐ</span>
                   </p>
+                  {order?.status != 2 && 
+                    <p className='border-stroke dark:border-strokedark mb-4 flex justify-between font-medium text-black dark:text-white'>
+                      <span> Tổng tiền: </span>
+                      <span> {currentPrice} VNĐ</span>
+                    </p>
+                  }
+                  
                 </div>
                 {order?.status == 1 ? (
                   <div className='max-md:grid max-md:grid-cols-2 mt-10 flex flex-col justify-end gap-4 sm:flex-row'>

@@ -17,7 +17,7 @@ import getAllLocker from '../../../services/Customer/getAllLocker';
 
 const StoreInformation = () => {
   const location = useLocation();
-
+  const [storeInfo, setStoreInfo] = useState();
   const [showMoreModal, setShowMoreModal] = useState(false);
   const [orderBoxInfo, setOrderBoxInfo] = useState();
   const [rentBoxModalOpen, setRentBoxModalOpen] = useState(false);
@@ -46,7 +46,7 @@ const StoreInformation = () => {
   return (
     <>
       <ShowMoreModal isOpen={showMoreModal} setIsOpen={setShowMoreModal} storeId={location.state.storeInfo.id} />
-      <RentBoxModal isOpen={rentBoxModalOpen} setIsOpen={setRentBoxModalOpen} boxInfo={orderBoxInfo} storeId={location.state?.storeInfo?.id} serviceTypeId={location.state.storeInfo.serviceTypeId} />
+      <RentBoxModal isOpen={rentBoxModalOpen} setIsOpen={setRentBoxModalOpen} boxInfo={orderBoxInfo} storeInfo={location.state?.storeInfo} serviceTypeId={location.state.storeInfo.serviceTypeId} />
       <div className="border-t border-gray-300 bg-slate-100">
 
         {/* Mobile sidebar */}
@@ -68,7 +68,7 @@ const StoreInformation = () => {
                 </div>
                 <div className='flex items-start'>
                   <div className='font-bold	mb-4 w-fit lg:text-[20px] sm:text-base pr-3'>Chọn tủ muốn thuê</div>
-                  <img className="pt-1" src={QRCode} alt="Your SVG" width='20px' />
+                  <img hidden className="pt-1" src={QRCode} alt="Your SVG" width='20px' />
                 </div>
 
 

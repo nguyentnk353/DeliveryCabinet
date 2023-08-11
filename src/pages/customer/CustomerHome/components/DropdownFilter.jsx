@@ -1,16 +1,52 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Transition from './../../components/Transition/Transition';
 import ShopSidebarDC from './ShopSidebarDC';
+import axios from 'axios';
+import { useMount } from 'ahooks';
+import useNotification from 'antd/es/notification/useNotification';
+import { useLocation } from 'react-router-dom';
 
 function DropdownFilter({
-  align, setProvince, setDistrict, setWard
+  align, province, district, ward, setProvinceDropdown, setDistrictDropdown, setWardDropdown
 }) {
+  const location = useLocation();
+  const [msg, sendNotification] = useNotification();
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [getClear, setClear] = useState(false);
-  const [provinceDropdown, setProvinceDropdown] = useState({ name: '', key: 0 });
-  const [districtDropdown, setDistrictDropdown] = useState({ name: '', key: 0 });
-  const [wardDropdown, setWardDropdown] = useState({ name: '', key: 0 });
+  // const [province, setProvince] = useState({ name: '', key: 0 });
+  // const [district, setDistrict] = useState({ name: '', key: 0 });
+  // const [ward, setWard] = useState({ name: '', key: 0 });
+  const [provinceList, setProvinceList] = useState([]);
+  const [districtList, setDistrictList] = useState([]);
+  const [wardList, setWardList] = useState([]);
+
+  const host = 'https://provinces.open-api.vn/api/';
+  
+  useMount(() => {
+    if (location?.state?.notifyState?.msg) {
+      sendNotification(location?.state?.notifyState);
+    }
+    return axios.get(host).then((res) => {
+      setProvinceList(res.data);
+    });
+  });
+  // useEffect(() => {
+  //   if (clear) {
+  //     setProvince({ name: '', key: 0 });
+  //     setDistrict({ name: '', key: 0 });
+  //     setWard({ name: '', key: 0 });
+  //   }
+  // }, [clear]);
+  function callApiDistrict(api) {
+    return axios.get(api).then((res) => {
+      setDistrictList(res.data.districts);
+    });
+  }
+  function callApiWard(api) {
+    return axios.get(api).then((res) => {
+      setWardList(res.data.wards);
+    });
+  }
 
   const trigger = useRef(null);
   const dropdown = useRef(null);
@@ -61,6 +97,7 @@ function DropdownFilter({
         leaveStart="opacity-100"
         leaveEnd="opacity-0"
       >
+        <form>
         <div ref={dropdown}>
           <div className="text-xs font-semibold text-slate-400 uppercase pt-1.5 pb-2 px-4">Tìm kiếm</div>
           {/* <ul className="mb-4">
@@ -101,19 +138,98 @@ function DropdownFilter({
               </label>
             </li>
           </ul> */}
-          <ShopSidebarDC clear={getClear} setClear={setClear} setProvinceDropdown={setProvince} setDistrictDropdown={setDistrict} setWardDropdown={setWard}/>
+
+          {/* <ShopSidebarDC clear={getClear} setClear={setClear} setProvinceDropdown={setProvince} setDistrictDropdown={setDistrict} setWardDropdown={setWard}/> */}
+          <div>
+            <div className="bg-white shadow-lg rounded-sm border border-slate-200 p-5">
+              <div className="grid md:grid-cols-2 xl:grid-cols-1 gap-6">
+                <div>
+                  <div className="text-sm text-slate-800 font-semibold mb-3">Địa chỉ</div>
+                  <label className="sr-only">Địa chỉ</label>
+                  <select
+                    className="form-select w-64 mb-3"
+                    defaultValue="Chọn tỉnh/tp"
+                    onChange={(e) => {
+                      // setProvince(provinceList.find((item) => item.code == e.target.value));
+                      setProvinceDropdown(provinceList.find((item) => item.code == e.target.value));
+                      callApiDistrict(host + 'p/' + e.target.value + '?depth=2');
+                    }}
+                  >
+                    <option hidden>Chọn tỉnh</option>
+                    {provinceList.map((item) => (
+                      <option key={item.code} value={item.code}>{item.name}</option>
+                    ))
+                    }
+
+
+                  </select>
+                  <select
+                    className="form-select w-64 mb-3"
+                    defaultValue="Chọn quận/huyện"
+                    onChange={(e) => {
+                      // setDistrict(districtList.find((item) => item.code == e.target.value));
+                      setDistrictDropdown(districtList.find((item) => item.code == e.target.value));
+                      callApiWard(host + 'd/' + e.target.value + '?depth=2');
+                    }}
+                  >
+                    <option hidden>Chọn quận/huyện</option>
+                    {districtList.map((item) => (
+                      <option key={item.code} value={item.code}>{item.name}</option>
+                    ))
+                    }
+                  </select>
+                  <select
+                    className="form-select w-64 mb-3"
+                    defaultValue="Chọn phường/xã"
+                    onChange={(e) => {
+                      // setWard(wardList.find((item) => item.code == e.target.value));
+                      setWardDropdown(wardList.find((item) => item.code == e.target.value));
+                    }}
+                  >
+                    <option hidden>Chọn phường/xã</option>
+                    {wardList.map((item) => (
+                      <option key={item.code} value={item.code}>{item.name}</option>
+                    ))
+                    }
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div className="py-2 px-3 border-t border-slate-200 bg-slate-50">
             <ul className="flex items-center justify-between">
               <li>
-                <button className="btn-xs bg-white border-slate-200 hover:border-slate-300 text-slate-500 hover:text-slate-600" onClick={() => {setClear(true); console.log(getClear)}}>Hủy tìm kiếm</button>
+                <button 
+                  type="reset"
+                  value="reset"
+                  className="btn-xs bg-white border-slate-200 hover:border-slate-300 text-slate-500 hover:text-slate-600"
+                  onClick={() => {
+                    setDistrictList([]);
+                    setWardList([]);
+                    setProvinceDropdown({ name: '', key: 0 });
+                    setDistrictDropdown({ name: '', key: 0 });
+                    setWardDropdown({ name: '', key: 0 })
+                    setDropdownOpen(false);
+                  }}
+                >
+                  Hủy tìm kiếm
+                </button>
               </li>
               <li>
-                <button className="btn-xs bg-indigo-500 hover:bg-indigo-600 text-white" onClick={() => setDropdownOpen(false)} onBlur={() => setDropdownOpen(false)}>Bắt đầu lọc</button>
+                <button className="btn-xs bg-indigo-500 hover:bg-indigo-600 text-white"
+                  type='button'
+                  onClick={() => setDropdownOpen(false)} onBlur={() => setDropdownOpen(false)}
+                >
+                  Hoàn thành
+                </button>
               </li>
             </ul>
           </div>
         </div>
+        </form>
       </Transition>
+      
     </div>
   );
 }

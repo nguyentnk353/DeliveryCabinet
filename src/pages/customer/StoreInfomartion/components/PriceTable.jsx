@@ -4,12 +4,15 @@ import getPriceTable from '../../../../services/Customer/getPriceTable';
 import { useMount } from 'ahooks';
 import { useState } from 'react';
 
-const PriceTable = ({ storeId }) => {
+const PriceTable = ({ storeId, length, height, boxType }) => {
     const [table, setTable] = useState([]);
     const [tableTotal, setTableTotal] = useState(0);
     useMount(() => {
         const payload = {
             storeId: storeId,
+            length: length,
+            height: height,
+            boxType: boxType,
             PageIndex: 1,
             PageSize: 10,
         };

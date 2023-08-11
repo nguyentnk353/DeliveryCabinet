@@ -4,7 +4,6 @@ import CardOrderCustomer from './components/CardOrderCustomer'
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import getListOrder from '../../../services/Customer/getListOrder';
 import DateSelect from './components/DateSelect';
-import index from './../../storeOwner/StoreOwnerHome/index';
 import { useNavigate } from 'react-router-dom';
 import Image from '../../../assets/images/no-order.svg'
 const Order = () => {
@@ -103,6 +102,7 @@ const Order = () => {
                 {
                   state: {
                     orderInfo: order,
+                    storeInfo: order?.box?.locker?.store,
                   },
                 }
               )
