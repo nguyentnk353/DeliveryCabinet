@@ -77,7 +77,8 @@ function BankCard() {
         </svg>
         {/* Card number */}
         <div className="flex justify-end gap-5 text-lg font-bold text-slate-200 tracking-widest drop-shadow-sm">
-          <span>{new Intl.NumberFormat("nb-NO").format(wallet?.balance)}</span>
+          {wallet?.balance ? (<span>{new Intl.NumberFormat("nb-NO").format(wallet?.balance)}</span>) : (<span>0</span>)}
+         
           {/* <span>, 000</span> */}
           <span>VNĐ</span>
 

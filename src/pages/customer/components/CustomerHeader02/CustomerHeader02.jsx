@@ -129,7 +129,7 @@ export default function CustomerHeader02() {
         </IconButton>
         <p>Tài khoản</p>
       </MenuItem>
-      <MenuItem onClick={logout} className='text-red-500'>
+      <MenuItem onClick={(e)=> {e.stopPropagation(); logout()}} className='text-red-500'>
         <IconButton
           size="large"
           aria-label="account of current user"
@@ -198,7 +198,7 @@ export default function CustomerHeader02() {
         </IconButton>
         <p>Tài khoản</p>
       </MenuItem>
-      <MenuItem onClick={logout} className='text-red-500'>
+      <MenuItem onClick={(e)=> {e.stopPropagation(); logout()}} className='text-red-500'>
         <IconButton
           size="large"
           aria-label="account of current user"
