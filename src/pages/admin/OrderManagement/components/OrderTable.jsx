@@ -94,6 +94,74 @@ const OrderTable = ({ search, isEnable }) => {
       });
   }, [pg, rpg, search, msg]);
 
+  function switchEndtime(val) {
+    switch (val?.status) {
+      case 0:
+        return 'Cancel';
+      case 1:
+        return 'Ongoing';
+      case 2:
+        return dayjs(val?.endTime).format('DD/MM/YYYY [at] HH:mm');
+      case 3:
+        return val?.endTime
+          ? dayjs(val?.endTime).format('DD/MM/YYYY [at] HH:mm')
+          : 'Overdue';
+      default:
+        return 'unknown end time';
+    }
+  }
+
+  function switchStatus(val) {
+    switch (val?.status) {
+      case 0:
+        return (
+          <Chip
+            label='Cancel'
+            size='small'
+            sx={{
+              color: '#e26e2a',
+              bgcolor: '#fdf4f3',
+            }}
+          />
+        );
+      case 1:
+        return (
+          <Chip
+            label='Ongoing'
+            size='small'
+            sx={{
+              color: '#2196f3',
+              bgcolor: '#bbdefb',
+            }}
+          />
+        );
+      case 2:
+        return (
+          <Chip
+            label='Complete'
+            size='small'
+            sx={{
+              color: '#1bcd7a',
+              bgcolor: '#e5fceb',
+            }}
+          />
+        );
+      case 3:
+        return (
+          <Chip
+            label='Overdue'
+            size='small'
+            sx={{
+              color: '#ff9800',
+              bgcolor: '#ffe0b2',
+            }}
+          />
+        );
+      default:
+        return 'unknown status';
+    }
+  }
+
   return (
     <Box>
       <Box>
@@ -136,75 +204,15 @@ const OrderTable = ({ search, isEnable }) => {
                     {row?.total}
                   </TableCell>
                   <TableCell>
-                    {/* {dayjs(row?.createTime).format('DD/MM/YYYY [at] HH:mm')} */}
+                    {dayjs(row?.createTime).format('DD/MM/YYYY [at] HH:mm')}
                   </TableCell>
-                  <TableCell>
-                    {/* {
-                        {
-                          0: 'Cancel',
-                          1: 'Ongoing',
-                          2: dayjs(row?.endTime).format(
-                            'DD/MM/YYYY [at] HH:mm'
-                          ),
-                          3: row?.endTime
-                            ? dayjs(row?.endTime).format(
-                                'DD/MM/YYYY [at] HH:mm'
-                              )
-                            : 'Overdue',
-                        }[row.status]
-                      } */}
-                  </TableCell>
+                  <TableCell>{switchEndtime(row)}</TableCell>
                   <TableCell component='th' scope='row'>
                     {row?.box?.boxSize?.length}x{row?.box?.boxSize?.height}{' '}
                     {row?.box?.boxType?.name}
                   </TableCell>
                   <TableCell>{row?.user?.fullName}</TableCell>
-                  <TableCell>
-                    {/* {
-                        {
-                          0: (
-                            <Chip
-                              label='Cancel'
-                              size='small'
-                              sx={{
-                                color: '#e26e2a',
-                                bgcolor: '#fdf4f3',
-                              }}
-                            />
-                          ),
-                          1: (
-                            <Chip
-                              label='Ongoing'
-                              size='small'
-                              sx={{
-                                color: '#2196f3',
-                                bgcolor: '#bbdefb',
-                              }}
-                            />
-                          ),
-                          2: (
-                            <Chip
-                              label='Complete'
-                              size='small'
-                              sx={{
-                                color: '#1bcd7a',
-                                bgcolor: '#e5fceb',
-                              }}
-                            />
-                          ),
-                          3: (
-                            <Chip
-                              label='Overdue'
-                              size='small'
-                              sx={{
-                                color: '#ff9800',
-                                bgcolor: '#ffe0b2',
-                              }}
-                            />
-                          ),
-                        }[row?.status]
-                      } */}
-                  </TableCell>
+                  <TableCell>{switchStatus(row)}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
