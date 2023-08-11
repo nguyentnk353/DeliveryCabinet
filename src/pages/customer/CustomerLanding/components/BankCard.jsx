@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import getWallet from '../../../../services/Customer/getWallet';
 import { useMount } from 'ahooks';
 import getLoginUser from '../../../../services/Customer/getLoginUser';
+import currency from 'currency.js';
 
 function BankCard() {
   const [wallet, setWallet] = useState({})
@@ -76,7 +77,7 @@ function BankCard() {
         </svg>
         {/* Card number */}
         <div className="flex justify-end gap-5 text-lg font-bold text-slate-200 tracking-widest drop-shadow-sm">
-          <span>{wallet.balance}</span>
+          <span>{new Intl.NumberFormat("nb-NO").format(wallet?.balance)}</span>
           {/* <span>, 000</span> */}
           <span>VNĐ</span>
 

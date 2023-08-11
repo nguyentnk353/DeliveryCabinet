@@ -2,8 +2,8 @@ import React from 'react'
 import ModalBasic from '../../components/ModalBasic/ModalBasic';
 import PriceTable from '../../StoreInfomartion/components/PriceTable';
 
-const PriceTableModal = ({ isOpen, setIsOpen, storeId }) => {
-    
+const PriceTableModal = ({ isOpen, setIsOpen, storeId, length, height, boxType }) => {
+
     return (
         <>
             <ModalBasic modalOpen={isOpen} setModalOpen={setIsOpen} title="BẢNG GIÁ THUÊ BOX">
@@ -11,7 +11,12 @@ const PriceTableModal = ({ isOpen, setIsOpen, storeId }) => {
                     {/* Modal content */}
                     <div className="px-5 pt-4 pb-1">
                         <div className="text-sm">
-                            <PriceTable storeId={storeId} />
+                            <PriceTable
+                                storeId={storeId}
+                                length={length}
+                                height={height}
+                                boxType={boxType}
+                            />
                         </div>
                     </div>
                     {/* Modal footer */}

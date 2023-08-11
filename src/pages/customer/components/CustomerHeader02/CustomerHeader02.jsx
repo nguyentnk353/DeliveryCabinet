@@ -21,6 +21,9 @@ import { Fragment } from 'react';
 import { json, useNavigate } from 'react-router-dom';
 import CustomerMobileSibar from '../CustomerMobileSibar/CustomerMobileSibar';
 import LogoutFunction from './../../../../utils/LogoutFunction';
+import LogoutCustomer from '../../../../utils/LogoutCustomer';
+import { useMount } from 'ahooks';
+import getLoginUser from './../../../../services/Customer/getLoginUser';
 
 
 const Search = styled('div')(({ theme }) => ({
@@ -65,12 +68,13 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 export default function CustomerHeader02() {
   const navigate = useNavigate();
-  const logout = LogoutFunction();
+  const logout = LogoutCustomer();
   const loginUser = JSON.parse(localStorage.getItem('loginUser'));
 
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+  const [imgSrc, setImgSrc] = React.useState("");
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -109,28 +113,34 @@ export default function CustomerHeader02() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={(e) => {
-        e.stopPropagation();
-        handleMenuClose
-        navigate('/customer/profile', 
-        // {
-        //   state: {
-        //     accInfo: { name: 'ahihi', price: '1000' },
-        //   },
-        // }
-        )
-      }}>Hồ sơ</MenuItem>
-      <MenuItem onClick={(e) => {
-        e.stopPropagation();
-        handleMenuClose
-        navigate('/customer/wallet', 
-        // {
-        //   state: {
-        //     accInfo: { name: 'ahihi', price: '1000' },
-        //   },
-        // }
-        )
-      }}>Ví</MenuItem>
+      <MenuItem onClick={(e) => { e.stopPropagation(); handleMenuClose(); navigate('/customer/profile', { replace: true }); }}>
+        <IconButton
+          size="large"
+          aria-label="account of current user"
+          aria-controls="primary-search-account-menu"
+          aria-haspopup="true"
+          color="inherit"
+        >
+          <img
+            className="w-8 h-8 rounded-full"
+            src={imgSrc}
+            alt="user photo"
+          />
+        </IconButton>
+        <p>Tài khoản</p>
+      </MenuItem>
+      <MenuItem onClick={logout} className='text-red-500'>
+        <IconButton
+          size="large"
+          aria-label="account of current user"
+          aria-controls="primary-search-account-menu"
+          aria-haspopup="true"
+          color="inherit"
+        >
+          <LogoutIcon />
+        </IconButton>
+        <p>Đăng xuất</p>
+      </MenuItem>
     </Menu>
   );
 
@@ -172,7 +182,7 @@ export default function CustomerHeader02() {
         <p>Notifications</p>
       </MenuItem> */}
 
-      <MenuItem onClick={handleProfileMenuOpen}>
+      <MenuItem onClick={(e) => { e.stopPropagation(); handleMobileMenuClose(); navigate('/customer/profile', { replace: true }); }}>
         <IconButton
           size="large"
           aria-label="account of current user"
@@ -180,7 +190,11 @@ export default function CustomerHeader02() {
           aria-haspopup="true"
           color="inherit"
         >
-          <AccountCircle />
+          <img
+            className="w-8 h-8 rounded-full"
+            src={imgSrc}
+            alt="user photo"
+          />
         </IconButton>
         <p>Tài khoản</p>
       </MenuItem>
@@ -199,6 +213,15 @@ export default function CustomerHeader02() {
     </Menu>
   );
 
+  useMount(() => {
+    getLoginUser()
+      .then((res) => {
+        setImgSrc(res?.imgUrl)
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  })
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -215,55 +238,62 @@ export default function CustomerHeader02() {
             />
           </Search> */}
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'block' } }} >
-            <Box className="flex justify-end space-x-10 cursor-pointer">
+            {loginUser ?
+              (
+                <Box className="flex justify-end space-x-10 cursor-pointer">
 
-              <Typography
-                variant="h7"
-                noWrap
-                component="div"
-                // sx={{ display: { xs: 'none', sm: 'block' } }}
-                onClick={() => navigate('/customer',
-                  // {
-                  //   state: {
-                  //       storeInfo: store,
-                  //   },
-                  // }
-                )}
-              >
-                Trang chủ
-              </Typography>
-              <Typography
-                variant="h7"
-                noWrap
-                component="div"
+                  <Typography
+                    variant="h7"
+                    noWrap
+                    component="div"
+                    // sx={{ display: { xs: 'none', sm: 'block' } }}
+                    onClick={() => navigate('/customer',
+                      // {
+                      //   state: {
+                      //       storeInfo: store,
+                      //   },
+                      // }
+                    )}
+                  >
+                    Trang chủ
+                  </Typography>
+                  <Typography
+                    variant="h7"
+                    noWrap
+                    component="div"
 
-                onClick={() => navigate('/customer/order',
-                  // {
-                  //   state: {
-                  //       storeInfo: store,
-                  //   },
-                  // }
-                )}
-              >
-                Đơn hàng
-              </Typography>
-              <Typography
-                variant="h7"
-                noWrap
-                component="div"
-                // sx={{ display: { xs: 'none', sm: 'block' } }}
-                onClick={() => navigate('/customer/wallet',
-                  // {
-                  //   state: {
-                  //       storeInfo: store,
-                  //   },
-                  // }
-                )}
-              >
-                Ví
-              </Typography>
+                    onClick={() => navigate('/customer/order',
+                      // {
+                      //   state: {
+                      //       storeInfo: store,
+                      //   },
+                      // }
+                    )}
+                  >
+                    Đơn hàng
+                  </Typography>
+                  <Typography
+                    variant="h7"
+                    noWrap
+                    component="div"
+                    // sx={{ display: { xs: 'none', sm: 'block' } }}
+                    onClick={() => navigate('/customer/wallet',
+                      // {
+                      //   state: {
+                      //       storeInfo: store,
+                      //   },
+                      // }
+                    )}
+                  >
+                    Ví
+                  </Typography>
 
-            </Box>
+                </Box>
+              ) : (
+                <></>
+              )
+
+            }
           </Box>
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
             {/* <IconButton size="large" aria-label="show 4 new mails" color="inherit">
@@ -280,35 +310,47 @@ export default function CustomerHeader02() {
                 <NotificationsIcon />
               </Badge>
             </IconButton> */}
-            <IconButton
-              size="large"
-              edge="end"
-              aria-label="account of current user"
-              aria-controls={menuId}
-              aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
-              color="inherit"
-            >
-              <AccountCircle />
-              {/* <img
-                className="w-8 h-8 rounded-full"
-                src="https://haycafe.vn/wp-content/uploads/2022/02/anh-meo-cute-hinh-cute-meo.jpg"
-                alt="user photo"
-              /> */}
-            </IconButton>
+            {loginUser ?
+              (
+                <IconButton
+                  size="large"
+                  edge="end"
+                  aria-label="account of current user"
+                  aria-controls={menuId}
+                  aria-haspopup="true"
+                  onClick={handleProfileMenuOpen}
+                  color="inherit"
+                >
+                  {/* <AccountCircle /> */}
+                  <img
+                    className="w-8 h-8 rounded-full"
+                    src={imgSrc}
+                    alt="user photo"
+                  />
+                </IconButton>
+              ) : (
+                <button className='font-semibold' onClick={(e) => { e.stopPropagation(); navigate('/login-customer') }}>Đăng nhập</button>
+              )
+
+            }
+
           </Box>
           <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
-            {loginUser ? (<IconButton
-              size="large"
-              aria-label="show more"
-              aria-controls={mobileMenuId}
-              aria-haspopup="true"
-              onClick={handleMobileMenuOpen}
-              color="inherit"
-            >
-              <MoreIcon />
-            </IconButton>) : (<button className='font-semibold' onClick={(e)=>{e.stopPropagation(); navigate('/login')}}>Login</button>)
-
+            {loginUser ?
+              (
+                <IconButton
+                  size="large"
+                  aria-label="show more"
+                  aria-controls={mobileMenuId}
+                  aria-haspopup="true"
+                  onClick={handleMobileMenuOpen}
+                  color="inherit"
+                >
+                  <MoreIcon />
+                </IconButton>
+              ) : (
+                <button className='font-semibold' onClick={(e) => { e.stopPropagation(); navigate('/login-customer') }}>Đăng nhập</button>
+              )
             }
 
           </Box>

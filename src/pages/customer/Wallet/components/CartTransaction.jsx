@@ -1,14 +1,19 @@
 import React, { useState } from 'react'
 import TransactionPanel from './TransactionPanel';
 import moment from 'moment';
+import TransactionDetailModal from './TransactionDetailModal';
+import currency from 'currency.js';
 
 const CartTransaction = ({ transaction, key }) => {
     const [tranDetail, setTranDetail] = useState({})
     const [transactionOpen, setTransactionOpen] = useState(false);
+    const [showMoreModal, setShowMoreModal] = useState(false);
+
     return (
         <>
-            <TransactionPanel transactionPanelOpen={transactionOpen} setTransactionPanelOpen={setTransactionOpen} transactionDetail={tranDetail}/>
-            <label className="relative block cursor-pointer text-left w-full bg-white">
+            {/* <TransactionPanel transactionPanelOpen={transactionOpen} setTransactionPanelOpen={setTransactionOpen} transactionDetail={tranDetail}/> */}
+            <TransactionDetailModal isOpen={showMoreModal} setIsOpen={setShowMoreModal} transaction={transaction}/>
+            <label className="relative block cursor-pointer text-left w-full bg-white my-2">
                 <input type="radio" name="radio-buttons" className="peer sr-only" defaultChecked />
                 <div className="p-4 rounded border border-slate-200 hover:border-slate-300 shadow-sm duration-150 ease-in-out">
                     <div 
@@ -17,6 +22,7 @@ const CartTransaction = ({ transaction, key }) => {
                             e.stopPropagation();
                             setTranDetail(transaction);
                             setTransactionOpen(true);
+                            setShowMoreModal(true)
                         }}
                     >
                         {/* Card */}
@@ -51,7 +57,7 @@ const CartTransaction = ({ transaction, key }) => {
                         </div>
                         {/* Card limits */}
                         <div className="col-span-6 order-1 sm:order-none sm:col-span-4 text-right sm:text-center lg:sidebar-expanded:col-span-6 xl:sidebar-expanded:col-span-4">
-                            <div className="text-sm">{transaction?.amount} / VNĐ</div>
+                            <div className="text-sm">{new Intl.NumberFormat("nb-NO").format(transaction?.amount)} / VNĐ</div>
                         </div>
                         {/* Card status */}
                         <div className="col-span-6 order-2 sm:order-none sm:col-span-2 text-right lg:sidebar-expanded:hidden xl:sidebar-expanded:block">

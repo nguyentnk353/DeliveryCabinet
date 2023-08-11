@@ -4,12 +4,15 @@ import getPriceTable from '../../../../services/Customer/getPriceTable';
 import { useMount } from 'ahooks';
 import { useState } from 'react';
 
-const PriceTable = ({ storeId }) => {
+const PriceTable = ({ storeId, length, height, boxType }) => {
     const [table, setTable] = useState([]);
     const [tableTotal, setTableTotal] = useState(0);
     useMount(() => {
         const payload = {
             storeId: storeId,
+            length: length,
+            height: height,
+            boxType: boxType,
             PageIndex: 1,
             PageSize: 10,
         };
@@ -33,10 +36,10 @@ const PriceTable = ({ storeId }) => {
                     <table className="text-heading w-full text-sm font-semibold lg:text-base">
                         <thead className='bg-[#2196f3]'>
                             <tr>
-                                <th className="bg-gray-150 w-1/4 p-4 ltr:text-left ltr:first:rounded-tl-md rtl:text-right rtl:first:rounded-tr-md">Box size</th>
-                                <th className="bg-gray-150 w-1/4 p-4 ltr:text-left ltr:last:rounded-tr-md rtl:text-right rtl:last:rounded-tl-md">Box Type</th>
-                                <th className="bg-gray-150 w-1/4 p-4 ltr:text-left ltr:first:rounded-tl-md rtl:text-right rtl:first:rounded-tr-md">Duration</th>
-                                <th className="bg-gray-150 w-1/4 p-4 ltr:text-left ltr:last:rounded-tr-md rtl:text-right rtl:last:rounded-tl-md">Price</th>
+                                <th className="bg-gray-150 w-1/4 p-4 ltr:text-left ltr:first:rounded-tl-md rtl:text-right rtl:first:rounded-tr-md">Kích thước</th>
+                                <th className="bg-gray-150 w-1/4 p-4 ltr:text-left ltr:last:rounded-tr-md rtl:text-right rtl:last:rounded-tl-md">Loại box</th>
+                                <th className="bg-gray-150 w-1/4 p-4 ltr:text-left ltr:first:rounded-tl-md rtl:text-right rtl:first:rounded-tr-md">Thời lượng (phút)</th>
+                                <th className="bg-gray-150 w-1/4 p-4 ltr:text-left ltr:last:rounded-tr-md rtl:text-right rtl:last:rounded-tl-md">Giá (VNĐ)</th>
                             </tr>
                         </thead>
                         <tbody>
