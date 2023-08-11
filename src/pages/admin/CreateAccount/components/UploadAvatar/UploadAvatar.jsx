@@ -15,13 +15,14 @@ const StyledButton = styled(Button)({
   display: 'none',
 });
 
-const UploadAvatar = () => {
+const UploadAvatar = ({ setFileImg }) => {
   const [loading, setLoading] = useState(false);
   const [image, setImage] = useState(defaultAvatar);
 
   const handleImageChange = (event) => {
     setLoading(true);
     const file = event.target.files[0];
+    setFileImg(file);
     const reader = new FileReader();
     reader.onload = () => {
       setImage(reader.result);

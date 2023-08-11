@@ -17,6 +17,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TableAccount from './components/TableAccount';
 import CustomBreadcrumb from '../../../components/CustomBreadcrumb';
+import ModalNewUser from '../components/ModalNewUser';
+
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -61,15 +63,17 @@ const AccountManagement = () => {
   const theme = useTheme();
   const navigate = useNavigate();
   const [value, setValue] = useState(0);
+  const [open, setOpen] = useState(false);
   const [role, setRole] = useState({ name: '', id: undefined });
   const [searchText, setSearchText] = useState();
-
+  const handleOpen = () => setOpen(true);
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
   const bcList = [{ name: 'User', sidebar: 'User', to: '/admin/user' }];
   return (
     <Box>
+      <ModalNewUser open={open} setOpen={setOpen} />
       <Box
         sx={{
           marginBottom: '1.5rem',
@@ -93,6 +97,7 @@ const AccountManagement = () => {
           variant='contained'
           startIcon={<Add />}
           onClick={() => navigate('/admin/new-user', { replace: true })}
+          // onClick={() => handleOpen()}
         >
           New user
         </Button>

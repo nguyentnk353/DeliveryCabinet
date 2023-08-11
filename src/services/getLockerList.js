@@ -1,23 +1,11 @@
 import { request } from '../utils/request';
 
-export default function getLockerList({
-  PageIndex,
-  PageSize,
-  search,
-  isEnable,
-  StoreId,
-}) {
+export default function getLockerList(payload) {
   const url = '/lockers';
 
   return request
     .get(url, {
-      params: {
-        Name: search,
-        IsEnable: isEnable,
-        StoreId: StoreId,
-        PageIndex: PageIndex + 1,
-        PageSize: PageSize,
-      },
+      params: payload,
     })
     .then((response) => response.data)
     .catch((err) => err.response.data);

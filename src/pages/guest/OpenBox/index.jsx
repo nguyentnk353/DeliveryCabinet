@@ -369,10 +369,10 @@ const index = () => {
                       // paddingBottom: '60%',
                       // paddingTop: '10%',
                       padding: '10%',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      justifyContent: 'space-between',
-                      gap: '1rem',
+                      // display: 'flex',
+                      // flexDirection: 'column',
+                      // justifyContent: 'space-between',
+                      // gap: '2rem',
                     }}
                     onClick={(c) => {
                       // c.stopPropagation();
@@ -383,6 +383,7 @@ const index = () => {
                     {e.code}
                     <Chip
                       sx={{
+                        paddingTop: '50%',
                         color: stat.color,
                         bgcolor: stat.bgcolor,
                       }}

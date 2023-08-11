@@ -70,6 +70,7 @@ export default function Login() {
               case '1':
                 localStorage.setItem('selected', 'Dashboard');
                 localStorage.setItem('subConfig', false);
+                localStorage.setItem('sidebarToggle', 'true');
                 return navigate('/admin/dashboard', { replace: true });
               case '2':
                 localStorage.setItem('selected', 'Dashboard');

@@ -62,10 +62,11 @@ const LockerTable = ({ isEnable, storeId, storeInfo }) => {
 
   useMount(() => {
     const payload = {
+      Name: '',
+      IsEnable: isEnable,
       StoreId: storeId,
-      PageIndex: pg,
+      PageIndex: pg + 1,
       PageSize: rpg,
-      isEnable: isEnable,
     };
     getLockerList(payload)
       .then((res) => {
@@ -83,18 +84,18 @@ const LockerTable = ({ isEnable, storeId, storeInfo }) => {
     }
     const payload = searchText
       ? {
+          Name: searchText,
+          IsEnable: isEnable,
           StoreId: storeId,
-          PageIndex: 0,
+          PageIndex: 1,
           PageSize: rpg,
-          search: searchText,
-          isEnable: isEnable,
         }
       : {
+          Name: searchText,
+          IsEnable: isEnable,
           StoreId: storeId,
-          PageIndex: pg,
+          PageIndex: pg + 1,
           PageSize: rpg,
-          search: searchText,
-          isEnable: isEnable,
         };
     getLockerList(payload)
       .then((res) => {
@@ -301,7 +302,7 @@ const LockerTable = ({ isEnable, storeId, storeInfo }) => {
           variant='outlined'
           onChange={(e) => setSearchText(e.target.value)}
           value={searchText}
-          sx={{ width: '30%' }}
+          sx={{ width: '90%' }}
           InputProps={{
             startAdornment: (
               <InputAdornment position='start'>

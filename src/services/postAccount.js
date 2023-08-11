@@ -13,6 +13,6 @@ export default function postAccount(props) {
       dob: props.dob,
       role: props.role,
     })
-    .then((response) => console.log(response))
-    .catch((err) => console.log(err));
+    .then((response) => response)
+    .catch((err) => err);
 }

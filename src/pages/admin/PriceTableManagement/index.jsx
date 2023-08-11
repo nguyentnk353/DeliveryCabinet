@@ -25,7 +25,7 @@ import {
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { DeleteOutline, SearchOutlined } from '@mui/icons-material';
+import { Add, DeleteOutline, SearchOutlined } from '@mui/icons-material';
 
 import { useNavigate } from 'react-router-dom';
 import { blue } from '@mui/material/colors';
@@ -44,6 +44,7 @@ import moment from 'moment-timezone';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker, Space, Modal } from 'antd';
 const { RangePicker } = DatePicker;
+import CustomBreadcrumb from '../../../components/CustomBreadcrumb';
 
 moment.tz.setDefault('America/Los_Angeles');
 function TabPanel(props) {
@@ -183,7 +184,9 @@ const index = () => {
         });
     },
   });
-
+  const bcList = [
+    { name: 'Price table', sidebar: 'Service price', to: '/admin/price-table' },
+  ];
   return (
     <Box>
       <Modal
@@ -312,19 +315,29 @@ const index = () => {
       </Modal>
       <Box
         sx={{
+          marginBottom: '1.5rem',
           display: 'flex',
           justifyContent: 'space-between',
-          marginBottom: '2rem',
+          alignItems: 'center',
         }}
       >
-        <Typography variant='h6' fontWeight='bold'>
-          Price table management
-        </Typography>
+        <Box>
+          <Typography
+            variant='h5'
+            sx={{ fontWeight: '600', marginBottom: '0.25rem' }}
+          >
+            Price table List
+          </Typography>
+          <Box>
+            <CustomBreadcrumb list={bcList} />
+          </Box>
+        </Box>
         <Button
           variant='contained'
+          startIcon={<Add />}
           onClick={() => navigate('/admin/new-price-table', { replace: true })}
         >
-          + New price table
+          New price table
         </Button>
       </Box>
 
