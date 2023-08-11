@@ -3,7 +3,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 function CardOrderCustomer({ order }) {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   return (
     <>
       <ul>
