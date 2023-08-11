@@ -11,21 +11,26 @@ import {
   Typography,
 } from '@mui/material';
 import { yellow } from '@mui/material/colors';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import CustomBreadcrumb from '../../../components/CustomBreadcrumb';
 import postOpenBox from '../../../services/postOpenBox';
 import useNotification from '../../../utils/useNotification';
+import openBox from './../../../services/Staff/openBox';
+import closeBox from './../../../services/Staff/closeBox';
+import getLockerList from '../../../services/getLockerList';
 
 const index = () => {
   const location = useLocation();
-  const cabinetInfo = location?.state?.cabinetInfo;
+  const cabinet = location?.state?.cabinetInfo;
+  const [cabinetInfo, setCabinetInfo] = useState(cabinet);
   const storeInfo = location?.state?.storeInfo;
   const [msg, sendNotification] = useNotification();
   const [box, setBox] = useState();
   function boxClick(e) {
     setBox(e);
   }
+  // console.log(box);
   const bcList = [
     { name: 'Store', sidebar: 'Store', to: '/store-owner/store' },
     {
@@ -50,45 +55,86 @@ const index = () => {
     { name: 'Store owner', info: cabinetInfo?.store?.user?.fullName },
   ];
 
-  function openLockBox(payload) {
-    postOpenBox(payload)
+  // function openLockBox(payload) {
+  //   postOpenBox(payload)
+  //     .then((res) => {
+  //       if (res.status == 201) {
+  //         sendNotification({
+  //           msg: `Box #${payload.boxid} open success`,
+  //           variant: 'success',
+  //         });
+  //       } else {
+  //         sendNotification({
+  //           msg: `Box #${payload.boxid} open fail`,
+  //           variant: 'error',
+  //         });
+  //       }
+  //     })
+  //     .catch((err) => console.log(err));
+  // }
+
+  function openBoxFunc() {
+    // console.log('open box');
+    openBox(box?.id)
       .then((res) => {
-        if (res.status == 201) {
+        console.log(res);
+        console.log(res.status === 200);
+        if (res.status === 200) {
           sendNotification({
-            msg: `Box #${payload.boxid} open success`,
+            msg: `Box #${box?.id} open success`,
             variant: 'success',
+          });
+        } else if (res.response.status === 400) {
+          sendNotification({
+            msg: `Box #${box?.id} had already opened!`,
+            variant: 'warning',
           });
         } else {
           sendNotification({
-            msg: `Box #${payload.boxid} open fail`,
+            msg: `Box #${box?.id} open fail!`,
             variant: 'error',
           });
         }
       })
       .catch((err) => console.log(err));
   }
+  function closeBoxFunc() {
+    closeBox(box?.id)
+      .then((res) => {
+        if (res.status === 200) {
+          sendNotification({
+            msg: `Box #${box?.id} close success`,
+            variant: 'success',
+          });
+        } else if (res.response.status === 400) {
+          sendNotification({
+            msg: `Box #${box?.id} had already closed!`,
+            variant: 'warning',
+          });
+        } else {
+          sendNotification({
+            msg: `Box #${box?.id} close fail!`,
+            variant: 'error',
+          });
+        }
+      })
+      .catch((err) => console.log(err));
+  }
+  useEffect(() => {
+    const payload = {
+      Id: cabinet?.id,
+    };
 
-  function openBox() {
-    const payload = {
-      boxid: box.id,
-      ActionType: 1,
-    };
-    openLockBox(payload);
-  }
-  function closeBox() {
-    const payload = {
-      boxid: box.id,
-      ActionType: 2,
-    };
-    openLockBox(payload);
-  }
-  function lockBox() {
-    const payload = {
-      boxid: box.id,
-      ActionType: 3,
-    };
-    openLockBox(payload);
-  }
+    getLockerList(payload)
+      .then((res) => {
+        const newTable = res.items[0];
+        setCabinetInfo(newTable);
+        setBox(newTable.boxes.find((e) => e.id == box?.id));
+      })
+      .catch((err) => {
+        sendNotification({ msg: err, variant: 'error' });
+      });
+  }, [msg]);
   function colorStatus(s) {
     switch (s) {
       case 0:
@@ -220,10 +266,10 @@ const index = () => {
                                 color: '#ff5722',
                                 bgcolor: '#ffccbc',
                               }}
-                              label='Locked'
+                              label='Closed'
                             />
                           )}
-
+                          {/* 
                           {
                             {
                               1: (
@@ -257,7 +303,7 @@ const index = () => {
                                 />
                               ),
                             }[box.isOpen]
-                          }
+                          } */}
                         </Typography>
                         <Typography variant='body1' sx={{ fontWeight: '600' }}>
                           {box.boxSize.length} x {box.boxSize.height}
@@ -276,15 +322,27 @@ const index = () => {
                     <Box
                       sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
                     >
-                      <Button variant='outlined' onClick={openBox}>
+                      <Button
+                        variant='outlined'
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          openBoxFunc();
+                        }}
+                      >
                         Open
                       </Button>
-                      <Button variant='outlined' onClick={closeBox}>
+                      <Button
+                        variant='outlined'
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          closeBoxFunc();
+                        }}
+                      >
                         Close
                       </Button>
-                      <Button variant='outlined' onClick={lockBox}>
+                      {/* <Button variant='outlined' onClick={lockBox}>
                         Lock
-                      </Button>
+                      </Button> */}
                     </Box>
                   </Box>
                   <Divider sx={{ margin: '2% 0' }} />
