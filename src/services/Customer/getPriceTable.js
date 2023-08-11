@@ -5,9 +5,12 @@ export default function getPriceTable(props) {
   return axiosInstance
     .get(url, {
       params: {
-        storeid: props.storeId,
         PageIndex: props.PageIndex,
-        PageSize: props.PageSize,
+        // PageSize: props.PageSize,
+        storeid: props.storeId,
+        'BoxSize.Length' : props.length ,
+        'BoxSize.Height' : props.height ,
+        'BoxType.Name' : props.boxType,
       },
     })
     .then((response) => response.data)

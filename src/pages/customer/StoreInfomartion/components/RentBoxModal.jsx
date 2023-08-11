@@ -3,12 +3,12 @@ import ModalBasic from './../../components/ModalBasic/ModalBasic';
 import { useNavigate } from 'react-router-dom';
 import rentBox from '../../../../services/Customer/rentBox';
 
-const RentBoxModal = ({ isOpen, setIsOpen, boxInfo, storeId, serviceTypeId }) => {
+const RentBoxModal = ({ isOpen, setIsOpen, boxInfo, storeInfo, serviceTypeId }) => {
     const navigate = useNavigate();
    
     const handleRentBox = () => {
         const payload = {
-            storeId: storeId,
+            storeId: storeInfo?.id,
             boxSizeId: boxInfo?.boxSize?.id,
             boxTypeId: boxInfo?.boxType?.id,
             servicetypeId: serviceTypeId,
@@ -18,6 +18,7 @@ const RentBoxModal = ({ isOpen, setIsOpen, boxInfo, storeId, serviceTypeId }) =>
                 navigate('/customer/order-detail', {
                     state: {
                         orderInfo: res,
+                        storeInfo: storeInfo,
                     },
                 })
                 // console.log(res);

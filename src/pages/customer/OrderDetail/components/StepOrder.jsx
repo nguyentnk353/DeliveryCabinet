@@ -4,7 +4,7 @@ const  StepOrder = ({createTime, endTime}) => {
 
     const [steps, setStep] = useState({
         stepsItems: ["Thuê tủ",  "Thanh toán"],
-        timeStepsItems: [createTime, endTime == 'Invalid date' ? '>>': endTime],
+        timeStepsItems: [createTime, endTime == 'Invalid date' ? '.': endTime],
         currentStep: endTime !== 'Invalid date' ? 3 : 2
     })
     
@@ -14,11 +14,7 @@ const  StepOrder = ({createTime, endTime}) => {
                 {steps.stepsItems.map((item, idx) => (
                     <li key={idx} aria-current={steps.currentStep == idx + 1 ? "step" : false} className="flex  flex-col flex-1 gap-x-0">
 
-                         <div className="flex justify-center items-center mt-3 h-auto">
-                            <h3 className={`text-sm ${steps.currentStep == idx + 1 ? "text-indigo-600" : ""}`}>
-                                {steps.timeStepsItems[idx]}
-                            </h3>
-                        </div>
+                         
 
                         <div className="flex  items-center flex-row flex-1">
                             <hr className={`w-full border block ${idx == 0 ? "border-none" : "" || steps.currentStep >= idx + 1 ? "border-indigo-600" : ""}`} />
@@ -37,6 +33,11 @@ const  StepOrder = ({createTime, endTime}) => {
                         <div className="flex justify-center items-center mt-3 h-auto">
                             <h3 className={`text-sm ${steps.currentStep == idx + 1 ? "text-indigo-600" : ""}`}>
                                 {item}
+                            </h3>
+                        </div>
+                        <div className="flex justify-center items-center mt-3 h-auto">
+                            <h3 className={`text-[12px] font-thin text-[#b8b5b0] ${steps.currentStep == idx + 1 ? "text-indigo-600" : ""}`}>
+                                {steps.timeStepsItems[idx]}
                             </h3>
                         </div>
                     </li>
