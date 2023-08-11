@@ -136,7 +136,7 @@ const OrderTable = ({ search, isEnable }) => {
                       {row.total}
                     </TableCell>
                     <TableCell>
-                      {dayjs(row.createTime).format('DD/MM/YYYY [at] HH:mm')}
+                      {dayjs(row?.createTime).format('DD/MM/YYYY [at] HH:mm')}
                     </TableCell>
                     <TableCell>
                       {
