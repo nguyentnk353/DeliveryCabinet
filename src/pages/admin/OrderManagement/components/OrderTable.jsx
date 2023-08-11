@@ -96,51 +96,50 @@ const OrderTable = ({ search, isEnable }) => {
 
   return (
     <Box>
-      {table ? (
-        <Box>
-          <TableContainer>
-            <Table sx={{ minWidth: 650 }} aria-label='simple table'>
-              <TableHead sx={{ backgroundColor: '#f4f6f8' }}>
-                <TableRow>
-                  <TableCell>Id</TableCell>
-                  <TableCell>Total price</TableCell>
-                  <TableCell>Start time</TableCell>
-                  <TableCell>End time</TableCell>
-                  <TableCell>Box</TableCell>
-                  <TableCell>Customer</TableCell>
-                  <TableCell>Status</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {table?.map((row) => (
-                  <TableRow
-                    key={row.id}
-                    sx={{
-                      '&:last-child td,&:last-child th': { border: 0 },
-                      '&:hover': {
-                        backgroundColor: '#f5f5f5',
+      <Box>
+        <TableContainer>
+          <Table sx={{ minWidth: 650 }} aria-label='simple table'>
+            <TableHead sx={{ backgroundColor: '#f4f6f8' }}>
+              <TableRow>
+                <TableCell>Id</TableCell>
+                <TableCell>Total price</TableCell>
+                <TableCell>Start time</TableCell>
+                <TableCell>End time</TableCell>
+                <TableCell>Box</TableCell>
+                <TableCell>Customer</TableCell>
+                <TableCell>Status</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {table?.map((row) => (
+                <TableRow
+                  key={row?.id}
+                  sx={{
+                    '&:last-child td,&:last-child th': { border: 0 },
+                    '&:hover': {
+                      backgroundColor: '#f5f5f5',
+                    },
+                    cursor: 'pointer',
+                  }}
+                  onClick={() =>
+                    navigate('/admin/order-detail', {
+                      state: {
+                        orderInfo: row,
                       },
-                      cursor: 'pointer',
-                    }}
-                    onClick={() =>
-                      navigate('/admin/order-detail', {
-                        state: {
-                          orderInfo: row,
-                        },
-                      })
-                    }
-                  >
-                    <TableCell component='th' scope='row'>
-                      {row.id}
-                    </TableCell>
-                    <TableCell component='th' scope='row'>
-                      {row.total}
-                    </TableCell>
-                    <TableCell>
-                      {dayjs(row?.createTime).format('DD/MM/YYYY [at] HH:mm')}
-                    </TableCell>
-                    <TableCell>
-                      {
+                    })
+                  }
+                >
+                  <TableCell component='th' scope='row'>
+                    {row?.id}
+                  </TableCell>
+                  <TableCell component='th' scope='row'>
+                    {row?.total}
+                  </TableCell>
+                  <TableCell>
+                    {/* {dayjs(row?.createTime).format('DD/MM/YYYY [at] HH:mm')} */}
+                  </TableCell>
+                  <TableCell>
+                    {/* {
                         {
                           0: 'Cancel',
                           1: 'Ongoing',
@@ -153,15 +152,15 @@ const OrderTable = ({ search, isEnable }) => {
                               )
                             : 'Overdue',
                         }[row.status]
-                      }
-                    </TableCell>
-                    <TableCell component='th' scope='row'>
-                      {row.box.boxSize.length}x{row.box.boxSize.height}{' '}
-                      {row.box.boxType.name}
-                    </TableCell>
-                    <TableCell>{row.user.fullName}</TableCell>
-                    <TableCell>
-                      {
+                      } */}
+                  </TableCell>
+                  <TableCell component='th' scope='row'>
+                    {row?.box?.boxSize?.length}x{row?.box?.boxSize?.height}{' '}
+                    {row?.box?.boxType?.name}
+                  </TableCell>
+                  <TableCell>{row?.user?.fullName}</TableCell>
+                  <TableCell>
+                    {/* {
                         {
                           0: (
                             <Chip
@@ -203,28 +202,25 @@ const OrderTable = ({ search, isEnable }) => {
                               }}
                             />
                           ),
-                        }[row.status]
-                      }
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          <Divider />
-          <TablePagination
-            rowsPerPageOptions={[5, 10, 25]}
-            component='div'
-            count={tableTotal}
-            rowsPerPage={rpg}
-            page={pg}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          />
-        </Box>
-      ) : (
-        <Skeleton variant='rectangular' width={210} height={118} />
-      )}
+                        }[row?.status]
+                      } */}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <Divider />
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25]}
+          component='div'
+          count={tableTotal}
+          rowsPerPage={rpg}
+          page={pg}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+      </Box>
     </Box>
   );
 };
