@@ -32,7 +32,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import useNotification from '../../../../utils/useNotification';
 import getOrderList from '../../../../services/getOrderList';
-import * as dayjs from 'dayjs';
+import moment from 'moment/moment';
 
 const OrderTable = ({ search, isEnable }) => {
   const theme = useTheme();
@@ -101,10 +101,10 @@ const OrderTable = ({ search, isEnable }) => {
       case 1:
         return 'Ongoing';
       case 2:
-        return dayjs(val?.endTime).format('DD/MM/YYYY [at] HH:mm');
+        return moment(val?.endTime).format('DD/MM/YYYY [at] HH:mm');
       case 3:
         return val?.endTime
-          ? dayjs(val?.endTime).format('DD/MM/YYYY [at] HH:mm')
+          ? moment(val?.endTime).format('DD/MM/YYYY [at] HH:mm')
           : 'Overdue';
       default:
         return 'unknown end time';
@@ -204,7 +204,7 @@ const OrderTable = ({ search, isEnable }) => {
                     {row?.total}
                   </TableCell>
                   <TableCell>
-                    {/* {dayjs(row?.createTime).format('DD/MM/YYYY [at] HH:mm')} */}
+                    {moment(row?.createTime).format('DD/MM/YYYY [at] HH:mm')}
                   </TableCell>
                   <TableCell>{switchEndtime(row)}</TableCell>
                   <TableCell component='th' scope='row'>
