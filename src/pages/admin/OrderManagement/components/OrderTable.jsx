@@ -111,7 +111,7 @@ const OrderTable = ({ search, isEnable }) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {table.map((row) => (
+                {table?.map((row) => (
                   <TableRow
                     key={row.id}
                     sx={{
