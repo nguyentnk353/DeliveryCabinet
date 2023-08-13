@@ -15,7 +15,7 @@ const Order = () => {
   const [pageSize, setPageSize] = useState(5);
   const [total, setTotal] = useState();
   const [status, setStatus] = useState('');
-  const [listOrder, setListOrder] = useState([]);
+  const [listOrder, setListOrder] = useState(null);
 
   // 0: Cancel
   // 1: ongoing
@@ -35,26 +35,26 @@ const Order = () => {
       search: searchText,
       status: status == 4 ? undefined : status,
     };
-    
+
     getListOrder(payload)
       .then((res) => {
         const newListOrder = res.items.map((e) => e);
         newListOrder.forEach(function (cs, index) {
           switch (cs.status) {
-              case 0:
-                  cs.statusName = 'Đã hủy';
-                  return;
-              case 1:
-                  cs.statusName = 'Đang thuê';
-                  return;
-              case 2:
-                  cs.statusName = 'Hoàn thành';
-                  return;
-              case 3:
-                  cs.statusName = 'Quá hạn';
-                  return;
+            case 0:
+              cs.statusName = 'Đã hủy';
+              return;
+            case 1:
+              cs.statusName = 'Đang thuê';
+              return;
+            case 2:
+              cs.statusName = 'Hoàn thành';
+              return;
+            case 3:
+              cs.statusName = 'Quá hạn';
+              return;
           }
-      });
+        });
         setListOrder(newListOrder);
         setTotal(res.totalRecord);
       })
@@ -63,7 +63,7 @@ const Order = () => {
       });
   }, [dataTabs, searchText, page, pageSize, status]);
 
- 
+
   return (
     <div className='bg-[#f1f5f9] md:px-[10%] md:py-[3%] max-md:px-3'>
       <div className='hidden'>
@@ -89,33 +89,67 @@ const Order = () => {
         </form>
       </div>
       <div className='pt-3'>
-        <DateSelect setStatus={setStatus}/>
+        <DateSelect setStatus={setStatus} />
       </div>
-
-      {total != 0 ?
-        listOrder.map((order, index) => {
-          return (
-          <Paper sx={{ backgroundColor: 'white', padding: '0 20px', marginBottom: '10px' }} key={index}
-            onClick={(e) => {
-              e.stopPropagation();
-              navigate('/customer/order-detail',
-                {
-                  state: {
-                    orderInfo: order,
-                    storeInfo: order?.box?.locker?.store,
-                  },
-                }
-              )
-            }}
-          >
-            <CardOrderCustomer order={order} />
-          </Paper>)
-        }) : (<div className='flex justify-center'>
-                <img src={Image} alt="Your SVG" width='80%'/>
+      {listOrder ? (
+        <div>
+          {total != 0 ?
+            (listOrder.map((order, index) => {
+              return (
+                <Paper sx={{ backgroundColor: 'white', padding: '0 20px', marginBottom: '10px' }} key={index}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigate('/customer/order-detail',
+                      {
+                        state: {
+                          orderInfo: order,
+                          storeInfo: order?.box?.locker?.store,
+                        },
+                      }
+                    )
+                  }}
+                >
+                  <CardOrderCustomer order={order} />
+                </Paper>)
+            })
+            ) : (
+              <div className='flex justify-center'>
+                <img src={Image} alt="Your SVG" width='80%' />
               </div>
-          
-          )
-      }
+            )
+          }
+        </div>
+      ) : (
+        <div>
+          <div
+            role="status"
+            className="space-y-8 animate-pulse md:space-y-0 md:space-x-8 md:flex md:items-center"
+          >
+            <div className="flex items-center justify-center w-full h-48 bg-gray-300 rounded sm:w-96 dark:bg-gray-700">
+              <svg
+                className="w-10 h-10 text-gray-200 dark:text-gray-600"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="currentColor"
+                viewBox="0 0 20 18"
+              >
+                <path d="M18 0H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-5.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm4.376 10.481A1 1 0 0 1 16 15H4a1 1 0 0 1-.895-1.447l3.5-7A1 1 0 0 1 7.468 6a.965.965 0 0 1 .9.5l2.775 4.757 1.546-1.887a1 1 0 0 1 1.618.1l2.541 4a1 1 0 0 1 .028 1.011Z" />
+              </svg>
+            </div>
+            <div className="w-full">
+              <div className="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-48 mb-4" />
+              <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[480px] mb-2.5" />
+              <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-2.5" />
+              <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[440px] mb-2.5" />
+              <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[460px] mb-2.5" />
+              <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[360px]" />
+            </div>
+            <span className="sr-only">Loading...</span>
+          </div>
+
+        </div>
+      )}
+
       <div className="py-6 flex justify-center md:justify-end">
         {pageSize <= total ? (
           <button className="p-3 rounded-lg text-sm font-medium text-white hover:text-indigo-600 bg-indigo-500"

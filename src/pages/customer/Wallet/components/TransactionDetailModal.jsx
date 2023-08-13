@@ -79,9 +79,21 @@ const TransactionDetailModal = ({ isOpen, setIsOpen, transaction }) => {
                                                         <div className="mb-3 text-center">
                                                             <img className="inline-flex w-12 h-12 rounded-full -mt-6" src={Image} width="48" height="48" alt="Transaction 04" />
                                                         </div>
-                                                        <div className="text-2xl font-semibold text-emerald-500 mb-1">+ {new Intl.NumberFormat("nb-NO").format(transaction?.amount)} VNĐ</div>
+                                                        {transaction?.paymentId ?
+                                                            (
+                                                                <div className="text-2xl font-semibold text-red-500 mb-1">- {new Intl.NumberFormat("nb-NO").format(transaction?.amount)} VNĐ</div>
+                                                            ) : (
+                                                                <div className="text-2xl font-semibold text-emerald-500 mb-1">+ {new Intl.NumberFormat("nb-NO").format(transaction?.amount)} VNĐ</div>
+                                                            )
+                                                        }
                                                         <div className="text-sm font-medium text-slate-800 mb-3">Giao dịch DC Pay</div>
-                                                        <div className="text-xs inline-flex font-medium bg-emerald-100  text-emerald-500 rounded-full text-center px-2.5 py-1">Thành công</div>
+                                                         {transaction?.isSucceed ? 
+                                                         (
+                                                            <div className="text-xs inline-flex font-medium bg-emerald-100  text-emerald-500 rounded-full text-center px-2.5 py-1">Thành công</div>
+                                                         ) : (
+                                                            <div className="text-xs inline-flex font-medium bg-red-100  text-red-500 rounded-full text-center px-2.5 py-1">Thất bại</div>
+                                                         )}
+                                                        
                                                     </div>
                                                     {/* Divider */}
                                                     <div className="flex justify-between items-center" aria-hidden="true">
@@ -103,7 +115,13 @@ const TransactionDetailModal = ({ isOpen, setIsOpen, transaction }) => {
                                                         </div>
                                                         <div className="flex justify-between space-x-1">
                                                             <span className="italic">Loại giao dịch:</span>
-                                                            <span className="font-medium text-slate-700 text-right">Nạp tiền</span>
+                                                            {transaction?.paymentId ?
+                                                            (
+                                                                <span className="font-medium text-slate-700 text-right">Thanh toán thuê tủ</span>
+                                                            ) : (
+                                                                <span className="font-medium text-slate-700 text-right">Nạp tiền</span>
+                                                            )
+                                                        }
                                                         </div>
                                                         <div className="flex justify-between space-x-1">
                                                             <span className="italic">Số tiền:</span>

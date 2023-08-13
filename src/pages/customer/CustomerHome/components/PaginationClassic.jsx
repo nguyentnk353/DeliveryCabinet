@@ -1,7 +1,8 @@
 import React from 'react';
 import WestIcon from '@mui/icons-material/West';
 import EastIcon from '@mui/icons-material/East';
-function PaginationClassic({currentPage, onPageChange}) {
+function PaginationClassic({currentPage, onPageChange, totalStore}) {
+  const currentTotalLoaded = currentPage * 6;
   return (
     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
       <nav className="mb-4 sm:mb-0 sm:order-1" role="navigation" aria-label="Navigation">
@@ -24,6 +25,7 @@ function PaginationClassic({currentPage, onPageChange}) {
           } 
           
           </li>
+          {currentTotalLoaded <= totalStore ? (
           <li className="ml-3 first:ml-0">
             <button
               className="btn bg-white border-slate-200 hover:border-slate-300 text-indigo-500 p-2 flex items-center"          
@@ -31,9 +33,11 @@ function PaginationClassic({currentPage, onPageChange}) {
                 onPageChange(currentPage + 1)
               }}
             >
-              Trang kế tiếp <EastIcon fontSize='smalla' sx={{margin: '0 0 0 5px'}}/>
+              Trang tiếp theo <EastIcon fontSize='smalla' sx={{margin: '0 0 0 5px'}}/>
             </button>
           </li>
+          ): (<></>)}
+          
         </ul>
       </nav>
       <div className="hidden text-sm text-slate-500 text-center sm:text-left">
