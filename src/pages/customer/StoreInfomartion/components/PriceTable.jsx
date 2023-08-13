@@ -18,8 +18,10 @@ const PriceTable = ({ storeId, length, height, boxType }) => {
         };
         getPriceTable(payload)
             .then((res) => {
-                const newTable = res.items.map((e) => {
-                    return e;
+                const newTable = res.items.filter((e) => {
+                    if(e?.boxSize?.length == length && e?.boxSize?.height == height && e?.boxType?.name == boxType){
+                        return e
+                    }
                 });
                 setTable(newTable);
                 setTableTotal(res.totalRecord)

@@ -12,13 +12,13 @@ const CartTransaction = ({ transaction, key }) => {
     return (
         <>
             {/* <TransactionPanel transactionPanelOpen={transactionOpen} setTransactionPanelOpen={setTransactionOpen} transactionDetail={tranDetail}/> */}
-            <TransactionDetailModal isOpen={showMoreModal} setIsOpen={setShowMoreModal} transaction={transaction}/>
+            <TransactionDetailModal isOpen={showMoreModal} setIsOpen={setShowMoreModal} transaction={transaction} />
             <label className="relative block cursor-pointer text-left w-full bg-white my-2">
                 <input type="radio" name="radio-buttons" className="peer sr-only" defaultChecked />
                 <div className="p-4 rounded border border-slate-200 hover:border-slate-300 shadow-sm duration-150 ease-in-out">
-                    <div 
-                        className="grid grid-cols-12 items-center gap-x-2" 
-                        onClick={(e)=>{
+                    <div
+                        className="grid grid-cols-12 items-center gap-x-2"
+                        onClick={(e) => {
                             e.stopPropagation();
                             setTranDetail(transaction);
                             setTransactionOpen(true);
@@ -47,8 +47,8 @@ const CartTransaction = ({ transaction, key }) => {
                                 </g>
                             </svg>
                             <div>
-                                <div className="text-sm font-medium text-slate-800">Nạp tiền</div>
-                                <div className="text-xs text-[#A9A9A9]">ZaloPay</div>
+                                <div className="text-sm font-medium text-slate-800">{transaction?.paymentId ? (<span>Thuê tủ</span>):(<span>Nạp tiền</span>)}</div>
+                                <div className="text-xs text-[#A9A9A9]">{transaction?.paymentId ? (<span>DC Pay</span>):(<span>ZaloPay</span>)}</div>
                             </div>
                         </div>
                         {/* Name */}
@@ -61,9 +61,18 @@ const CartTransaction = ({ transaction, key }) => {
                         </div>
                         {/* Card status */}
                         <div className="col-span-6 order-2 sm:order-none sm:col-span-2 text-right lg:sidebar-expanded:hidden xl:sidebar-expanded:block">
-                            <div className="text-xs inline-flex font-medium bg-emerald-100 text-emerald-600 rounded-full text-center px-2.5 py-1">
-                                Thành công
-                            </div>
+
+                            {transaction?.isSucceed ?
+                                (
+                                    <div className="text-xs inline-flex font-medium bg-emerald-100 text-emerald-600 rounded-full text-center px-2.5 py-1">
+                                        <span>Thành công</span>
+                                    </div>
+                                ) : (
+                                    <div className="text-xs inline-flex font-medium bg-rose-100 text-red-500 rounded-full text-center px-2.5 py-1">
+                                        <span>Thất bại</span>
+                                    </div>
+                                )}
+
                         </div>
                     </div>
                 </div>

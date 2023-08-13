@@ -4,7 +4,7 @@ import { useLocation } from 'react-router-dom';
 import VendorCard03 from './VendorCard03';
 import { useEffect } from 'react';
 import getAllStore from './../../../../services/Customer/getAllStore';
-const StoreCard = ({ search, pg, onPageChange, province, district, ward }) => {
+const StoreCard = ({ search, pg, onPageChange, province, district, ward, setTotalStore }) => {
   const pageSize = 6;
   const [gridView, setGridView] = useState(Boolean(false));
   const location = useLocation();
@@ -28,6 +28,7 @@ const StoreCard = ({ search, pg, onPageChange, province, district, ward }) => {
       .then((res) => {
         const newListStore = res.items.map((e) => e);
         setListStore(newListStore);
+        setTotalStore(res?.totalRecord);
       })
       .catch((err) => {
         console.log(err);

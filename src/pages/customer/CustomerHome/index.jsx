@@ -20,6 +20,7 @@ const CustomerHome = () => {
   const [msg, sendNotification] = useNotification();
 
   const [pg, setPg] = useState(1);
+  const [totalStore, setTotalStore] = useState(6);
   const [searchText, setSearchText] = useState('');
   const [province, setProvince] = useState({ name: '', key: 0 });
   const [district, setDistrict] = useState({ name: '', key: 0 });
@@ -71,10 +72,10 @@ const CustomerHome = () => {
                       <DropdownFilter align={'right'} province={province} district={district} ward={ward} setProvinceDropdown={setProvince} setDistrictDropdown={setDistrict} setWardDropdown={setWard}/>
                     </div>
                   </div>
-                  <StoreCard search={searchText} pg={pg} onPageChange={setPg} province={province} district={district} ward={ward}/>
+                  <StoreCard search={searchText} pg={pg} onPageChange={setPg} province={province} district={district} ward={ward} setTotalStore={setTotalStore}/>
                   {/* Pagination */}
                   <div className="mt-6">
-                    <PaginationClassic currentPage={pg} onPageChange={setPg} />
+                    <PaginationClassic currentPage={pg} onPageChange={setPg} totalStore={totalStore}/>
                   </div>
                 </div>
               </div>
