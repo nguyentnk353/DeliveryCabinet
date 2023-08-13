@@ -52,15 +52,15 @@ export default function Login() {
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      login(values)
+      const payload = {
+        loginName: values.loginName,
+        password: values.password,
+      };
+      login(payload)
         .then((data) => {
           const errLogin = 'Invalid Login';
 
-          if (
-            data.localeCompare(errLogin, 'en', { sensitivity: 'base' }) == 0
-          ) {
-            setIsinvalid(true);
-          } else {
+          if (data.status == 200) {
             setIsinvalid(false);
             const decoded = jwt_decode(data);
             localStorage.setItem('loginUser', JSON.stringify(decoded));
@@ -82,10 +82,14 @@ export default function Login() {
               default:
                 return null;
             }
+          } else if (data.code == 400) {
+            setIsinvalid(true);
+          } else {
+            sendNotification({ msg: 'Unable to login', variant: 'error' });
           }
         })
         .catch((error) => {
-          sendNotification({ msg: error, variant: 'error' });
+          console.log(error);
         });
     },
   });

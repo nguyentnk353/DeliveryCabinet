@@ -43,6 +43,8 @@ import StoreInformation from './pages/customer/StoreInfomartion/StoreInformation
 import Guest from './pages/guest/Guest';
 import LoginCustomer from './pages/guest/Guest/LoginCustomer/LoginCustomer';
 import Login from './pages/guest/Login';
+import LoginCustomerV2 from './pages/guest/LoginCustomerV2';
+import RegisterCustomerV2 from './pages/guest/RegisterCustomerV2';
 import OpenBox from './pages/guest/OpenBox';
 import theme from './theme';
 import Wallet from './pages/customer/Wallet/Wallet';
@@ -84,8 +86,9 @@ function App() {
             {/* public routes */}
             <Route path='/' element={<Navigate to='/home' />} />
             <Route path='/home' element={<Guest />} />
-            <Route path='/login' element={<Login />} />
-            <Route path='/login-admin' element={<Login />} />
+            <Route path='/login' element={<LoginCustomerV2 />} />
+            <Route path='/register' element={<RegisterCustomerV2 />} />
+            <Route path='/login-employee' element={<Login />} />
             <Route path='/login-customer' element={<LoginCustomer />} />
             <Route path='/open-box/39' element={<OpenBox />} />
 

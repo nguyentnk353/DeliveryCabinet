@@ -9,5 +9,5 @@ export function RolesAuthRoute({ children, roles }) {
 
   if (canAccess) return <Fragment>{children}</Fragment>;
 
-  return <Navigate to='/login' />;
+  return <Navigate to='/login-employee' />;
 }
