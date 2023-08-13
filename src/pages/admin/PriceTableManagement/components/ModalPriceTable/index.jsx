@@ -33,6 +33,7 @@ const index = ({ open, setOpen, priceId }) => {
       });
   }, [priceId]);
   const handleClose = () => {
+    setPriceTable([]);
     setOpen(false);
   };
   const style = {

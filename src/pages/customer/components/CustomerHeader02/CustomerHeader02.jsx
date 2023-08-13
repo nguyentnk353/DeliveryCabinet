@@ -25,7 +25,6 @@ import LogoutCustomer from '../../../../utils/LogoutCustomer';
 import { useMount } from 'ahooks';
 import getLoginUser from './../../../../services/Customer/getLoginUser';
 
-
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: theme.shape.borderRadius,
@@ -71,10 +70,9 @@ export default function CustomerHeader02() {
   const logout = LogoutCustomer();
   const loginUser = JSON.parse(localStorage.getItem('loginUser'));
 
-
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-  const [imgSrc, setImgSrc] = React.useState("");
+  const [imgSrc, setImgSrc] = React.useState('');
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -115,27 +113,23 @@ export default function CustomerHeader02() {
     >
       <MenuItem onClick={(e) => { e.stopPropagation(); handleMenuClose(); handleMobileMenuClose(); navigate('/customer/profile', { replace: true }); }}>
         <IconButton
-          size="large"
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
+          size='large'
+          aria-label='account of current user'
+          aria-controls='primary-search-account-menu'
+          aria-haspopup='true'
+          color='inherit'
         >
-          <img
-            className="w-8 h-8 rounded-full"
-            src={imgSrc}
-            alt="user photo"
-          />
+          <img className='w-8 h-8 rounded-full' src={imgSrc} alt='user photo' />
         </IconButton>
         <p>Tài khoản</p>
       </MenuItem>
       <MenuItem onClick={(e) => { e.stopPropagation(); handleMenuClose(); handleMobileMenuClose(); logout() }} className='text-red-500'>
         <IconButton
-          size="large"
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
+          size='large'
+          aria-label='account of current user'
+          aria-controls='primary-search-account-menu'
+          aria-haspopup='true'
+          color='inherit'
         >
           <LogoutIcon />
         </IconButton>
@@ -184,27 +178,23 @@ export default function CustomerHeader02() {
 
       <MenuItem onClick={(e) => { e.stopPropagation(); handleMenuClose(); handleMobileMenuClose(); navigate('/customer/profile', { replace: true }); }}>
         <IconButton
-          size="large"
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
+          size='large'
+          aria-label='account of current user'
+          aria-controls='primary-search-account-menu'
+          aria-haspopup='true'
+          color='inherit'
         >
-          <img
-            className="w-8 h-8 rounded-full"
-            src={imgSrc}
-            alt="user photo"
-          />
+          <img className='w-8 h-8 rounded-full' src={imgSrc} alt='user photo' />
         </IconButton>
         <p>Tài khoản</p>
       </MenuItem>
       <MenuItem onClick={(e) => { e.stopPropagation(); handleMenuClose(); handleMobileMenuClose(); logout() }} className='text-red-500'>
         <IconButton
-          size="large"
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
+          size='large'
+          aria-label='account of current user'
+          aria-controls='primary-search-account-menu'
+          aria-haspopup='true'
+          color='inherit'
         >
           <LogoutIcon />
         </IconButton>
@@ -216,15 +206,15 @@ export default function CustomerHeader02() {
   useMount(() => {
     getLoginUser()
       .then((res) => {
-        setImgSrc(res?.imgUrl)
+        setImgSrc(res?.imgUrl);
       })
       .catch((err) => {
         console.log(err);
       });
-  })
+  });
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+      <AppBar position='static'>
         <Toolbar className='flex justify-between'>
           <CustomerMobileSibar />
 
@@ -237,63 +227,66 @@ export default function CustomerHeader02() {
               inputProps={{ 'aria-label': 'search' }}
             />
           </Search> */}
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'block' } }} >
-            {loginUser ?
-              (
-                <Box className="flex justify-end space-x-10 cursor-pointer">
-
-                  <Typography
-                    variant="h7"
-                    noWrap
-                    component="div"
-                    // sx={{ display: { xs: 'none', sm: 'block' } }}
-                    onClick={() => navigate('/customer',
+          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'block' } }}>
+            {loginUser ? (
+              <Box className='flex justify-end space-x-10 cursor-pointer'>
+                <Typography
+                  variant='h7'
+                  noWrap
+                  component='div'
+                  // sx={{ display: { xs: 'none', sm: 'block' } }}
+                  onClick={() =>
+                    navigate(
+                      '/customer'
                       // {
                       //   state: {
                       //       storeInfo: store,
                       //   },
                       // }
-                    )}
-                  >
-                    Trang chủ
-                  </Typography>
-                  <Typography
-                    variant="h7"
-                    noWrap
-                    component="div"
-
-                    onClick={() => navigate('/customer/order',
+                    )
+                  }
+                >
+                  Trang chủ
+                </Typography>
+                <Typography
+                  variant='h7'
+                  noWrap
+                  component='div'
+                  onClick={() =>
+                    navigate(
+                      '/customer/order'
                       // {
                       //   state: {
                       //       storeInfo: store,
                       //   },
                       // }
-                    )}
-                  >
-                    Đơn hàng
-                  </Typography>
-                  <Typography
-                    variant="h7"
-                    noWrap
-                    component="div"
-                    // sx={{ display: { xs: 'none', sm: 'block' } }}
-                    onClick={() => navigate('/customer/wallet',
+                    )
+                  }
+                >
+                  Đơn hàng
+                </Typography>
+                <Typography
+                  variant='h7'
+                  noWrap
+                  component='div'
+                  // sx={{ display: { xs: 'none', sm: 'block' } }}
+                  onClick={() =>
+                    navigate(
+                      '/customer/wallet'
                       // {
                       //   state: {
                       //       storeInfo: store,
                       //   },
                       // }
-                    )}
-                  >
-                    Ví
-                  </Typography>
-
-                </Box>
-              ) : (
-                <></>
-              )
-
-            }
+                    )
+                  }
+                >
+                  Ví
+                </Typography>
+              </Box>
+            ) : (
+              <></>
+            )}
           </Box>
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
             {/* <IconButton size="large" aria-label="show 4 new mails" color="inherit">
@@ -310,53 +303,63 @@ export default function CustomerHeader02() {
                 <NotificationsIcon />
               </Badge>
             </IconButton> */}
-            {loginUser ?
-              (
-                <IconButton
-                  size="large"
-                  edge="end"
-                  aria-label="account of current user"
-                  aria-controls={menuId}
-                  aria-haspopup="true"
-                  onClick={handleProfileMenuOpen}
-                  color="inherit"
-                >
-                  {/* <AccountCircle /> */}
-                  <img
-                    className="w-8 h-8 rounded-full"
-                    src={imgSrc}
-                    alt="user photo"
-                  />
-                </IconButton>
-              ) : (
-                <button className='font-semibold' onClick={(e) => { e.stopPropagation(); navigate('/login-customer') }}>Đăng nhập</button>
-              )
-
-            }
-
+            {loginUser ? (
+              <IconButton
+                size='large'
+                edge='end'
+                aria-label='account of current user'
+                aria-controls={menuId}
+                aria-haspopup='true'
+                onClick={handleProfileMenuOpen}
+                color='inherit'
+              >
+                {/* <AccountCircle /> */}
+                <img
+                  className='w-8 h-8 rounded-full'
+                  src={imgSrc}
+                  alt='user photo'
+                />
+              </IconButton>
+            ) : (
+              <button
+                className='font-semibold'
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigate('/login');
+                }}
+              >
+                Đăng nhập
+              </button>
+            )}
           </Box>
           <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
-            {loginUser ?
-              (
-                <IconButton
-                  size="large"
-                  aria-label="show more"
-                  aria-controls={mobileMenuId}
-                  aria-haspopup="true"
-                  onClick={handleMobileMenuOpen}
-                  color="inherit"
-                >
-                  <MoreIcon />
-                </IconButton>
-              ) : (
-                <button className='font-semibold' onClick={(e) => { e.stopPropagation(); navigate('/login-customer') }}>Đăng nhập</button>
-              )
-            }
-
+            {loginUser ? (
+              <IconButton
+                size='large'
+                aria-label='show more'
+                aria-controls={mobileMenuId}
+                aria-haspopup='true'
+                onClick={handleMobileMenuOpen}
+                color='inherit'
+              >
+                <MoreIcon />
+              </IconButton>
+            ) : (
+              <button
+                className='font-semibold'
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigate('/login');
+                }}
+              >
+                Đăng nhập
+              </button>
+            )}
           </Box>
         </Toolbar>
       </AppBar>
-      {renderMobileMenu}{renderMenu}
+      {renderMobileMenu}
+      {renderMenu}
     </Box>
   );
 }

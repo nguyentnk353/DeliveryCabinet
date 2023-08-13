@@ -9,5 +9,5 @@ export function CusAuthRoute({ children, roles }) {
 
   if (canAccess) return <Fragment>{children}</Fragment>;
 
-  return <Navigate to='/login-customer' />;
+  return <Navigate to='/login' />;
 }
