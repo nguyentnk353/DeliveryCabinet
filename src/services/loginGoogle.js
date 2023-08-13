@@ -1,7 +1,7 @@
 import { loginRequest } from '../utils/loginRequest';
 
-export default function login(payload) {
-  const url = '/user/authenticate';
+export default function loginGoogle(payload) {
+  const url = '/user/email-authenticate';
 
   return loginRequest
     .post(
@@ -12,5 +12,5 @@ export default function login(payload) {
       }
     )
     .then((response) => response)
-    .catch((err) => err.response.data);
+    .catch((err) => err.response);
 }
