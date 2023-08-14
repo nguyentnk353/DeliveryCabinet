@@ -12,8 +12,8 @@ function rentBox(props) {
                 servicetypeid: props.servicetypeId,
             },}
         )
-        .then((response) => response.data)
-        .catch((err) => err.data);
+        .then((response) => response)
+        .catch((err) => err);
 }
 
 export default rentBox;
