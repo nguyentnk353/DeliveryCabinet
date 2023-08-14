@@ -16,6 +16,7 @@ const ShowMoreModal = ({ isOpen, setIsOpen, storeId }) => {
     getStoreById(storeId)
       .then((res) => {
         setStoreInfo(res.items[0]);
+        if(res.items[0]?.imgUrl)
         setImgSrc(res.items[0]?.imgUrl)
       })
       .catch((err) => {
@@ -150,7 +151,8 @@ const ShowMoreModal = ({ isOpen, setIsOpen, storeId }) => {
                             alt="Store Image"
                             // srcSet="/_next/image?url=%2Fassets%2Fimages%2Fshop%2Fshop-logo-1.jpg&w=256&q=75 1x, /_next/image?url=%2Fassets%2Fimages%2Fshop%2Fshop-logo-1.jpg&w=384&q=75 2x"
                             // src="/_next/image?url=%2Fassets%2Fimages%2Fshop%2Fshop-logo-1.jpg&w=384&q=75"
-                            src={imgSrc} onError={() => setImgSrc(storeDefault)}
+                            src={imgSrc}
+                            onError={() => setImgSrc(storeDefault)}
                             layout="fill"
                             objectfit="cover"
                             decoding="async"
@@ -178,7 +180,7 @@ const ShowMoreModal = ({ isOpen, setIsOpen, storeId }) => {
                         {storeInfo?.name}
                       </h4>
                       <p className="text-sm sm:leading-6 leading-7 text-body">
-                        You will get quality product
+                        Thông tin chi tiết cửa hàng
                       </p>
                       {/* <div className="flex items-center flex-wrap justify-center gap-x-2 pt-4 mt-0.5">
                         <button

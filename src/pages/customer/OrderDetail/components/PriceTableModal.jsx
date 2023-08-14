@@ -2,7 +2,7 @@ import React from 'react'
 import ModalBasic from '../../components/ModalBasic/ModalBasic';
 import PriceTable from '../../StoreInfomartion/components/PriceTable';
 
-const PriceTableModal = ({ isOpen, setIsOpen, storeId, length, height, boxType }) => {
+const PriceTableModal = ({ isOpen, setIsOpen, storeId, priceTableId, length, height, boxType }) => {
 
     return (
         <>
@@ -13,6 +13,7 @@ const PriceTableModal = ({ isOpen, setIsOpen, storeId, length, height, boxType }
                         <div className="text-sm">
                             <PriceTable
                                 storeId={storeId}
+                                priceTableId={priceTableId}
                                 length={length}
                                 height={height}
                                 boxType={boxType}
