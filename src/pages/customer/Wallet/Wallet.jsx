@@ -179,7 +179,7 @@ const Wallet = () => {
                                             handleChangeSize();
                                         }}
                                     >
-                                        Load more
+                                        Xem thêm
                                     </button>
                                 ) : (<></>)}
                             </div>

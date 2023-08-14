@@ -158,7 +158,7 @@ const Order = () => {
               setPageSize(pageSize + 5);
             }}
           >
-            Load more
+            Xem thêm
           </button>
         ) : (<></>)}
       </div>

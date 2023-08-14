@@ -108,6 +108,7 @@ const OrderDetail = () => {
         isOpen={isOpenPriceTable}
         setIsOpen={setIsOpenPriceTable}
         storeId={store?.id}
+        priceTableId={order?.priceTableId}
         length={order?.box?.boxSize?.length}
         height={order?.box?.boxSize?.height}
         boxType={order?.box?.boxType?.name}
