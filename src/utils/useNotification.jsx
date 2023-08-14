@@ -30,7 +30,7 @@ const useNotification = () => {
       }
       enqueueSnackbar(conf.msg, {
         variant: variant,
-        autoHideDuration: 5000,
+        autoHideDuration: 3000,
         action,
       });
     }
