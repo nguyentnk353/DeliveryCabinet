@@ -6,7 +6,12 @@ import Navbar from '../../../components/Navbar';
 import Sidebar from '../../../components/Sidebar';
 import { Outlet } from 'react-router-dom';
 import Footer from '../../../components/Footer';
-import { IconBuildingStore, IconDashboard } from '@tabler/icons-react';
+import {
+  IconBuildingStore,
+  IconDashboard,
+  IconNotes,
+  IconUser,
+} from '@tabler/icons-react';
 
 const index = () => {
   const list = [
@@ -28,6 +33,20 @@ const index = () => {
           type: 'item',
           to: '/store-owner/store',
           icon: IconBuildingStore,
+        },
+        {
+          id: 'order',
+          title: 'Order',
+          type: 'item',
+          to: '/store-owner/order',
+          icon: IconNotes,
+        },
+        {
+          id: 'staff',
+          title: 'Staff',
+          type: 'item',
+          to: '/store-owner/staff',
+          icon: IconUser,
         },
       ],
     },

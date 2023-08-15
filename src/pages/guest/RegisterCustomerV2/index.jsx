@@ -21,6 +21,7 @@ import useNotification from '../../../utils/useNotification';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import loginGoogle from '../../../services/loginGoogle';
 import jwt_decode from 'jwt-decode';
+import { FcGoogle } from 'react-icons/fc';
 
 const index = () => {
   const theme = useTheme();
@@ -205,7 +206,7 @@ const index = () => {
                         >
                           Hoặc đăng nhập với
                         </Typography>
-                        <Button
+                        {/* <Button
                           variant='contained'
                           color='error'
                           startIcon={<Google />}
@@ -214,6 +215,26 @@ const index = () => {
                           onClick={(e) => {
                             e.stopPropagation();
                             loginG();
+                          }}
+                        >
+                          Đăng nhập với google
+                        </Button> */}
+                        <Button
+                          // variant='contained'
+                          variant='outlined'
+                          // color='error'
+                          startIcon={<FcGoogle />}
+                          fullWidth
+                          // sx={{ backgroundColor: '#dd4b39' }}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            loginG();
+                          }}
+                          sx={{
+                            color: 'black',
+                            '&.MuiButton-outlined': {
+                              borderColor: 'lightgrey',
+                            },
                           }}
                         >
                           Đăng nhập với google

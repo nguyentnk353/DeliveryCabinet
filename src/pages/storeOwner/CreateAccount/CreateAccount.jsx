@@ -110,16 +110,22 @@ const CreateAccount = () => {
         });
     },
   });
-  const bcList = [
-    { name: 'Store', sidebar: 'Store', to: '/store-owner/store' },
-    {
-      name: 'Store detail',
-      sidebar: 'Store',
-      to: '/store-owner/store-detail',
-      state: storeInfo,
-    },
-    { name: 'New staff', sidebar: 'Store', to: '/store-owner/new-staff' },
-  ];
+  const bcList = storeInfo
+    ? [
+        { name: 'Store', sidebar: 'Store', to: '/store-owner/store' },
+        {
+          name: 'Store detail',
+          sidebar: 'Store',
+          to: '/store-owner/store-detail',
+          state: storeInfo,
+        },
+        { name: 'New staff', sidebar: 'Store', to: '/store-owner/new-staff' },
+      ]
+    : [
+        { name: 'Staff', sidebar: 'Staff', to: '/store-owner/staff' },
+
+        { name: 'New staff', sidebar: 'Store', to: '/store-owner/new-staff' },
+      ];
   return (
     <Box>
       <Box

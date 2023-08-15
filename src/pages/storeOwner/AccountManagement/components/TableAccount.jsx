@@ -21,6 +21,8 @@ import { blue, red } from '@mui/material/colors';
 import { useNavigate } from 'react-router-dom';
 import deleteAccount from '../../../../services/deleteAccount';
 import useNotification from '../../../../utils/useNotification';
+import getStaffByStore from '../../../../services/getStaffByStore';
+import getStaffByOwner from '../../../../services/storeOwner/getStaffByOwner';
 
 const TableAccount = ({ status, search, role }) => {
   const [table, setTable] = useState([]);
@@ -46,7 +48,7 @@ const TableAccount = ({ status, search, role }) => {
       Role: 3,
       IsEnable: status,
     };
-    getAccountList(payload)
+    getStaffByOwner(payload)
       .then((res) => {
         const newTable = res.items.map((e) => e);
         newTable.forEach(function (cs, index) {
@@ -82,17 +84,17 @@ const TableAccount = ({ status, search, role }) => {
           PageIndex: 1,
           PageSize: rpg,
           Role: 3,
-          search: search,
+          Name: search,
           IsEnable: status,
         }
       : {
           PageIndex: page + 1,
           PageSize: rpg,
           Role: 3,
-          search: search,
+          Name: search,
           IsEnable: status,
         };
-    getAccountList(payload)
+    getStaffByOwner(payload)
       .then((res) => {
         const newTable = res.items.map((e) => e);
         newTable.forEach(function (cs, index) {
@@ -127,11 +129,11 @@ const TableAccount = ({ status, search, role }) => {
             msg: 'Account delete success',
             variant: 'success',
           });
-          getAccountList({
+          getStaffByOwner({
             PageIndex: page + 1,
             PageSize: rpg,
-            Role: role,
-            search: search,
+            Role: 3,
+            Name: search,
             IsEnable: status,
           })
             .then((res) => {
@@ -191,7 +193,7 @@ const TableAccount = ({ status, search, role }) => {
                   cursor: 'pointer',
                 }}
                 onClick={() =>
-                  navigate('/admin/user/user-information', {
+                  navigate('/store-owner/staff/staff-information', {
                     state: {
                       accountInfo: row,
                     },
