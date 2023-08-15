@@ -8,9 +8,7 @@ import CustomerMobileSibar from '../components/CustomerMobileSibar/CustomerMobil
 const index = () => {
   return <>
     <CustomerHeader02 />
-    <div style={{
-      // marginTop: '2 0px'
-    }}>
+    <div>
       <Outlet />
     </div>
 

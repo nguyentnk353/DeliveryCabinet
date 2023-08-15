@@ -103,7 +103,7 @@ const OrderDetail = () => {
   };
 
   return (
-    <div className='bg-[#f1f5f9] md:px-[7%] md:py-[3%]'>
+    <div className='bg-[#f1f5f9] md:px-[7%] md:py-[3%] min-h-screen'>
       <PriceTableModal
         isOpen={isOpenPriceTable}
         setIsOpen={setIsOpenPriceTable}

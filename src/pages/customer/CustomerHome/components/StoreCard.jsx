@@ -4,11 +4,15 @@ import { useLocation } from 'react-router-dom';
 import VendorCard03 from './VendorCard03';
 import { useEffect } from 'react';
 import getAllStore from './../../../../services/Customer/getAllStore';
+import NotFoundItem from '../../../../assets/images/NotFoundItem.png'
 const StoreCard = ({ search, pg, onPageChange, province, district, ward, setTotalStore }) => {
   const pageSize = 6;
   const [gridView, setGridView] = useState(Boolean(false));
   const location = useLocation();
   const [listStore, setListStore] = useState([]);
+  const [total, setTotal] = useState(0);
+  const [load, setLoad] = useState(0);
+
 
   useEffect(() => {
     if (search) {
@@ -23,12 +27,14 @@ const StoreCard = ({ search, pg, onPageChange, province, district, ward, setTota
       District: ward.name,
       isEnable: true,
     };
-   
+
     getAllStore(payload)
       .then((res) => {
         const newListStore = res.items.map((e) => e);
         setListStore(newListStore);
         setTotalStore(res?.totalRecord);
+        setTotal(res?.totalRecord);
+        setLoad(1);
       })
       .catch((err) => {
         console.log(err);
@@ -60,19 +66,66 @@ const StoreCard = ({ search, pg, onPageChange, province, district, ward, setTota
             </div>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4 lg:gap-5 xl:gap-6">
-            {
-              listStore.map((store, index) => {
+            {load != 0 ?
+              (total != 0 ? listStore.map((store, index) => {
                 if (store.isEnable == true &&
-                    // store.user.isEnable == true &&
-                    // store.storeType.isEnable == true &&
-                    store.serviceType.isEnable == true &&
-                    store.area.isEnable == true) {
+                  // store.user.isEnable == true &&
+                  // store.storeType.isEnable == true &&
+                  store.serviceType.isEnable == true &&
+                  store.area.isEnable == true) {
                   return (
                     <VendorCard03 key={index} store={store} variant={gridView === true ? "grid" : "list"} />
                   )
                 }
                 return null;
-              })  
+              }) : <div>
+                <div className='flex justify-center'>
+                  <img src={NotFoundItem} alt="No Item Found" width='80%' />
+                </div>
+                <div className='flex justify-center font-semibold text-blue-700'>Không tìm thấy của hàng</div>
+              </div>
+              ) : (
+
+                <div role="status" className="max-w-md p-4 space-y-4 border border-gray-200 divide-y divide-gray-200 rounded shadow animate-pulse dark:divide-gray-700 md:p-6 dark:border-gray-700">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-24 mb-2.5"></div>
+                      <div className="w-32 h-2 bg-gray-200 rounded-full dark:bg-gray-700"></div>
+                    </div>
+                    <div className="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-12"></div>
+                  </div>
+                  <div className="flex items-center justify-between pt-4">
+                    <div>
+                      <div className="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-24 mb-2.5"></div>
+                      <div className="w-32 h-2 bg-gray-200 rounded-full dark:bg-gray-700"></div>
+                    </div>
+                    <div className="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-12"></div>
+                  </div>
+                  <div className="flex items-center justify-between pt-4">
+                    <div>
+                      <div className="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-24 mb-2.5"></div>
+                      <div className="w-32 h-2 bg-gray-200 rounded-full dark:bg-gray-700"></div>
+                    </div>
+                    <div className="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-12"></div>
+                  </div>
+                  <div className="flex items-center justify-between pt-4">
+                    <div>
+                      <div className="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-24 mb-2.5"></div>
+                      <div className="w-32 h-2 bg-gray-200 rounded-full dark:bg-gray-700"></div>
+                    </div>
+                    <div className="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-12"></div>
+                  </div>
+                  <div className="flex items-center justify-between pt-4">
+                    <div>
+                      <div className="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-24 mb-2.5"></div>
+                      <div className="w-32 h-2 bg-gray-200 rounded-full dark:bg-gray-700"></div>
+                    </div>
+                    <div className="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-12"></div>
+                  </div>
+                  <span className="sr-only">Loading...</span>
+                </div>
+
+              )
             }
           </div>
         </div>
