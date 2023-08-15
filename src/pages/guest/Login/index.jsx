@@ -59,12 +59,11 @@ export default function Login() {
       login(payload)
         .then((data) => {
           const errLogin = 'Invalid Login';
-
           if (data.status == 200) {
             setIsinvalid(false);
-            const decoded = jwt_decode(data);
+            const decoded = jwt_decode(data.data);
             localStorage.setItem('loginUser', JSON.stringify(decoded));
-            localStorage.setItem('token', data);
+            localStorage.setItem('token', data.data);
 
             switch (decoded.Role) {
               case '1':
@@ -82,8 +81,12 @@ export default function Login() {
               default:
                 return null;
             }
-          } else if (data.code == 400) {
+          } else if (data.code == 404) {
             setIsinvalid(true);
+            // sendNotification({
+            //   msg: 'Wrong Username or Password!',
+            //   variant: 'error',
+            // });
           } else {
             sendNotification({ msg: 'Unable to login', variant: 'error' });
           }

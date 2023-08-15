@@ -153,12 +153,14 @@ const index = () => {
         <Paper sx={{ borderRadius: '16px', padding: '2rem' }}>
           <Box>
             <Box sx={{ display: 'flex', gap: 5 }}>
-              <img
-                src={storeInfo?.imgUrl ? storeInfo?.imgUrl : storeDefault}
-                alt='store image'
-                style={{ width: '50%' }}
-              />
-              <Box>
+              <Box sx={{ width: '50%' }}>
+                <img
+                  src={storeInfo?.imgUrl ? storeInfo?.imgUrl : storeDefault}
+                  alt='store image'
+                  style={{ width: '100%' }}
+                />
+              </Box>
+              <Box sx={{ width: '50%' }}>
                 <Box>
                   <Typography variant='h4' sx={{ fontWeight: '600' }}>
                     {storeInfo?.name}

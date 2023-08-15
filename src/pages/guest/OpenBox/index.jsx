@@ -97,8 +97,8 @@ const index = () => {
       case 3:
         return {
           label: 'Quá hạn',
-          color: '#ffeb3b',
-          bgcolor: '#fff9c4',
+          color: '#ff5722',
+          bgcolor: '#ffccbc',
         };
       case 4:
         return {
