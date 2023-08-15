@@ -400,6 +400,7 @@ const LockerTable = ({ search, isEnable }) => {
                   <TableCell>Description</TableCell>
                   <TableCell>Rows</TableCell>
                   <TableCell>Columns</TableCell>
+                  <TableCell>Store</TableCell>
                   <TableCell>Status</TableCell>
                   <TableCell>Action</TableCell>
                 </TableRow>
@@ -415,13 +416,13 @@ const LockerTable = ({ search, isEnable }) => {
                       },
                       cursor: 'pointer',
                     }}
-                    // onClick={() =>
-                    //   navigate('/admin/locker', {
-                    //     state: {
-                    //       storeId: row.id,
-                    //     },
-                    //   })
-                    // }
+                    onClick={() =>
+                      navigate('/admin/cabinet-detail', {
+                        state: {
+                          cabinetInfo: row,
+                        },
+                      })
+                    }
                   >
                     <TableCell component='th' scope='row'>
                       {row.id}
@@ -432,6 +433,9 @@ const LockerTable = ({ search, isEnable }) => {
                     <TableCell>{row.description}</TableCell>
                     <TableCell>{row.row}</TableCell>
                     <TableCell>{row.col}</TableCell>
+                    <TableCell>
+                      {row.store.name ? row.store.name : 'Unassign'}
+                    </TableCell>
                     <TableCell>
                       {row.isEnable ? (
                         <Chip

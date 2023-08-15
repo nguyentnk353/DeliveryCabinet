@@ -19,6 +19,7 @@ import BoxTypeManagement from './pages/admin/BoxTypeManagement';
 import PriceTableManagement from './pages/admin/PriceTableManagement';
 import PriceTableItemManagement from './pages/admin/PriceTableItemManagement';
 import LockerManagement from './pages/admin/LockerManagement';
+import ADCabinetDetail from './pages/admin/CabinetDetail';
 import CreateLocker from './pages/admin/CreateLocker';
 import StoreDetail from './pages/admin/StoreDetail';
 import ConfigPage from './pages/admin/ConfigPage';
@@ -49,7 +50,6 @@ import OpenBox from './pages/guest/OpenBox';
 import theme from './theme';
 import Wallet from './pages/customer/Wallet/Wallet';
 import CustomerLanding from './pages/customer/CustomerLanding/CustomerLanding';
-
 import UpdateAccount from './pages/admin/AccountManagement/components/UpdateAccount/UpdateAccount';
 import ShowAccInfo from './pages/admin/AccountManagement/ShowAccInfo/ShowAccInfo';
 import UpdateCustomer from './pages/admin/CustomerManagement/components/UpdateAccount/UpdateAccount';
@@ -62,7 +62,8 @@ import UpdateStaff from './pages/storeOwner/StoreDetail/components/UpdateAccount
 import ShowStaffInfo from './pages/storeOwner/StoreDetail/ShowAccInfo/ShowAccInfo';
 import SOStoreManagement from './pages/storeOwner/StoreManagement';
 import SOStoreDetail from './pages/storeOwner/StoreDetail';
-import CabinetDetail from './pages/storeOwner/CabinetDetail';
+import SOCabinetDetail from './pages/storeOwner/CabinetDetail';
+import SOOrder from './pages/storeOwner/OrderManagement';
 import CreateAccount from './pages/admin/CreateAccount/CreateAccount';
 import 'antd/dist/reset.css';
 import 'react-perfect-scrollbar/dist/css/styles.css';
@@ -133,6 +134,7 @@ function App() {
                 element={<PriceTableItemManagement />}
               />
               <Route path='cabinet' element={<LockerManagement />} />
+              <Route path='cabinet-detail' element={<ADCabinetDetail />} />
               <Route path='new-cabinet' element={<CreateLocker />} />
               <Route path='config' element={<ConfigPage />} />
               <Route path='store-config' element={<StoreConfig />} />
@@ -162,7 +164,8 @@ function App() {
               />
               <Route path='store' element={<SOStoreManagement />} />
               <Route path='store-detail' element={<SOStoreDetail />} />
-              <Route path='cabinet-detail' element={<CabinetDetail />} />
+              <Route path='cabinet-detail' element={<SOCabinetDetail />} />
+              <Route path='order' element={<SOOrder />} />
             </Route>
             <Route
               path='/staff'

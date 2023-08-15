@@ -23,7 +23,7 @@ const AssignModal = ({ open, setOpen, field }) => {
 
   useMount(() => {
     const payload = {
-      PageIndex: 0,
+      PageIndex: 1,
       PageSize: 1000,
       isEnable: true,
     };
@@ -123,8 +123,8 @@ const AssignModal = ({ open, setOpen, field }) => {
                     display: 'flex',
                     gap: 1,
                     //   textAlign: 'center',
-                    justifyContent: 'center',
-                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    // alignItems: 'center',
                   }}
                 >
                   <Box sx={{ width: '50%' }}>

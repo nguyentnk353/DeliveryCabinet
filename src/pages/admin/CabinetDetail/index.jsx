@@ -24,7 +24,6 @@ const index = () => {
   const location = useLocation();
   const cabinet = location?.state?.cabinetInfo;
   const [cabinetInfo, setCabinetInfo] = useState(cabinet);
-  const storeInfo = location?.state?.storeInfo;
   const [msg, sendNotification] = useNotification();
   const [box, setBox] = useState();
   function boxClick(e) {
@@ -32,17 +31,11 @@ const index = () => {
   }
   // console.log(box);
   const bcList = [
-    { name: 'Store', sidebar: 'Store', to: '/store-owner/store' },
-    {
-      name: 'Store detail',
-      sidebar: 'Store',
-      state: storeInfo,
-      to: '/store-owner/store-detail',
-    },
+    { name: 'Cabinet', sidebar: 'Cabinet', to: '/admin/cabinet' },
     {
       name: 'Cabinet detail',
-      sidebar: 'Store',
-      to: '/store-owner/cabinet-detail',
+      sidebar: 'Cabinet',
+      to: '/admin/cabinet-detail',
     },
   ];
 
