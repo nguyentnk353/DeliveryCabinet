@@ -65,7 +65,7 @@ const Order = () => {
 
 
   return (
-    <div className='bg-[#f1f5f9] md:px-[10%] md:py-[3%] max-md:px-3'>
+    <div className='bg-[#f1f5f9] md:px-[10%] md:py-[3%] max-md:px-3 min-h-[70vh]'>
       <div className='hidden'>
         <Paper sx={{ backgroundColor: 'white', display: 'flex', justifyContent: 'space-between', padding: '15px', fontWeight: '600' }}>
           <div className={`cursor-pointer	 ${dataTabs.c1}`} onClick={() => handleChangeTabs('c1')}>All</div>

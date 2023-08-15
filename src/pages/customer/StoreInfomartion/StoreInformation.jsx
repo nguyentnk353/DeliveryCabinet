@@ -47,7 +47,7 @@ const StoreInformation = () => {
     <>
       <ShowMoreModal isOpen={showMoreModal} setIsOpen={setShowMoreModal} storeId={location.state.storeInfo.id} />
       <RentBoxModal isOpen={rentBoxModalOpen} setIsOpen={setRentBoxModalOpen} boxInfo={orderBoxInfo} storeInfo={location.state?.storeInfo} serviceTypeId={location.state.storeInfo.serviceTypeId} />
-      <div className="border-t border-gray-300 bg-slate-100">
+      <div className="border-t border-gray-300 bg-slate-100 min-h-[60vh]">
 
         {/* Mobile sidebar */}
         <MobileSidebar isOpen={showMoreModal} setIsOpen={setShowMoreModal} storeId={location.state.storeInfo.id} />

@@ -28,7 +28,7 @@ const CustomerHome = () => {
 
   return (
     <>
-      <div className="flex overflow-hidden bg-slate-100">
+      <div className="flex overflow-hidden bg-slate-100 min-h-[50vh]">
 
         {/* Content area */}
         <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
