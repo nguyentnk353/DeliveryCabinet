@@ -12,6 +12,7 @@ const MobileSidebar = ({ isOpen, setIsOpen, storeId }) => {
         getStoreById(storeId)
             .then((res) => {
                 setStoreInfo(res.items[0]);
+                if(res.items[0]?.imgUrl)
                 setImgSrc(res.items[0]?.imgUrl)
             })
             .catch((err) => {

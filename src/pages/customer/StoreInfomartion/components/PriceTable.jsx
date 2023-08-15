@@ -4,12 +4,13 @@ import getPriceTable from '../../../../services/Customer/getPriceTable';
 import { useMount } from 'ahooks';
 import { useState } from 'react';
 
-const PriceTable = ({ storeId, length, height, boxType }) => {
+const PriceTable = ({ storeId, priceTableId, length, height, boxType }) => {
     const [table, setTable] = useState([]);
     const [tableTotal, setTableTotal] = useState(0);
     useMount(() => {
         const payload = {
             storeId: storeId,
+            priceTableId: priceTableId,
             length: length,
             height: height,
             boxType: boxType,
@@ -18,8 +19,10 @@ const PriceTable = ({ storeId, length, height, boxType }) => {
         };
         getPriceTable(payload)
             .then((res) => {
-                const newTable = res.items.map((e) => {
-                    return e;
+                const newTable = res.items.filter((e) => {
+                    if(e?.boxSize?.length == length && e?.boxSize?.height == height && e?.boxType?.name == boxType){
+                        return e
+                    }
                 });
                 setTable(newTable);
                 setTableTotal(res.totalRecord)

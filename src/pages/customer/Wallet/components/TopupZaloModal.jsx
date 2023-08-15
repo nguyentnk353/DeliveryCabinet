@@ -35,8 +35,9 @@ const TopupZaloModal = ({ isOpen, setIsOpen }) => {
                                 {/* Submit form */}
                                 <form className="flex max-w-sm m-auto">
                                     <div className="grow mr-2">
-                                        <label htmlFor="subscribe-form" className="sr-only">Leave your Email</label>
-                                        <input id="subscribe-form" className="form-input w-full px-2 py-1" type="email" placeholder='VNĐ' 
+                                        <label htmlFor="subscribe-form" className="sr-only">Nhập số tiền</label>
+                                        <input  id="subscribe-form" type="number"
+                                                className="form-input w-full px-2 py-1" placeholder='VNĐ' 
                                                 onChange={(e)=>{setAmount(e.target.value)}}
                                         />
                                     </div>

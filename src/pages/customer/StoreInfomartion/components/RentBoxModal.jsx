@@ -2,10 +2,12 @@ import React from 'react'
 import ModalBasic from './../../components/ModalBasic/ModalBasic';
 import { useNavigate } from 'react-router-dom';
 import rentBox from '../../../../services/Customer/rentBox';
+import useNotification from '../../../../utils/useNotification';
 
 const RentBoxModal = ({ isOpen, setIsOpen, boxInfo, storeInfo, serviceTypeId }) => {
     const navigate = useNavigate();
-   
+    const [msg, sendNotification] = useNotification();
+
     const handleRentBox = () => {
         const payload = {
             storeId: storeInfo?.id,
@@ -15,13 +17,21 @@ const RentBoxModal = ({ isOpen, setIsOpen, boxInfo, storeInfo, serviceTypeId }) 
         }
         rentBox(payload)
             .then((res) => {
-                navigate('/customer/order-detail', {
-                    state: {
-                        orderInfo: res,
-                        storeInfo: storeInfo,
-                    },
-                })
-                // console.log(res);
+                if(res.status == 201){
+                    sendNotification({ msg: 'Thuê tủ thành công', variant: 'success' });
+                    navigate('/customer/order-detail', {
+                        state: {
+                            orderInfo: res.data,
+                            storeInfo: storeInfo,
+                        },
+                    })
+                } else if(res.response.status == 400){
+                    sendNotification({ msg: 'Hiện tại bạn không đủ tiền', variant: 'warning' });
+                    
+                } else {
+                    sendNotification({ msg: 'Không thể tạo đơn hàng', variant: 'error'  });
+                }
+                
             })
             .catch((err) => {
                 console.log(err);

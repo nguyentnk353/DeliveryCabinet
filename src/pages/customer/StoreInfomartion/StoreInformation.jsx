@@ -60,7 +60,7 @@ const StoreInformation = () => {
               <WebSidebar storeId={location.state.storeInfo.id} />
 
               <div className="w-full lg:pl-7">
-                <div className="mb-5 flex lg:mb-7">
+                <div className="max-md:mb-5 flex ">
 
                   {/* PriceTable */}
                   {/* <PriceTable storeId={location.state.storeInfo.id} /> */}
@@ -96,7 +96,7 @@ const StoreInformation = () => {
                     data-variant="slim"
                     className="font-body bg-slate-950 hover:shadow-cart inline-flex h-11 transform-none cursor-pointer items-center justify-center rounded-md border-0 border-transparent px-5 py-2 text-center text-[13px] font-semibold normal-case leading-4 text-white placeholder-white transition duration-300 ease-in-out hover:bg-gray-600 hover:text-white focus:outline-none focus-visible:outline-none md:h-12 md:text-sm"
                   >
-                    Load More
+                    Tải thêm
                   </button>
                 </div>
               </div>

@@ -29,7 +29,7 @@ const CardsSidebar = ({info}) => {
                     <div className="py-8 px-4 lg:px-8">
                         <div className="max-w-sm mx-auto lg:max-w-none">
 
-                            <div className="text-slate-800 font-semibold text-center mb-6">Thông tin ví Delivery cabinet</div>
+                            <div className="text-slate-800 font-semibold text-center mb-6">THÔNG TIN SỐ DƯ TÀI KHOẢN</div>
 
                             {/* Credit Card */}
                             

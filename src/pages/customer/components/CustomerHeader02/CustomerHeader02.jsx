@@ -109,15 +109,9 @@ export default function CustomerHeader02() {
         horizontal: 'right',
       }}
       open={isMenuOpen}
-      onClose={handleMenuClose}
+      onClose={(e) => { handleMobileMenuClose(); handleMenuClose(); }}
     >
-      <MenuItem
-        onClick={(e) => {
-          e.stopPropagation();
-          handleMenuClose();
-          navigate('/customer/profile', { replace: true });
-        }}
-      >
+      <MenuItem onClick={(e) => { e.stopPropagation(); handleMenuClose(); handleMobileMenuClose(); navigate('/customer/profile', { replace: true }); }}>
         <IconButton
           size='large'
           aria-label='account of current user'
@@ -129,13 +123,7 @@ export default function CustomerHeader02() {
         </IconButton>
         <p>Tài khoản</p>
       </MenuItem>
-      <MenuItem
-        onClick={(e) => {
-          e.stopPropagation();
-          logout();
-        }}
-        className='text-red-500'
-      >
+      <MenuItem onClick={(e) => { e.stopPropagation(); handleMenuClose(); handleMobileMenuClose(); logout() }} className='text-red-500'>
         <IconButton
           size='large'
           aria-label='account of current user'
@@ -165,7 +153,7 @@ export default function CustomerHeader02() {
         horizontal: 'right',
       }}
       open={isMobileMenuOpen}
-      onClose={handleMobileMenuClose}
+      onClose={(e) => { handleMobileMenuClose(); handleMenuClose(); }}
     >
       {/* <MenuItem>
         <IconButton size="large" aria-label="show 4 new mails" color="inherit">
@@ -188,13 +176,7 @@ export default function CustomerHeader02() {
         <p>Notifications</p>
       </MenuItem> */}
 
-      <MenuItem
-        onClick={(e) => {
-          e.stopPropagation();
-          handleMobileMenuClose();
-          navigate('/customer/profile', { replace: true });
-        }}
-      >
+      <MenuItem onClick={(e) => { e.stopPropagation(); handleMenuClose(); handleMobileMenuClose(); navigate('/customer/profile', { replace: true }); }}>
         <IconButton
           size='large'
           aria-label='account of current user'
@@ -206,13 +188,7 @@ export default function CustomerHeader02() {
         </IconButton>
         <p>Tài khoản</p>
       </MenuItem>
-      <MenuItem
-        onClick={(e) => {
-          e.stopPropagation();
-          logout();
-        }}
-        className='text-red-500'
-      >
+      <MenuItem onClick={(e) => { e.stopPropagation(); handleMenuClose(); handleMobileMenuClose(); logout() }} className='text-red-500'>
         <IconButton
           size='large'
           aria-label='account of current user'

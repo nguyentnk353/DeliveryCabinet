@@ -108,6 +108,7 @@ const OrderDetail = () => {
         isOpen={isOpenPriceTable}
         setIsOpen={setIsOpenPriceTable}
         storeId={store?.id}
+        priceTableId={order?.priceTableId}
         length={order?.box?.boxSize?.length}
         height={order?.box?.boxSize?.height}
         boxType={order?.box?.boxType?.name}
@@ -243,7 +244,7 @@ const OrderDetail = () => {
           </div> */}
 
           <div className='-mx-4 md:mx-4 flex flex-wrap'>
-            <div className='max-md:border bg-white p-4 w-full max-md:m-4'>
+            <div className='max-md:border bg-white p-4 w-full max-md:m-4 flex justify-center'>
               {/* <p className='font-semibold text-[#14df14] text-2xl'>
                 Locker here
               </p> */}
@@ -255,6 +256,7 @@ const OrderDetail = () => {
                   gridTemplateColumns: `repeat(${locker?.col}, 1fr)`,
                   gridTemplateRows: `repeat(${locker?.row}, 1fr)`,
                   gridGap: '8px',
+                  width: '80%'
                 }}
               >
                 {locker?.boxes &&
@@ -270,8 +272,9 @@ const OrderDetail = () => {
                             cursor: 'pointer',
                             backgroundColor: blue[100],
                             textAlign: 'center',
-                            paddingBottom: '60%',
+                            paddingBottom: '40%',
                             paddingTop: '10%',
+                            border: '3px solid'
                           }}
                         >
                           {e.code}
@@ -290,8 +293,9 @@ const OrderDetail = () => {
                             cursor: 'pointer',
                             backgroundColor: yellow[100],
                             textAlign: 'center',
-                            paddingBottom: '60%',
+                            paddingBottom: '40%',
                             paddingTop: '10%',
+                            border: '3px solid'
                           }}
                         >
                           {e.code}
@@ -319,7 +323,7 @@ const OrderDetail = () => {
                   </div>
                 </div>
                 <p>
-                  Ví DC Pay 
+                  DC Pay 
                   <br />
                   {orderInfo?.user?.fullName}
                 </p>
