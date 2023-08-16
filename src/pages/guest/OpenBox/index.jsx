@@ -369,6 +369,7 @@ const index = () => {
                       // paddingBottom: '60%',
                       // paddingTop: '10%',
                       padding: '10%',
+                      border: '3px solid'
                       // display: 'flex',
                       // flexDirection: 'column',
                       // justifyContent: 'space-between',
@@ -380,15 +381,20 @@ const index = () => {
                       handleWrongBox(e.status);
                     }}
                   >
-                    {e.code}
-                    <Chip
+                    <div>{e.code}</div>
+                    {/* <Chip
                       sx={{
-                        paddingTop: '50%',
+                        //  paddingTop: '50%',
                         color: stat.color,
                         bgcolor: stat.bgcolor,
                       }}
                       label={stat.label}
-                    />
+                    /> */}
+                    
+                    <div 
+                      style={{color: stat.color, backgroundColor: stat.bgcolor, width: 'fit-content'}}
+                      className='m-auto p-[5px] rounded-lg md:mt-10 max-md:mt-2'
+                    >{stat.label}</div>
                   </Paper>
                 );
               })}
