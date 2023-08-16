@@ -26,10 +26,13 @@ import getAccountById from '../../../../../services/getAccountById';
 import { useEffect } from 'react';
 import CustomBreadcrumb from '../../../../../components/CustomBreadcrumb';
 import dayjs from 'dayjs';
+import postImage from '../../../../../services/postImage';
 
 const UpdateAccount = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const [getFlie, setFile] = useState(null);
+
 
   const [userInfo, setUserInfo] = useState({
     id: '',
@@ -48,8 +51,7 @@ const UpdateAccount = () => {
     { name: 'Active', id: true },
     { name: 'InActive', id: false },
   ];
-  const phoneRegExp =
-    /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
+  const phoneRegExp = /(((\+|)84)|0)(3|5|7|8|9)+([0-9]{8})\b/;
 
   useMount(() => {
     getAccountById(location?.state?.accountInfo?.id)
@@ -76,37 +78,78 @@ const UpdateAccount = () => {
         .min(2, 'Full Name mininum 2 characters')
         .max(30, 'Full Name maximum 30 characters')
         .required('Required!'),
-      email: Yup.string().email('Invalid email format').required('Required!'),
+      email: Yup.string()
+        .email('Invalid email format')
+        .required('Required!'),
       phone: Yup.string()
         .required('Required!')
         .matches(phoneRegExp, 'Phone number is not valid'),
     }),
     onSubmit: (values) => {
-      const api = {
-        id: userInfo.id,
-        // loginName: values.login_name,
-        fullName: values.full_name,
-        email: values.email,
-        phone: values.phone,
-        dob: dayjs(date.$d).format('YYYY-MM-DDTHH:mm[Z]'),
-        isEnable: userInfo?.isEnable,
-        imgUrl: userInfo?.imgUrl,
-      };
-      updateAccount(api)
-        .then((res) => {
-          if (res.status == 200) {
-            navigate('/admin/user', { replace: true });
-            sendNotification({
-              msg: 'Account update success',
-              variant: 'success',
-            });
-          } else {
-            sendNotification({ msg: 'Account update fail', variant: 'error' });
-          }
-        })
-        .catch((err) => {
-          sendNotification({ msg: err, variant: 'error' });
-        });
+      const formData = new FormData();
+      formData.append('file', getFlie);
+      if (getFlie) {
+        postImage(formData)
+          .then((res) => {
+            if (res.status === 200) {
+              const api = {
+                id: userInfo.id,
+                // loginName: values.login_name,
+                fullName: values.full_name,
+                email: values.email,
+                phone: values.phone,
+                dob: dayjs(date.$d).format('YYYY-MM-DDTHH:mm[Z]'),
+                isEnable: userInfo?.isEnable,
+                imgUrl: res.data.url,
+              };;
+              updateAccount(api)
+                .then((res) => {
+                  if (res.status == 200) {
+                    navigate('/admin/user', { replace: true });
+                    sendNotification({
+                      msg: 'Account update success',
+                      variant: 'success',
+                    });
+                  } else {
+                    sendNotification({ msg: 'Account update fail', variant: 'error' });
+                  }
+                })
+                .catch((err) => {
+                  sendNotification({ msg: err, variant: 'error' });
+                });
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } else {
+        const api = {
+          id: userInfo.id,
+          // loginName: values.login_name,
+          fullName: values.full_name,
+          email: values.email,
+          phone: values.phone,
+          dob: dayjs(date.$d).format('YYYY-MM-DDTHH:mm[Z]'),
+          isEnable: userInfo?.isEnable,
+          imgUrl: userInfo?.imgUrl,
+        };
+        updateAccount(api)
+          .then((res) => {
+            if (res.status == 200) {
+              navigate('/admin/user', { replace: true });
+              sendNotification({
+                msg: 'Account update success',
+                variant: 'success',
+              });
+            } else {
+              sendNotification({ msg: 'Account update fail', variant: 'error' });
+            }
+          })
+          .catch((err) => {
+            sendNotification({ msg: err, variant: 'error' });
+          });
+      }
+
     },
   });
 
@@ -135,6 +178,7 @@ const UpdateAccount = () => {
       to: '/admin/user/user-information',
     },
   ];
+
   return (
     <Box>
       <Box
@@ -165,7 +209,7 @@ const UpdateAccount = () => {
               elevation={3}
             >
               <Box sx={{ padding: '10% 0' }}>
-                <UpLoadImage />
+                <UpLoadImage getFlie={getFlie} setFile={setFile} />
               </Box>
             </Paper>
 
@@ -184,11 +228,12 @@ const UpdateAccount = () => {
                       value={formik.values.full_name}
                       onChange={formik.handleChange}
                       fullWidth
+                      autoFocus
                       margin='normal'
-                      required
+                      error={formik.touched.full_name && Boolean(formik.errors.full_name)}
                     />
                     {formik.errors.full_name && formik.touched.full_name && (
-                      <p>{formik.errors.full_name}</p>
+                      <p className='text-red-500'>{formik.errors.full_name}</p>
                     )}
                   </Grid>
                   <Grid item xs={6}>
@@ -200,10 +245,11 @@ const UpdateAccount = () => {
                       onChange={formik.handleChange}
                       fullWidth
                       margin='normal'
-                      required
+                      error={formik.touched.email && Boolean(formik.errors.email)}
+
                     />
                     {formik.errors.email && formik.touched.email && (
-                      <p>{formik.errors.email}</p>
+                      <p className='text-red-500'>{formik.errors.email}</p>
                     )}
                   </Grid>
                   <Grid item xs={6}>
@@ -215,10 +261,10 @@ const UpdateAccount = () => {
                       onChange={formik.handleChange}
                       fullWidth
                       margin='normal'
-                      required
+                      error={formik.touched.phone && Boolean(formik.errors.phone)}
                     />
                     {formik.errors.phone && formik.touched.phone && (
-                      <p>{formik.errors.phone}</p>
+                      <p className='text-red-500'>{formik.errors.phone}</p>
                     )}
                   </Grid>
                   <Grid item xs={6}>
@@ -265,6 +311,7 @@ const UpdateAccount = () => {
                           // id='dob'
                           // name='dob'
                           required
+                          sx={{ width: '100%' }}
                           // defaultValue={dayjs(userInfo?.dob)}
                           // defaultValue={dayjs('2022-04-17')}
                           value={date}

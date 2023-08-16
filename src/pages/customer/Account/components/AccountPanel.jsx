@@ -47,10 +47,10 @@ function AccountPanel() {
       fullName: Yup.string()
         .min(2, 'Họ và tên có tối thiểu 2 kí tự')
         .max(30, 'Họ và tên có tối đa 30 kí tự')
-        .required('Trường này không được trống!'),
+        .required('Tên không được trống!'),
       email: Yup.string().email('Sai định dạng email').required('Trường này không được trống!'),
       phone: Yup.string()
-        .required('Trường này không được trống!')
+        .required('Số điện thoại không được trống!')
         .matches(phoneRegExp, 'Sai định dạng số điện thoại Việt Nam'),
     }),
     onSubmit: (values) => {
