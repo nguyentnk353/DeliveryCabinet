@@ -2,16 +2,28 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom';
 import ModalBasic from './../../components/ModalBasic/ModalBasic';
 import completeOrder from '../../../../services/Customer/completeOrder';
+import useNotification from '../../../../utils/useNotification';
 
 const ConfirmFinishRentModal = ({isOpen, setIsOpen, orderId}) => {
     const navigate = useNavigate();
+    const [msg, sendNotification] = useNotification();
+
     const handleFinishOrder = () => {
         completeOrder(orderId)
-            .then((res) => {
-                navigate('/customer');  
+            .then(async(res) => {
+                if (res.status == 200) {
+                    sendNotification({
+                      msg: 'Thanh toán đơn hàng thành công',
+                      variant: 'success',
+                    });
+                    await new Promise((resolve)=>setTimeout(resolve, 3000))
+                    navigate('/customer'); 
+                  } else {
+                    sendNotification({ msg: 'Số dư tài khoản không đủ', variant: 'error' });
+                  }
             })
             .catch((err) => {
-                console.log(err);
+                sendNotification({ msg: "không hoàn thành được đơn hàng", variant: 'error' });
         });
     }
     return (

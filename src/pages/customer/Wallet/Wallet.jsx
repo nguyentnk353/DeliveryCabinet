@@ -58,7 +58,6 @@ const Wallet = () => {
                     });
                 getTransaction({ walletId: res.wallets[0]?.id, PageSize: pageSizeTopup, isIncrease: true })
                     .then((trans) => {
-                        console.log(trans)
                         setListTopUp(trans.items);
                         setTotalTopup(trans?.totalRecord);
                         // setLoad(1);

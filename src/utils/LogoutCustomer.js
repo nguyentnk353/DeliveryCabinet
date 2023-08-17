@@ -8,7 +8,7 @@ export default function LogoutCustomer() {
   async function Logout() {
     await auth.signOut();
     localStorage.clear('loginUser');
-    navigate('/home', { replace: true });
+    navigate('/login', { replace: true });
   }
   return Logout;
 }
