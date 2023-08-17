@@ -9,8 +9,12 @@ import NoTransaction from '../../../assets/images/NoTransaction02.gif'
 
 const Wallet = () => {
 
-    const [pageSize, setPageSize] = useState(5);
-    const [total, setTotal] = useState(1);
+    const [pageSizeAll, setPageSizeAll] = useState(5);
+    const [pageSizeTopup, setPageSizeTopup] = useState(5);
+    const [pageSizeTran, setPageSizeTran] = useState(5);
+    const [totalAll, setTotalAll] = useState(1);
+    const [totalTopup, setTotalTopup] = useState(1);
+    const [totalTran, setTotalTran] = useState(1);
     const [walletInfo, setWalletInfo] = useState({})
     const [info, setInfo] = useState({})
     const [listAll, setListAll] = useState([]);
@@ -43,26 +47,30 @@ const Wallet = () => {
             .then((res) => {
                 setInfo(res)
                 setWalletInfo(res.wallets[0]);
-                getTransaction({ walletId: res.wallets[0]?.id, PageSize: pageSize })
+                getTransaction({ walletId: res.wallets[0]?.id, PageSize: pageSizeAll })
                     .then((trans) => {
                         setListAll(trans.items);
-                        setListTopUp(trans.items);
-                        setTotal(trans?.totalRecord);
-                        const listTopUpApi = trans.items.filter((e) => {
-                            if (e?.isIncrease) {
-                                return e;
-                            }
-
-                        })
-                        const listTranApi = trans.items.filter((e) => {
-                            if (e?.isIncrease == false) {
-                                return e;
-                            }
-
-                        })
-                        setListTopUp(listTopUpApi);
-                        setListTrans(listTranApi);
+                        setTotalAll(trans?.totalRecord);
                         setLoad(1);
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+                getTransaction({ walletId: res.wallets[0]?.id, PageSize: pageSizeTopup, isIncrease: true })
+                    .then((trans) => {
+                        console.log(trans)
+                        setListTopUp(trans.items);
+                        setTotalTopup(trans?.totalRecord);
+                        // setLoad(1);
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+                getTransaction({ walletId: res.wallets[0]?.id, PageSize: pageSizeAll, isIncrease: false })
+                    .then((trans) => {
+                        setListTrans(trans.items);
+                        setTotalTran(trans?.totalRecord);
+                        // setLoad(1);
                     })
                     .catch((error) => {
                         console.log(error);
@@ -73,37 +81,61 @@ const Wallet = () => {
             });
     });
 
-    const handleChangeSize = () => {
+    const handleChangeSizeAll = () => {
         const payload = {
             walletId: walletInfo?.id,
-            PageSize: pageSize + 5,
+            PageSize: pageSizeAll + 5,
         }
 
-        setPageSize(pageSize + 5);
+        setPageSizeAll(pageSizeAll + 5);
         getTransaction(payload)
             .then((trans) => {
                 setListAll(trans.items);
-                setTotal(trans?.totalRecord)
-                const listTopUpApi = trans.items.filter((e) => {
-                    if (e?.isIncrease) {
-                        return e;
-                    }
-
-                })
-                const listTranApi = trans.items.filter((e) => {
-                    if (e?.isIncrease == false) {
-                        return e;
-                    }
-
-                })
-                setListTopUp(listTopUpApi);
-                setListTrans(listTranApi)
+                setTotalAll(trans?.totalRecord)
                 setLoad(1)
             })
             .catch((error) => {
                 console.log(error);
             });
     }
+
+    const handleChangeSizeTopup = () => {
+        const payload = {
+            walletId: walletInfo?.id,
+            PageSize: pageSizeTopup + 5,
+            isIncrease: true
+        }
+
+        setPageSizeTopup(pageSizeTopup + 5);
+        getTransaction(payload)
+            .then((trans) => {
+                setListTopUp(trans.items);
+                setTotalTopup(trans?.totalRecord)
+                // setLoad(1)
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
+
+    const handleChangeSizeTran = () => {
+        const payload = {
+            walletId: walletInfo?.id,
+            PageSize: pageSizeTran + 5,
+            isIncrease: false
+        }
+        setPageSizeTran(pageSizeTran + 5);
+        getTransaction(payload)
+            .then((trans) => {
+                setListTrans(trans.items);
+                setTotalTran(trans?.totalRecord)
+                // setLoad(1)
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
+
 
     return (
         <div className="flex overflow-hidden bg-[#f1f5f9] min-h-screen">
@@ -148,19 +180,41 @@ const Wallet = () => {
 
                             {
                                 type == 'all' &&
-                                (load != 0 ? (listAll?.length != 0 ?
-                                    listAll.map((tran, index) => (
-                                        <div key={index} className="space-y-2">
-                                            {/* Cart content */}
-                                            <CartTransaction transaction={tran} />
+                                (load != 0 ? (
+                                    listAll?.length != 0 ? (
+                                        <div>
+                                            {
+                                                listAll.map((tran, index) => (
+                                                    <div key={index} className="space-y-2">
+                                                        {/* Cart content */}
+                                                        <CartTransaction transaction={tran} />
+                                                    </div>
+                                                ))
+                                            }
+                                            {
+                                                pageSizeAll < totalAll &&
+                                                <div className="py-6 flex justify-center">
+                                                    <button className="p-3 rounded-lg text-sm font-medium text-white bg-indigo-500"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            handleChangeSizeAll();
+                                                        }}
+                                                    >
+                                                        Xem thêm
+                                                    </button>
+                                                </div>
+                                            }
+
                                         </div>
-                                    )) :
-                                    <div>
-                                        <div className='flex justify-center sm:hidden'>
-                                            <img src={NoTransaction} alt="No Item Found" width='80%' />
-                                        </div>
-                                        <div className='flex justify-center font-semibold'>Hiện chưa có giao dịch</div>
-                                    </div>) : (
+
+
+                                    ) :
+                                        <div>
+                                            <div className='flex justify-center sm:hidden'>
+                                                <img src={NoTransaction} alt="No Item Found" width='80%' />
+                                            </div>
+                                            <div className='flex justify-center font-semibold'>Hiện chưa có giao dịch</div>
+                                        </div>) : (
                                     <div role="status" className="max-w-md p-4 space-y-4 border border-gray-200 divide-y divide-gray-200 rounded shadow animate-pulse dark:divide-gray-700 md:p-6 dark:border-gray-700">
                                         <div className="flex items-center justify-between">
                                             <div>
@@ -183,51 +237,62 @@ const Wallet = () => {
                             }
                             {
                                 type == 'topup' &&
-                                (listTopUp?.length != 0 ?
-                                    listTopUp.map((tran, index) => (
-                                        <div key={index} className="space-y-2">
-                                            {/* Cart content */}
-                                            <CartTransaction transaction={tran} />
-                                        </div>
-                                    )) :
+                                listTopUp?.length != 0 && (
                                     <div>
-                                        <div className='flex justify-center sm:hidden'>
-                                            <img src={NoTransaction} alt="No Item Found" width='80%' />
-                                        </div>
-                                        <div className='flex justify-center font-semibold'>Hiện chưa có giao dịch</div>
+                                        {
+                                            listTopUp.map((tran, index) => (
+                                                <div key={index} className="space-y-2">
+                                                    {/* Cart content */}
+                                                    <CartTransaction transaction={tran} />
+                                                </div>
+                                            ))
+                                        }
+                                        {
+                                            pageSizeTopup < totalTopup &&
+                                            <div className="py-6 flex justify-center">
+                                                <button className="p-3 rounded-lg text-sm font-medium text-white bg-indigo-500"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        handleChangeSizeTopup();
+                                                    }}
+                                                >
+                                                    Xem thêm
+                                                </button>
+                                            </div>
+                                        }
+
                                     </div>
                                 )
                             }
                             {
                                 type == 'tran' &&
-                                (listTrans?.length != 0 ?
-                                    listTrans.map((tran, index) => (
-                                        <div key={index} className="space-y-2">
-                                            {/* Cart content */}
-                                            <CartTransaction transaction={tran} />
-                                        </div>
-                                    )) :
+                                listTrans?.length != 0 && (
                                     <div>
-                                        <div className='flex justify-center sm:hidden'>
-                                            <img src={NoTransaction} alt="No Item Found" width='80%' />
-                                        </div>
-                                        <div className='flex justify-center font-semibold'>Hiện chưa có giao dịch</div>
-                                    </div>
-                                )
+                                        {
+                                            listTrans.map((tran, index) => (
+                                                <div key={index} className="space-y-2">
+                                                    {/* Cart content */}
+                                                    <CartTransaction transaction={tran} />
+                                                </div>
+                                            ))
+                                        }
+                                        {
+                                            pageSizeTran < totalTran &&
+                                            <div className="py-6 flex justify-center">
+                                                <button className="p-3 rounded-lg text-sm font-medium text-white bg-indigo-500"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        handleChangeSizeTran();
+                                                    }}
+                                                >
+                                                    Xem thêm
+                                                </button>
+                                            </div>
+                                        }
+
+                                    </div>)
                             }
 
-                            <div className="py-6 flex justify-center">
-                                {pageSize < total ? (
-                                    <button className="p-3 rounded-lg text-sm font-medium text-white bg-indigo-500"
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            handleChangeSize();
-                                        }}
-                                    >
-                                        Xem thêm
-                                    </button>
-                                ) : (<></>)}
-                            </div>
                         </div>
 
                     </div>
