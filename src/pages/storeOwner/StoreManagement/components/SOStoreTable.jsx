@@ -120,7 +120,7 @@ const SOStoreTable = ({ province, city, district, search, isEnable }) => {
                   <TableCell>Description</TableCell>
                   <TableCell>Owner</TableCell>
                   <TableCell>Status</TableCell>
-                  <TableCell>Action</TableCell>
+                  {/* <TableCell>Action</TableCell> */}
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -170,7 +170,7 @@ const SOStoreTable = ({ province, city, district, search, isEnable }) => {
                         />
                       )}
                     </TableCell>
-                    <TableCell>
+                    {/* <TableCell>
                       <Box sx={{ display: 'flex' }}>
                         <IconButton
                           onClick={(e) => {
@@ -193,7 +193,7 @@ const SOStoreTable = ({ province, city, district, search, isEnable }) => {
                           <DeleteForever sx={{ color: red[600] }} />
                         </IconButton>
                       </Box>
-                    </TableCell>
+                    </TableCell> */}
                   </TableRow>
                 ))}
               </TableBody>

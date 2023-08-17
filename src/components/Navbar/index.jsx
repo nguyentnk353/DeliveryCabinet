@@ -23,8 +23,10 @@ import {
   PersonOutlineOutlined,
 } from '@mui/icons-material';
 import LogoutFunction from '../../utils/LogoutFunction';
+import { useNavigate } from 'react-router-dom';
 
 const index = ({ toggle, setToggle }) => {
+  const navigate = useNavigate();
   const loginUser = JSON.parse(localStorage.getItem('loginUser'));
   const sidebarToggle = JSON.parse(localStorage.getItem('sidebarToggle'));
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -44,6 +46,12 @@ const index = ({ toggle, setToggle }) => {
   }
   function handleDrawerClose() {
     setToggle(false);
+  }
+  function toProfile() {
+    handleClose();
+    loginUser.Role == 1
+      ? navigate('/admin/profile', { replace: true })
+      : navigate('/store-owner/profile', { replace: true });
   }
 
   return (
@@ -207,7 +215,7 @@ const index = ({ toggle, setToggle }) => {
           </Box>
         </Box>
         <Divider />
-        <MenuItem onClick={handleClose}>
+        <MenuItem onClick={toProfile}>
           <ListItemIcon>
             <PersonOutlineOutlined fontSize='small' />
           </ListItemIcon>

@@ -1,11 +1,12 @@
 import axios from 'axios';
 import { request } from '../utils/request';
+import { requestOwner } from '../utils/requestOwner';
 
 export default function getStaffByStore(payload) {
   // const url = '/stores';
-  const url = 'https://deliver-store.tk/storeowner/api/v1/users';
+  const url = '/v1/users';
 
-  return axios
+  return requestOwner
     .get(url, {
       params: payload,
     })
