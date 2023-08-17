@@ -8,6 +8,6 @@ export default function completeOrder(orderId) {
             orderid: orderId       
         },}
     )
-    .then((response) => response.data)
-    .catch((err) => err.response.data);
+    .then((response) => response)
+    .catch((err) => err.response);
 }

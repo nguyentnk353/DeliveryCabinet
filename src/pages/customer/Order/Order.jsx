@@ -53,6 +53,9 @@ const Order = () => {
             case 3:
               cs.statusName = 'Quá hạn';
               return;
+            case 4:
+              cs.statusName = 'Hoàn thành';
+              return;
           }
         });
         setListOrder(newListOrder);

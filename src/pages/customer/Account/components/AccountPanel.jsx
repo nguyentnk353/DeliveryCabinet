@@ -208,14 +208,14 @@ function AccountPanel() {
           {/* <div className="text-sm">Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit.</div> */}
           <div className="sm:flex sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 mt-5">
             <div className="sm:w-1/3">
-              <label className="block text-sm font-medium mb-1" htmlFor="location">Tài khoản</label>
-              <input disabled id="location" className="form-input w-full cursor-not-allowed" type="text" defaultValue={'Customer'} />
+              <label className="block text-sm font-medium mb-1" htmlFor="location">Tên đăng nhập</label>
+              <input disabled id="location" className="form-input w-full cursor-not-allowed bg-[#e6e9ed]" type="text" defaultValue={userInfo?.loginName} />
             </div>
             <div className="sm:w-1/3">
               <label className="block text-sm font-medium mb-1" htmlFor="email">Email</label>
               <input
                 id="email"
-                className={`form-input w-full ${formik.touched.email && Boolean(formik.errors.email) == true ? "border-red-500 text-red-500" : ""}`}
+                className={`form-input w-full bg-[#e6e9ed] cursor-not-allowed ${formik.touched.email && Boolean(formik.errors.email) == true ? "border-red-500 text-red-500" : ""}`}
                 type="text"
                 defaultValue={formik.values.email}
                 onChange={formik.handleChange}
@@ -227,7 +227,7 @@ function AccountPanel() {
             </div>
             <div className="sm:w-1/3">
               <label className="block text-sm font-medium mb-1" htmlFor="location">Trạng thái</label>
-              <input disabled id="location" className="form-input w-full cursor-not-allowed" type="text" defaultValue={'Đang hoạt động'} />
+              <input disabled id="location" className="form-input w-full cursor-not-allowed bg-[#e6e9ed]" type="text" defaultValue={'Đang hoạt động'} />
             </div>
           </div>
         </section>
