@@ -187,7 +187,7 @@ const OrderDetail = () => {
                   </h4>
                   <div className='mb-4 text-base font-medium text-black dark:text-white'>
                     {' '}
-                    {order?.box?.locker?.name}
+                    {locker?.name}
                   </div>
                   <div className='block'>
                     <span className='font-semibold'>Tên box:</span>{' '}
