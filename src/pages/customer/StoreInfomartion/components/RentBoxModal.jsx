@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
-import ModalBasic from './../../components/ModalBasic/ModalBasic';
 import { useNavigate } from 'react-router-dom';
 import rentBox from '../../../../services/Customer/rentBox';
 import useNotification from '../../../../utils/useNotification';
 import ShowPriceTable from './ShowPriceTable';
+import ModalBasic from './ModalBasic';
 
 const RentBoxModal = ({ isOpen, setIsOpen, boxInfo, storeInfo, serviceTypeId }) => {
     const navigate = useNavigate();
@@ -18,9 +18,10 @@ const RentBoxModal = ({ isOpen, setIsOpen, boxInfo, storeInfo, serviceTypeId }) 
             servicetypeId: serviceTypeId,
         }
         rentBox(payload)
-            .then((res) => {
+            .then(async (res) => {
                 if (res.status == 201) {
                     sendNotification({ msg: 'Thuê tủ thành công', variant: 'success' });
+                    await new Promise((resolve)=>setTimeout(resolve, 3000))
                     navigate('/customer/order-detail', {
                         state: {
                             orderInfo: res.data,

@@ -7,6 +7,7 @@ export default function getTransaction(props) {
     .get(url, {
       params:{
         PageSize: props?.PageSize,
+        isIncrease: props?.isIncrease,
       }
     })
     .then((response) => response.data)

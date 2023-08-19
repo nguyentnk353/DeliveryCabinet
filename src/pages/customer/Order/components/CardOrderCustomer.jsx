@@ -1,6 +1,8 @@
 import moment from 'moment/moment';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import storeDefault from '../../../../assets/images/storeDefault.jpg'
+
 
 function CardOrderCustomer({ order }) {
   // const navigate = useNavigate();
@@ -8,14 +10,15 @@ function CardOrderCustomer({ order }) {
     <>
       <ul>
         <div className='pt-2 flex justify-between'>
-          {order?.status !== 1 ?
+          {(order?.status == 2 || order?.status == 4) ?
             <div className="inline-flex text-sm font-medium bg-emerald-100 text-emerald-600 rounded-full px-2 pt-1">{order?.total} VNĐ</div> : <div></div>
           }
-          <div className='text-green-500 font-medium'>{order?.statusName}</div> </div>
+          <div className={`font-medium ${(order?.status == 0 || order?.status == 3) ? "text-red-500" : "text-green-500" }`}>{order?.statusName}</div> 
+        </div>
         {/* Cart item */}
         <li className="sm:flex items-center md:py-6 max-md:py-2 border-b border-slate-200">
           <a className="block mb-4 sm:mb-0 md:mr-5 md:w-32 xl:w-auto shrink-0">
-            <img className="rounded-sm w-full xl:w-40" src={order?.box?.locker?.store?.imgUrl} alt="Order" />
+            <img className="rounded-sm w-full xl:w-40" src={order?.box?.locker?.store?.imgUrl || storeDefault} alt="Order" />
           </a>
           <div className="grow">
             {/* <a href="#0"> */}

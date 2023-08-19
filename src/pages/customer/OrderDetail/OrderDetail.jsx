@@ -38,7 +38,7 @@ const OrderDetail = () => {
   );
   const lockerId = location.state?.orderInfo?.box?.lockerId;
   //location.state?.orderInfo
-  // console.log(order);
+  // console.log(locker);
   useMount(() => {
     getOrderById(orderId)
       .then((res) => {
@@ -93,13 +93,17 @@ const OrderDetail = () => {
 
   // console.log(location.state?.orderInfo)
   const handleOpenCode = () => {
-    getOpenCode(orderId)
+    if(order?.status != 3){
+      getOpenCode(orderId)
       .then((res) => {
         SetOpenCode(res.openCode);
       })
       .catch((err) => {
         console.log(err);
       });
+    } else {
+      SetOpenCode('0000');
+    }
   };
 
   return (
@@ -117,6 +121,7 @@ const OrderDetail = () => {
         isOpen={isOpenOpenCode}
         setIsOpen={setIsOpenOpenCode}
         openCode={openCode}
+        orderStatus={order?.status}
       />
       <ConfirmFinishRentModal
         isOpen={isFinishOrder}
@@ -170,7 +175,7 @@ const OrderDetail = () => {
                   </h4>
                   <div className='block'>
                     <span className='font-semibold'>Liên hệ:</span>{' '}
-                    {order?.user?.phone}
+                    {locker?.store?.user?.phone}
                   </div>
                   <span className='mt-2 block'>
                     <span className='font-semibold'>Địa chỉ:</span>{' '}
@@ -187,7 +192,7 @@ const OrderDetail = () => {
                   </h4>
                   <div className='mb-4 text-base font-medium text-black dark:text-white'>
                     {' '}
-                    {order?.box?.locker?.name}
+                    {locker?.name}
                   </div>
                   <div className='block'>
                     <span className='font-semibold'>Tên box:</span>{' '}
@@ -337,7 +342,9 @@ const OrderDetail = () => {
                     <h4 className='mb-4 text-xl font-medium text-[#2196f3] dark:text-white md:text-2xl'>
                       Thanh toán
                     </h4>
-                    {/* <div className='max-md:flex justify-end text-right text-[#14df14] cursor-pointer'>Xem chi tiết</div> */}
+                    {(order?.status == 4 || order?.status == 3) &&
+                      <div className='max-md:flex justify-end text-right text-red-500 cursor-pointer'>Phí quá hạn: 10% </div>
+                    }
                   </div>
                   {/* <p className="mb-4 flex justify-between font-medium text-black dark:text-white">
                     <span> Subtotal </span>
@@ -351,7 +358,7 @@ const OrderDetail = () => {
                     <span> Đã thanh toán: </span>
                     <span> {order?.total} VNĐ</span>
                   </p>
-                  {order?.status != 2 && 
+                  {(order?.status != 2 && order?.status != 4) && 
                     <p className='border-stroke dark:border-strokedark mb-4 flex justify-between font-medium text-black dark:text-white'>
                       <span> Tổng tiền: </span>
                       <span> {currentPrice} VNĐ</span>
@@ -359,7 +366,7 @@ const OrderDetail = () => {
                   }
                   
                 </div>
-                {order?.status == 1 ? (
+                {(order?.status == 1 || order?.status == 3 )? (
                   <div className='max-md:grid max-md:grid-cols-2 mt-10 flex flex-col justify-end gap-4 sm:flex-row'>
                     <button
                       className='border-[#3c50e0] text-[#3c50e0] flex items-center justify-center rounded border px-8 py-2.5 text-center font-medium hover:bg-opacity-90'
@@ -373,7 +380,8 @@ const OrderDetail = () => {
                     </button>
                     <button
                       className='bg-[#3c50e0] text-white flex items-center justify-center rounded px-8 py-2.5 text-center font-medium hover:bg-opacity-90'
-                      onClick={() => {
+                      onClick={(e) => {
+                        e.stopPropagation();
                         setIsFinishOrder(true);
                       }}
                     >
