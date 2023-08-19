@@ -96,7 +96,7 @@ const index = () => {
   const [rowInput, setRowInput] = useState({ priority: '', dateRange: [] });
   const [rowInputItem, setRowInputItem] = useState({
     min: '',
-    max: '',
+    max: null,
     price: '',
     description: '',
   });
@@ -181,7 +181,7 @@ const index = () => {
       const itemList = piList.map((e) => {
         return {
           minDuration: e.min,
-          maxDuration: e.max,
+          maxDuration: e.max === '' ? null : e.max,
           price: e.price,
           description: e.description,
           boxSizeId: e.boxSize.id,
@@ -775,6 +775,7 @@ const index = () => {
                                         label='Maximum time (minute)'
                                         value={rowInputItem.max}
                                         onChange={(e) => {
+                                          console.log(e.target.value === '');
                                           setRowInputItem((param) => ({
                                             ...param,
                                             max: e.target.value,

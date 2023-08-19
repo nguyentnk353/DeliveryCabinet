@@ -106,6 +106,8 @@ const OrderTable = ({ search, isEnable }) => {
         return val?.endTime
           ? moment(val?.endTime).format('DD/MM/YYYY [at] HH:mm')
           : 'Overdue';
+      case 4:
+        return moment(val?.endTime).format('DD/MM/YYYY [at] HH:mm');
       default:
         return 'unknown end time';
     }
@@ -154,6 +156,17 @@ const OrderTable = ({ search, isEnable }) => {
             sx={{
               color: '#ff9800',
               bgcolor: '#ffe0b2',
+            }}
+          />
+        );
+      case 4:
+        return (
+          <Chip
+            label='Complete'
+            size='small'
+            sx={{
+              color: '#1bcd7a',
+              bgcolor: '#e5fceb',
             }}
           />
         );

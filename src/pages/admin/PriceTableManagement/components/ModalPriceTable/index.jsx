@@ -19,6 +19,7 @@ const index = ({ open, setOpen, priceId }) => {
   const [priceTable, setPriceTable] = useState([]);
 
   useEffect(() => {
+    setPriceTable([]);
     const payloadPrice = {
       IsEnable: true,
       PriceTableId: priceId,
@@ -33,7 +34,6 @@ const index = ({ open, setOpen, priceId }) => {
       });
   }, [priceId]);
   const handleClose = () => {
-    setPriceTable([]);
     setOpen(false);
   };
   const style = {
@@ -94,7 +94,8 @@ const index = ({ open, setOpen, priceId }) => {
                     </TableCell>
                     <TableCell>{row?.boxType?.name}</TableCell>
                     <TableCell>
-                      {row?.minDuration} - {row?.maxDuration}
+                      {row?.minDuration} -{' '}
+                      {row.maxDuration === null ? 'Onwards' : row?.maxDuration}
                     </TableCell>
                     <TableCell>{row?.price}</TableCell>
                   </TableRow>

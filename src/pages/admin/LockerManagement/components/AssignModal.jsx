@@ -116,7 +116,7 @@ const AssignModal = ({ open, setOpen, field }) => {
                 )}
               />
             </Box>
-            {select.name && (
+            {select?.name && (
               <Box>
                 <Box
                   sx={{

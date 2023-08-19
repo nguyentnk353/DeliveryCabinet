@@ -6,14 +6,16 @@ import CustomerHeader02 from '../components/CustomerHeader02/CustomerHeader02';
 import CustomerMobileSibar from '../components/CustomerMobileSibar/CustomerMobileSibar';
 
 const index = () => {
-  return <>
-    <CustomerHeader02 />
-    <div>
-      <Outlet />
-    </div>
+  return (
+    <>
+      <CustomerHeader02 />
+      <div>
+        <Outlet />
+      </div>
 
-    <CustomerFooter />
-  </>;
+      <CustomerFooter />
+    </>
+  );
 };
 
 export default index;
