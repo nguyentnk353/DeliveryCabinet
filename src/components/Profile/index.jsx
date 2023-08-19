@@ -27,6 +27,12 @@ import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import * as Yup from 'yup';
 import useScriptRef from './hooks/useScriptRef';
 import useNotification from '../../utils/useNotification';
+import moment from 'moment';
+import { FaUpload } from 'react-icons/fa';
+import postImage from '../../services/postImage';
+import updateUser from '../../services/updateUser';
+import Navbar from '../Navbar';
+import { CameraAlt } from '@mui/icons-material';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -75,12 +81,27 @@ const index = () => {
   // const phoneRegExp =
   //   /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
   const phoneRegExp = /(((\+|)84)|0)(3|5|7|8|9)+([0-9]{8})\b/;
+  const [image, setImage] = useState(user?.imgUrl);
+  const [file, setFile] = useState(null);
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
   };
 
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
+  };
+  const handleImageChange = (event) => {
+    const file = event.target.files[0];
+    setFile(file);
+    const reader = new FileReader();
+    reader.onload = () => {
+      setImage(reader.result);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleClick = () => {
+    document.getElementById('img-input').click();
   };
   const customInput = {
     marginTop: 1,
@@ -113,12 +134,28 @@ const index = () => {
     getUserList(payload)
       .then((res) => {
         setUser(res.items[0]);
+        setImage(res.items[0].imgUrl);
       })
       .catch((err) => {
         console.log(err);
       });
   });
-  console.log(user);
+  function checkRole(r) {
+    if (r) {
+      switch (r) {
+        case 1:
+          return 'Admin';
+        case 2:
+          return 'Store Owner';
+        case 3:
+          return 'Staff';
+        case 4:
+          return 'Customer';
+        default:
+          return 'Unknown role';
+      }
+    }
+  }
   const bcList = [
     { name: 'Profile', sidebar: 'Dashboard', to: '/admin/profile' },
   ];
@@ -147,10 +184,11 @@ const index = () => {
       <Box sx={{ display: 'flex', gap: 3 }}>
         <Paper
           sx={{
-            padding: '3rem 1rem',
+            padding: '5rem 0 3rem 0',
             width: '40%',
             position: 'relative',
             overflow: 'hidden',
+            borderRadius: '12px',
           }}
         >
           {/* <Chip sx={{ position: 'absolute', top: '24px', right: '24px' }}>
@@ -182,26 +220,121 @@ const index = () => {
               }}
             />
           )}
-
           <Box
             sx={{
-              padding: '1rem',
-              textAlign: 'center',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
             }}
           >
-            <Avatar src={user?.imgUrl} sx={{ width: 144, height: 144 }} />
+            <Box
+              sx={{
+                padding: '8px',
+                margin: 'auto',
+                width: '164px',
+                height: '164px',
+                cursor: 'pointer',
+                overflow: 'hidden',
+                borderRadius: '50%',
+                border: '1px dashed rgba(145, 158, 171, 0.2)',
+              }}
+              onClick={handleClick}
+            >
+              <input
+                id='img-input'
+                type='file'
+                hidden
+                accept='image/png, image/jpeg'
+                onChange={handleImageChange}
+              />
+              <Box
+                sx={{
+                  width: '100%',
+                  height: '100%',
+                  overflow: 'hidden',
+                  borderRadius: '50%',
+                  position: 'relative',
+                }}
+              >
+                <Avatar
+                  src={image}
+                  alt='upload image'
+                  sx={{ width: '144px', height: '144px' }}
+                />
+                <Box
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '8px',
+                    // -webkit-box-align: 'center',
+                    // WebkitBoxAlign: 'center',
+                    alignItems: 'center',
+                    // -webkit-box-pack: 'center',
+                    // WebkitBoxPack: 'center',
+                    justifyContent: 'center',
+                    top: '0px',
+                    left: '0px',
+                    width: '100%',
+                    height: '100%',
+                    zIndex: '9',
+                    borderRadius: '50%',
+                    position: ' absolute',
+                    color: 'rgb(255, 255, 255)',
+                    backgroundColor: 'rgba(22, 28, 36, 0.64)',
+                    transition:
+                      'opacity 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
+                    opacity: '0',
+                    ':hover': {
+                      opacity: '1',
+                    },
+                  }}
+                >
+                  <CameraAlt />
+                  <Typography variant='caption'>Update photo</Typography>
+                </Box>
+              </Box>
+            </Box>
+            <Box sx={{ margin: '1rem 0' }}>
+              <Typography
+                variant='caption'
+                sx={{
+                  color: 'rgb(145, 158, 171)',
+                  fontWeight: '400',
+                  textAlign: 'center',
+                }}
+              >
+                Allowed *.jpeg, *.jpg, *.png
+              </Typography>
+            </Box>
+            <Button
+              variant='contained'
+              size='large'
+              startIcon={<FaUpload />}
+              sx={{
+                borderRadius: '99px',
+                // fontSize: '1.25rem',
+                // lineheight: '1.5',
+                padding: '0.5rem 1.5rem',
+                fontWeight: '700',
+                marginTop: '0.5rem',
+              }}
+              onClick={handleClick}
+            >
+              Upload Image
+            </Button>
           </Box>
         </Paper>
-        <Paper sx={{ padding: '2rem 3rem' }}>
+        <Paper
+          sx={{ padding: '2rem 3rem', width: '100%', borderRadius: '12px' }}
+        >
           <Formik
+            enableReinitialize
             initialValues={{
-              username: '',
-              name: '',
-              email: '',
-              phone: '',
-              dob: '',
-              password: '',
-              confirm: '',
+              username: user?.loginName,
+              name: user?.fullName,
+              email: user?.email,
+              phone: user?.phone,
+              dob: user?.dob ? moment(user?.dob) : null,
               submit: null,
             }}
             validationSchema={Yup.object().shape({
@@ -222,18 +355,18 @@ const index = () => {
                   'Phone number must be in Vietnamese number format'
                 ),
               dob: Yup.date().required('Date of birth can not be empty'),
-              password: Yup.string()
-                .min(6, 'Password needs at least 6 characters ')
-                .max(255)
-                .required('Password can not be empty'),
-              confirm: Yup.string()
-                .min(6)
-                .max(255)
-                .oneOf(
-                  [Yup.ref('password'), null],
-                  'Confirm password must match the password'
-                )
-                .required('Confirm password can not be empty'),
+              // password: Yup.string()
+              //   .min(6, 'Password needs at least 6 characters ')
+              //   .max(255)
+              //   .required('Password can not be empty'),
+              // confirm: Yup.string()
+              //   .min(6)
+              //   .max(255)
+              //   .oneOf(
+              //     [Yup.ref('password'), null],
+              //     'Confirm password must match the password'
+              //   )
+              //   .required('Confirm password can not be empty'),
             })}
             onSubmit={async (
               values,
@@ -244,18 +377,91 @@ const index = () => {
                   setStatus({ success: true });
                   setSubmitting(false);
                 }
-                const payload = {
-                  loginName: values.username,
-                  password: values.password,
-                  confirmPassword: values.confirm,
-                  fullName: values.name,
-                  email: values.email,
-                  phone: values.phone,
-                  dob: moment(values.dob).format('YYYY-MM-DDTHH:mm[Z]'),
-                  role: 4,
-                  storeId: 0,
-                };
+                // const payload = {
+                //   loginName: values.username,
+                //   password: values.password,
+                //   confirmPassword: values.confirm,
+                //   fullName: values.name,
+                //   email: values.email,
+                //   phone: values.phone,
+                //   dob: moment(values.dob).format('YYYY-MM-DDTHH:mm[Z]'),
+                //   role: 4,
+                //   storeId: 0,
+                // };
 
+                if (file) {
+                  const formData = new FormData();
+                  formData.append('file', file);
+                  postImage(formData)
+                    .then((res) => {
+                      if (res.status === 200) {
+                        const payload = {
+                          id: user?.id,
+                          fullName: values.name,
+                          email: values.email,
+                          phone: values.phone,
+                          dob: moment(values.dob).format('YYYY-MM-DDTHH:mm[Z]'),
+                          isEnable: user?.isEnable,
+                          storeId: user?.storeId,
+                          imgUrl: res.data.url,
+                        };
+                        updateUser(payload)
+                          .then((res) => {
+                            if (res.status == 200) {
+                              sendNotification({
+                                msg: 'Update profile success',
+                                variant: 'success',
+                              });
+                              // localStorage.setItem(
+                              //   'updateProfile',
+                              //   res.data.url
+                              // );
+                            } else {
+                              sendNotification({
+                                msg: 'Update profile fail',
+                                variant: 'error',
+                              });
+                            }
+                          })
+                          .catch((err) => console.log(err));
+                      } else {
+                        sendNotification({
+                          msg: 'Update profile fail',
+                          variant: 'error',
+                        });
+                      }
+                    })
+                    .catch((err) => {
+                      console.log(err);
+                    });
+                } else {
+                  const payload = {
+                    id: user?.id,
+                    fullName: values.name,
+                    email: values.email,
+                    phone: values.phone,
+                    dob: moment(values.dob).format('YYYY-MM-DDTHH:mm[Z]'),
+                    isEnable: user?.isEnable,
+                    storeId: user?.storeId,
+                    imgUrl: user?.imgUrl,
+                  };
+                  updateUser(payload)
+                    .then((res) => {
+                      if (res.status == 200) {
+                        sendNotification({
+                          msg: 'Update profile success',
+                          variant: 'success',
+                        });
+                        // localStorage.setItem('updateProfile', res.data.url);
+                      } else {
+                        sendNotification({
+                          msg: 'Update profile fail',
+                          variant: 'error',
+                        });
+                      }
+                    })
+                    .catch((err) => console.log(err));
+                }
                 // register(payload)
                 //   .then((res) => {
                 //     if (res.status == 200) {
@@ -326,18 +532,48 @@ const index = () => {
                     </FormHelperText>
                   )}
                 </FormControl> */}
-                <Box sx={{ display: 'flex', gap: 4 }}>
-                  <Box>
-                    <TextField
-                      id='outlined-adornment-username-login'
-                      // value={user?.loginName}
-                      // defaultValue={user?.loginName}
-                      name='username'
-                      variant='outlined'
-                      autoFocus
-                      disabled
-                      label='Username'
-                    />
+                <Box sx={{ display: 'flex', gap: 1, flexDirection: 'column' }}>
+                  <Box sx={{ display: 'flex', gap: 4 }}>
+                    <FormControl fullWidth sx={{ ...customInput }}>
+                      <TextField
+                        id='outlined-adornment-username-login'
+                        value={values.username}
+                        // value={user?.loginName}
+                        defaultValue='Username'
+                        name='username'
+                        variant='outlined'
+                        disabled
+                        label='Username'
+                      />
+                    </FormControl>
+                    <FormControl
+                      fullWidth
+                      error={Boolean(touched.phone && errors.phone)}
+                      sx={{ ...customInput }}
+                    >
+                      <TextField
+                        id='outlined-adornment-phone-login'
+                        value={values.phone}
+                        name='phone'
+                        variant='outlined'
+                        defaultValue='Phone'
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        label='Phone'
+                        error={touched.phone && Boolean(errors.phone)}
+                      />
+                      {touched.phone && errors.phone && (
+                        <FormHelperText
+                          error
+                          id='standard-weight-helper-text-phone-login'
+                        >
+                          {errors.phone}
+                        </FormHelperText>
+                      )}
+                    </FormControl>
+                  </Box>
+
+                  <Box sx={{ display: 'flex', gap: 4 }}>
                     <FormControl
                       fullWidth
                       error={Boolean(touched.name && errors.name)}
@@ -349,63 +585,20 @@ const index = () => {
                         name='name'
                         variant='outlined'
                         onBlur={handleBlur}
+                        defaultValue='Full name'
                         onChange={handleChange}
                         label='Full name'
+                        error={touched.name && Boolean(errors.name)}
                       />
+                      {/* {errors.name && touched.name && (
+                        <p className='text-red-500'>{errors.name}</p>
+                      )} */}
                       {touched.name && errors.name && (
                         <FormHelperText
                           error
                           id='standard-weight-helper-text-name-login'
                         >
                           {errors.name}
-                        </FormHelperText>
-                      )}
-                    </FormControl>
-                    <FormControl
-                      fullWidth
-                      error={Boolean(touched.email && errors.email)}
-                      sx={{ ...customInput }}
-                    >
-                      <TextField
-                        id='outlined-adornment-email-login'
-                        value={values.email}
-                        name='email'
-                        variant='outlined'
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        label='Email'
-                      />
-                      {touched.email && errors.email && (
-                        <FormHelperText
-                          error
-                          id='standard-weight-helper-text-email-login'
-                        >
-                          {errors.email}
-                        </FormHelperText>
-                      )}
-                    </FormControl>
-                  </Box>
-                  <Box>
-                    <FormControl
-                      fullWidth
-                      error={Boolean(touched.phone && errors.phone)}
-                      sx={{ ...customInput }}
-                    >
-                      <TextField
-                        id='outlined-adornment-phone-login'
-                        value={values.phone}
-                        name='phone'
-                        variant='outlined'
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        label='Phone'
-                      />
-                      {touched.phone && errors.phone && (
-                        <FormHelperText
-                          error
-                          id='standard-weight-helper-text-phone-login'
-                        >
-                          {errors.phone}
                         </FormHelperText>
                       )}
                     </FormControl>
@@ -430,14 +623,15 @@ const index = () => {
                           name='dob'
                           label='Date of birth'
                           format='DD/MM/YYYY'
-                          value={values.date}
+                          // defaultValue='Date of birth'
+                          value={values.dob}
                           onChange={(value) =>
                             setFieldValue('dob', value, true)
                           }
                           slotProps={{
                             textField: {
                               variant: 'outlined',
-                              // error: formik.touched.date && Boolean(formik.errors.date),
+                              error: touched.dob && Boolean(errors.dob),
                               // helperText: formik.touched.date && formik.errors.date
                             },
                           }}
@@ -453,7 +647,47 @@ const index = () => {
                       )}
                     </FormControl>
                   </Box>
+                  <Box sx={{ display: 'flex', gap: 4 }}>
+                    <FormControl
+                      fullWidth
+                      error={Boolean(touched.email && errors.email)}
+                      sx={{ ...customInput }}
+                    >
+                      <TextField
+                        id='outlined-adornment-email-login'
+                        value={values.email}
+                        name='email'
+                        variant='outlined'
+                        onBlur={handleBlur}
+                        defaultValue='Email'
+                        onChange={handleChange}
+                        label='Email'
+                        error={touched.email && Boolean(errors.email)}
+                      />
+                      {touched.email && errors.email && (
+                        <FormHelperText
+                          error
+                          id='standard-weight-helper-text-email-login'
+                        >
+                          {errors.email}
+                        </FormHelperText>
+                      )}
+                    </FormControl>
+                    <FormControl fullWidth sx={{ ...customInput }}>
+                      <TextField
+                        id='outlined-adornment-role'
+                        value={checkRole(user?.role)}
+                        defaultValue='Role'
+                        fullWidth
+                        name='role'
+                        variant='outlined'
+                        disabled
+                        label='Role'
+                      />
+                    </FormControl>
+                  </Box>
                 </Box>
+
                 {/* <FormControl
               fullWidth
               error={Boolean(touched.password && errors.password)}
@@ -558,17 +792,17 @@ const index = () => {
                   </Box>
                 )}
 
-                <Box sx={{ mt: 2 }}>
+                <Box sx={{ mt: 2, textAlign: 'right' }}>
                   <Button
                     // disableElevation
                     disabled={isSubmitting}
-                    fullWidth
-                    size='large'
+                    // fullWidth
+                    // size='large'
                     type='submit'
                     variant='contained'
                     // color='secondary'
                   >
-                    Đăng ký
+                    Save change
                   </Button>
                 </Box>
                 {/* <Box sx={{ textAlign: 'center' }}>

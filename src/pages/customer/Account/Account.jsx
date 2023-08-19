@@ -3,7 +3,7 @@ import AccountPanel from './components/AccountPanel'
 
 const Account = () => {
   return (
-    <div className="flex overflow-hidden bg-[#f1f5f9] md:px-[10%] md:py-[3%]">
+    <div className="flex overflow-hidden bg-[#f1f5f9] md:px-[10%] md:py-[3%] min-h-screen">
 
       {/* Content area */}
       <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">

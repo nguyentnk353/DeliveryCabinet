@@ -4,6 +4,8 @@ import CartTransaction from './components/CartTransaction'
 import { useMount } from 'ahooks'
 import getLoginUser from '../../../services/Customer/getLoginUser'
 import getTransaction from '../../../services/Customer/getTransaction'
+import NoTransaction from '../../../assets/images/NoTransaction02.gif'
+
 
 const Wallet = () => {
 
@@ -15,6 +17,7 @@ const Wallet = () => {
     const [listTopUp, setListTopUp] = useState([]);
     const [listTrans, setListTrans] = useState([]);
     const [type, setType] = useState('all');
+    const [load, setLoad] = useState(0);
     const [dataTabs, setDataTabs] = useState({ all: 'bg-indigo-500 text-white', topup: 'bg-white text-slate-500', tran: 'bg-white text-slate-500' });
 
     const handleChangeTabs = (locationa) => {
@@ -43,7 +46,6 @@ const Wallet = () => {
                 getTransaction({ walletId: res.wallets[0]?.id, PageSize: pageSize })
                     .then((trans) => {
                         setListAll(trans.items);
-
                         setListTopUp(trans.items);
                         setTotal(trans?.totalRecord);
                         const listTopUpApi = trans.items.filter((e) => {
@@ -60,6 +62,7 @@ const Wallet = () => {
                         })
                         setListTopUp(listTopUpApi);
                         setListTrans(listTranApi);
+                        setLoad(1);
                     })
                     .catch((error) => {
                         console.log(error);
@@ -80,7 +83,6 @@ const Wallet = () => {
         getTransaction(payload)
             .then((trans) => {
                 setListAll(trans.items);
-                setListTopUp(trans.items)
                 setTotal(trans?.totalRecord)
                 const listTopUpApi = trans.items.filter((e) => {
                     if (e?.isIncrease) {
@@ -96,6 +98,7 @@ const Wallet = () => {
                 })
                 setListTopUp(listTopUpApi);
                 setListTrans(listTranApi)
+                setLoad(1)
             })
             .catch((error) => {
                 console.log(error);
@@ -103,7 +106,7 @@ const Wallet = () => {
     }
 
     return (
-        <div className="flex overflow-hidden bg-[#f1f5f9]">
+        <div className="flex overflow-hidden bg-[#f1f5f9] min-h-screen">
             <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
 
                 <main>
@@ -145,30 +148,72 @@ const Wallet = () => {
 
                             {
                                 type == 'all' &&
-                                listAll.map((tran, index) => (
-                                    <div key={index} className="space-y-2">
-                                        {/* Cart content */}
-                                        <CartTransaction transaction={tran} />
+                                (load != 0 ? (listAll?.length != 0 ?
+                                    listAll.map((tran, index) => (
+                                        <div key={index} className="space-y-2">
+                                            {/* Cart content */}
+                                            <CartTransaction transaction={tran} />
+                                        </div>
+                                    )) :
+                                    <div>
+                                        <div className='flex justify-center sm:hidden'>
+                                            <img src={NoTransaction} alt="No Item Found" width='80%' />
+                                        </div>
+                                        <div className='flex justify-center font-semibold'>Hiện chưa có giao dịch</div>
+                                    </div>) : (
+                                    <div role="status" className="max-w-md p-4 space-y-4 border border-gray-200 divide-y divide-gray-200 rounded shadow animate-pulse dark:divide-gray-700 md:p-6 dark:border-gray-700">
+                                        <div className="flex items-center justify-between">
+                                            <div>
+                                                <div className="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-24 mb-2.5"></div>
+                                                <div className="w-32 h-2 bg-gray-200 rounded-full dark:bg-gray-700"></div>
+                                            </div>
+                                            <div className="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-12"></div>
+                                        </div>
+                                        <div className="flex items-center justify-between pt-4">
+                                            <div>
+                                                <div className="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-24 mb-2.5"></div>
+                                                <div className="w-32 h-2 bg-gray-200 rounded-full dark:bg-gray-700"></div>
+                                            </div>
+                                            <div className="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-12"></div>
+                                        </div>
+                                        <span className="sr-only">Loading...</span>
                                     </div>
-                                ))
+                                )
+                                )
                             }
                             {
                                 type == 'topup' &&
-                                listTopUp.map((tran, index) => (
-                                    <div key={index} className="space-y-2">
-                                        {/* Cart content */}
-                                        <CartTransaction transaction={tran} />
+                                (listTopUp?.length != 0 ?
+                                    listTopUp.map((tran, index) => (
+                                        <div key={index} className="space-y-2">
+                                            {/* Cart content */}
+                                            <CartTransaction transaction={tran} />
+                                        </div>
+                                    )) :
+                                    <div>
+                                        <div className='flex justify-center sm:hidden'>
+                                            <img src={NoTransaction} alt="No Item Found" width='80%' />
+                                        </div>
+                                        <div className='flex justify-center font-semibold'>Hiện chưa có giao dịch</div>
                                     </div>
-                                ))
+                                )
                             }
                             {
                                 type == 'tran' &&
-                                listTrans.map((tran, index) => (
-                                    <div key={index} className="space-y-2">
-                                        {/* Cart content */}
-                                        <CartTransaction transaction={tran} />
+                                (listTrans?.length != 0 ?
+                                    listTrans.map((tran, index) => (
+                                        <div key={index} className="space-y-2">
+                                            {/* Cart content */}
+                                            <CartTransaction transaction={tran} />
+                                        </div>
+                                    )) :
+                                    <div>
+                                        <div className='flex justify-center sm:hidden'>
+                                            <img src={NoTransaction} alt="No Item Found" width='80%' />
+                                        </div>
+                                        <div className='flex justify-center font-semibold'>Hiện chưa có giao dịch</div>
                                     </div>
-                                ))
+                                )
                             }
 
                             <div className="py-6 flex justify-center">

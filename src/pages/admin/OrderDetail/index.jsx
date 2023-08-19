@@ -72,14 +72,19 @@ const index = () => {
       <Box sx={{ display: 'flex', gap: 2 }}>
         <Box sx={{ width: '70%' }}>
           <Paper sx={{ borderRadius: '8px', width: '100%' }}>
-            <Box sx={{ padding: '1rem' }}>
+            <Box sx={{ padding: '1rem 2rem' }}>
               <Typography variant='body1' sx={{ fontWeight: '700' }}>
                 Order Details
               </Typography>
             </Box>
             <Divider />
             <Box
-              sx={{ padding: '1rem', display: 'flex', gap: 2, width: '100%' }}
+              sx={{
+                padding: '1rem 2rem',
+                display: 'flex',
+                justifyContent: 'space-between',
+                width: '100%',
+              }}
             >
               <Box sx={{ width: '50%' }}>
                 <div
@@ -189,6 +194,9 @@ const index = () => {
                                 'DD/MM/YYYY [at] HH:mm'
                               )
                             : 'Overdue',
+                          4: dayjs(orderInfo?.endTime).format(
+                            'DD/MM/YYYY [at] HH:mm'
+                          ),
                         }[orderInfo.status]
                       }
                     </Typography>
@@ -208,13 +216,25 @@ const index = () => {
                     <Typography variant='body1' sx={{ opacity: '50%' }}>
                       Sub total
                     </Typography>
+                    <Typography variant='body1' sx={{ opacity: '50%' }}>
+                      Overdue fines (10%)
+                    </Typography>
                     <Typography variant='body1' sx={{ fontWeight: '600' }}>
                       Total
                     </Typography>
                   </Box>
                   <Box>
                     <Typography variant='body1' sx={{ fontWeight: '600' }}>
-                      {orderInfo?.total} (VND)
+                      {orderInfo?.status == 4
+                        ? (orderInfo?.total * 100) / 110
+                        : orderInfo?.total}{' '}
+                      (VND)
+                    </Typography>
+                    <Typography variant='body1' sx={{ fontWeight: '600' }}>
+                      {orderInfo?.status == 4
+                        ? orderInfo?.total - (orderInfo?.total * 100) / 110
+                        : 0}{' '}
+                      (VND)
                     </Typography>
                     <Typography variant='body1' sx={{ fontWeight: '600' }}>
                       {orderInfo?.total} (VND)
@@ -291,7 +311,7 @@ const index = () => {
                 Store Info
               </Typography>
             </Box>
-            <Box
+            {/* <Box
               sx={{
                 display: 'flex',
                 gap: 3,
@@ -309,6 +329,32 @@ const index = () => {
                 </Typography>
                 <Typography variant='body1' sx={{ fontWeight: '600' }}>
                   {locker?.store?.user?.phone}
+                </Typography>
+                <Typography variant='body1' sx={{ fontWeight: '600' }}>
+                  {locker?.store?.address}
+                </Typography>
+              </Box>
+            </Box> */}
+            <Box sx={{ padding: '8px 16px' }}>
+              <Box sx={{ display: 'flex' }}>
+                <Typography variant='body1' sx={{ minWidth: '80px' }}>
+                  Name:{' '}
+                </Typography>
+                <Typography variant='body1' sx={{ fontWeight: '600' }}>
+                  {locker?.store?.name}
+                </Typography>
+              </Box>
+              <Box sx={{ display: 'flex' }}>
+                <Typography variant='body1' sx={{ minWidth: '80px' }}>
+                  Phone:{' '}
+                </Typography>
+                <Typography variant='body1' sx={{ fontWeight: '600' }}>
+                  {locker?.store?.user?.phone}
+                </Typography>
+              </Box>
+              <Box sx={{ display: 'flex' }}>
+                <Typography variant='body1' sx={{ minWidth: '80px' }}>
+                  Address:{' '}
                 </Typography>
                 <Typography variant='body1' sx={{ fontWeight: '600' }}>
                   {locker?.store?.address}

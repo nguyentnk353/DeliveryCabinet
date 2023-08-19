@@ -3,6 +3,8 @@ import {
   Box,
   Button,
   Grid,
+  IconButton,
+  InputAdornment,
   Paper,
   TextField,
   Typography,
@@ -21,27 +23,31 @@ import CustomBreadcrumb from '../../../components/CustomBreadcrumb';
 import postImage from '../../../services/postImage';
 import useNotification from '../../../utils/useNotification';
 import { useNavigate } from 'react-router-dom';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 const CreateAccount = () => {
   const navigate = useNavigate();
   const [role, setRole] = useState({ name: 'Role', id: 0 });
+  const [showPassword, setShowPassword] = useState(false);
   const [dob, setDob] = useState();
   const [fileImg, setFileImg] = useState();
   const [msg, sendNotification] = useNotification();
-  const phoneRegExp =
-    /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
+  const phoneRegExp = /(((\+|)84)|0)(3|5|7|8|9)+([0-9]{8})\b/;
+
 
   const roleList = [
-    { name: 'Admin', id: 1 },
-    { name: 'Store Owner', id: 2 },
-    { name: 'Staff', id: 3 },
-    { name: 'Customer', id: 4 },
+    { name: 'Admin', key: 1 },
+    { name: 'Store Owner', key: 2 },
+    { name: 'Staff', key: 3 },
+    { name: 'Customer', key: 4 },
   ];
   const formik = useFormik({
     initialValues: {
       full_name: '',
       email: '',
       phone: '',
+      dob: null,
+      role: '',
       login_name: '',
       password: '',
       confirm_password: '',
@@ -55,6 +61,8 @@ const CreateAccount = () => {
       phone: Yup.string()
         .required('Required!')
         .matches(phoneRegExp, 'Phone number is not valid'),
+      dob: Yup.date().required('Date of Birth can not be empty'),
+      role: Yup.object().required('Role can not be empty'),
       login_name: Yup.string()
         .min(2, 'Login Name mininum 2 characters')
         .max(15, 'Login Name maximum 15 characters')
@@ -69,7 +77,6 @@ const CreateAccount = () => {
     onSubmit: (values) => {
       const formData = new FormData();
       formData.append('file', fileImg);
-
       const api = {
         loginName: values.login_name,
         password: values.password,
@@ -77,10 +84,9 @@ const CreateAccount = () => {
         fullName: values.full_name,
         email: values.email,
         phone: values.phone,
-        dob: dob,
-        role: role,
+        dob: values.dob,
+        role: values.role?.key,
       };
-
       postAccount(api)
         .then((res) => {
           if (res.status == 201) {
@@ -111,6 +117,13 @@ const CreateAccount = () => {
     { name: 'User', sidebar: 'User', to: '/admin/user' },
     { name: 'New user', sidebar: 'User', to: '/admin/new-user' },
   ];
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
 
   return (
     <Box>
@@ -174,10 +187,11 @@ const CreateAccount = () => {
                         onChange={formik.handleChange}
                         fullWidth
                         margin='normal'
-                        required
+                        error={formik.touched.full_name && Boolean(formik.errors.full_name)}
+                      // required
                       />
                       {formik.errors.full_name && formik.touched.full_name && (
-                        <p>{formik.errors.full_name}</p>
+                        <p className='text-red-500'>{formik.errors.full_name}</p>
                       )}
                     </Grid>
                     <Grid item xs={6}>
@@ -189,10 +203,11 @@ const CreateAccount = () => {
                         onChange={formik.handleChange}
                         fullWidth
                         margin='normal'
-                        required
+                        error={formik.touched.email && Boolean(formik.errors.email)}
+                      // required
                       />
                       {formik.errors.email && formik.touched.email && (
-                        <p>{formik.errors.email}</p>
+                        <p className='text-red-500'>{formik.errors.email}</p>
                       )}
                     </Grid>
                     <Grid item xs={6}>
@@ -204,10 +219,11 @@ const CreateAccount = () => {
                         onChange={formik.handleChange}
                         fullWidth
                         margin='normal'
-                        required
+                        error={formik.touched.phone && Boolean(formik.errors.phone)}
+                      // required
                       />
                       {formik.errors.phone && formik.touched.phone && (
-                        <p>{formik.errors.phone}</p>
+                        <p className='text-red-500'>{formik.errors.phone}</p>
                       )}
                     </Grid>
                     <Grid item xs={6}>
@@ -215,50 +231,74 @@ const CreateAccount = () => {
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                           <DemoContainer components={['DatePicker']}>
                             <DatePicker
+                              id='dob'
+                              name='dob'
                               label='Date Of Birth'
                               sx={{ width: '100%' }}
+                              value={formik.values.dob}
                               onChange={(newValue) => {
-                                setDob(moment(newValue.$d).format());
+                                // setDob(moment(newValue.$d).format());
+                                formik.setFieldValue('dob', moment(newValue.$d).format(), true)
+                              }}
+                              slotProps={{
+                                textField: {
+                                  variant: 'outlined',
+                                  error: formik.touched.dob && Boolean(formik.errors.dob),
+                                },
                               }}
                             />
                           </DemoContainer>
                         </LocalizationProvider>
                       </Box>
+                      {formik.errors.dob && formik.touched.dob && (
+                        <p className='text-red-500'>{formik.errors.dob}</p>
+                      )}
                     </Grid>
                     <Grid item xs={6}>
                       <Autocomplete
                         disablePortal
-                        id='Role'
+                        id='role'
+                        name='role'
                         sx={{ paddingTop: '4.5%' }}
                         options={roleList}
                         getOptionLabel={(option) => option.name}
+                        // value={formik.values.role}
+                        error={formik.touched.role && Boolean(formik.errors.role)}
                         onChange={(event, newValue) => {
-                          if (newValue) {
-                            setRole(newValue.id);
-                          }
+                          // console.log(newValue)
+                          formik.setFieldValue("role", newValue, true)
+                          // if (newValue) {
+                          //   // setRole(newValue.id);
+                          //   setFieldValue("role", newValue.id)
+
+                          // }
                         }}
                         isOptionEqualToValue={(option, value) =>
                           option.name === value.name && option.id === value.id
                         }
                         renderInput={(params) => (
-                          <TextField {...params} label='Role' />
+                          <TextField {...params} label='Role' name='role' error={formik.touched.role && Boolean(formik.errors.role)} />
                         )}
                       />
+                      {formik.errors.role && formik.touched.role && (
+                        <p className='text-red-500'>{formik.errors.role}</p>
+                      )}
                     </Grid>
                     <Grid item xs={6}>
                       <TextField
-                        label='Login Name'
+                        label='User Name'
                         id='login_name'
                         variant='outlined'
                         value={formik.values.login_name}
                         onChange={formik.handleChange}
                         fullWidth
                         margin='normal'
-                        required
+                        error={formik.touched.login_name && Boolean(formik.errors.login_name)}
+                      // required
                       />
                       {formik.errors.login_name &&
                         formik.touched.login_name && (
-                          <p>{formik.errors.login_name}</p>
+                          <p className='text-red-500'>{formik.errors.login_name}</p>
                         )}
                     </Grid>
                     <Grid item xs={6}>
@@ -267,13 +307,30 @@ const CreateAccount = () => {
                         id='password'
                         variant='outlined'
                         value={formik.values.password}
+                        type={showPassword ? 'text' : 'password'}
                         onChange={formik.handleChange}
                         fullWidth
                         margin='normal'
-                        required
+                        error={formik.touched.password && Boolean(formik.errors.password)}
+                        InputProps={{
+                          endAdornment: (
+                            <InputAdornment position='end'>
+                              <IconButton
+                                aria-label='toggle password visibility'
+                                onClick={handleClickShowPassword}
+                                onMouseDown={handleMouseDownPassword}
+                                edge='end'
+                                // size='large'
+                              >
+                                {showPassword ? <Visibility /> : <VisibilityOff />}
+                              </IconButton>
+                            </InputAdornment>
+                          ),
+                        }}
+                      // required
                       />
                       {formik.errors.password && formik.touched.password && (
-                        <p>{formik.errors.password}</p>
+                        <p className='text-red-500'>{formik.errors.password}</p>
                       )}
                     </Grid>
                     <Grid item xs={6}>
@@ -281,15 +338,32 @@ const CreateAccount = () => {
                         label='Confirm Password'
                         id='confirm_password'
                         variant='outlined'
+                        type={showPassword ? 'text' : 'password'}
                         value={formik.values.confirm_password}
                         onChange={formik.handleChange}
+                        error={formik.touched.confirm_password && Boolean(formik.errors.confirm_password)}
                         fullWidth
                         margin='normal'
-                        required
+                        InputProps={{
+                          endAdornment: (
+                            <InputAdornment position='end'>
+                              <IconButton
+                                aria-label='toggle password visibility'
+                                onClick={handleClickShowPassword}
+                                onMouseDown={handleMouseDownPassword}
+                                edge='end'
+                                // size='large'
+                              >
+                                {showPassword ? <Visibility /> : <VisibilityOff />}
+                              </IconButton>
+                            </InputAdornment>
+                          ),
+                        }}
+                      // required
                       />
                       {formik.errors.confirm_password &&
                         formik.touched.confirm_password && (
-                          <p>{formik.errors.confirm_password}</p>
+                          <p className='text-red-500'>{formik.errors.confirm_password}</p>
                         )}
                     </Grid>
                     <Box sx={{ marginLeft: 'auto', marginTop: '20px' }}>
