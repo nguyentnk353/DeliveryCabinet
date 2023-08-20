@@ -62,7 +62,7 @@ const UpdateAccount = () => {
       email: userInfo.email,
       phone: userInfo.phone,
       // login_name: userInfo.loginName,
-      dob: moment(userInfo?.dob),
+      dob: userInfo?.dob ? moment(userInfo?.dob) : null,
     },
     validationSchema: Yup.object({
       full_name: Yup.string()
@@ -236,7 +236,7 @@ const UpdateAccount = () => {
                           id='dob'
                           name='dob'
                           required
-                          value={formik.values.dob}
+                          value={formik?.values?.dob}
                           onChange={(value) => {
                             formik.setFieldValue('dob', value);
                           }}

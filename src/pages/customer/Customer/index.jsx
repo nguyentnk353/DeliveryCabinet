@@ -22,15 +22,16 @@ const index = () => {
             console.log(err);
         });
 });
-  return <>
+  return( <>
     <CustomerHeader02 />
     <div>
       <OverDueModal isOpenOverDue={isOpenOverDue} setIsOpenOverDue={setIsOpenOverDue} />
       <Outlet />
     </div>
 
-    <CustomerFooter />
-  </>;
+      <CustomerFooter />
+    </>
+  );
 };
 
 export default index;

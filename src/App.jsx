@@ -65,11 +65,11 @@ import SOStoreDetail from './pages/storeOwner/StoreDetail';
 import SOCabinetDetail from './pages/storeOwner/CabinetDetail';
 import SOOrder from './pages/storeOwner/OrderManagement';
 import CreateAccount from './pages/admin/CreateAccount/CreateAccount';
+import Profile from './components/Profile';
+import { CusAuthRoute } from './context/CusAuthRoute';
 import 'antd/dist/reset.css';
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import './index.css';
-import { CusAuthRoute } from './context/CusAuthRoute';
-
 function App() {
   return (
     <ProSidebarProvider>
@@ -106,6 +106,7 @@ function App() {
               }
             >
               <Route path='home' element={<AdminHome />} />
+              <Route path='profile' element={<Profile />} />
               <Route path='dashboard' element={<AdAnalytics />} />
               <Route path='user' element={<AccountManagement />} />
               <Route path='customer' element={<CustomerManagement />} />
@@ -166,6 +167,7 @@ function App() {
               <Route path='store-detail' element={<SOStoreDetail />} />
               <Route path='cabinet-detail' element={<SOCabinetDetail />} />
               <Route path='order' element={<SOOrder />} />
+              <Route path='profile' element={<Profile />} />
             </Route>
             <Route
               path='/staff'
@@ -178,6 +180,7 @@ function App() {
               }
             >
               <Route path='home' element={<StaffHome />} />
+              <Route path='profile' element={<Profile />} />
             </Route>
             <Route
               path='/customer'

@@ -31,10 +31,14 @@ import { Input } from 'antd';
 const { TextArea } = Input;
 
 const validationSchema = yup.object({
-  name: yup.string('Enter name').required('Store name is required'),
-  address: yup
-    .string('Enter detail address')
-    .required('Detail address is required'),
+  name: yup.string().required('Store name can not be empty'),
+  address: yup.string().required('Detail address can not be empty'),
+  province: yup.object().required('Province can not be empty'),
+  district: yup.object().required('District can not be empty'),
+  ward: yup.object().required('Ward can not be empty'),
+  storeType: yup.object().required('Store type can not be empty'),
+  area: yup.object().required('Area can not be empty'),
+  serviceType: yup.object().required('Service type can not be empty'),
 });
 
 const index = () => {
@@ -43,79 +47,89 @@ const index = () => {
   const theme = useTheme();
   const [msg, sendNotification] = useNotification();
   const pcolor = theme.palette.primary.main;
+  const errColor = theme.palette.error.main;
   const userInfo = location?.state?.storeOwnerInfo;
-  const [province, setProvince] = useState({ name: 'Choose province', key: 0 });
-  const [district, setDistrict] = useState({ name: 'Choose district', key: 0 });
-  const [ward, setWard] = useState({ name: 'Choose ward', key: 0 });
   const [provinceList, setProvinceList] = useState([]);
   const [districtList, setDistrictList] = useState([]);
   const [wardList, setWardList] = useState([]);
   const [storeTypeList, setStoreTypeList] = useState([]);
   const [areaList, setAreaList] = useState([]);
   const [serviceTypeList, setServiceTypeList] = useState([]);
-  const [storeType, setStoreType] = useState({});
-  const [area, setArea] = useState({});
-  const [serviceType, setServiceType] = useState({});
   const [image, setImage] = useState(null);
   const [fileApi, setFileApi] = useState(null);
-  const [fileBi, setFileBi] = useState(null);
   const [dnd, setDnd] = useState(false);
+  const [invalid, setInvalid] = useState(false);
+
+  function handleInvalidImg() {
+    if (!fileApi) {
+      setInvalid(true);
+    } else {
+      setInvalid(false);
+    }
+  }
 
   const formik = useFormik({
     initialValues: {
       name: '',
       address: '',
       description: '',
+      province: '',
+      district: '',
+      ward: '',
+      storeType: '',
+      area: '',
+      serviceType: '',
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
       const formData = new FormData();
       formData.append('file', fileApi);
-
-      postImage(formData)
-        .then((res) => {
-          if (res.status === 200) {
-            const api = {
-              name: values.name,
-              imgUrl: res.data.url,
-              province: province.name,
-              city: district.name,
-              district: ward.name,
-              street: '',
-              address: values.address,
-              description: values.description,
-              storeTypeId: storeType.id,
-              areaId: area.id,
-              serviceTypeId: serviceType.id,
-              userId: userInfo.id,
-            };
-            createStore(api)
-              .then((res) => {
-                if (res.status == 201) {
-                  navigate('/admin/user/user-information', {
-                    state: {
-                      accountInfo: userInfo,
-                    },
-                  });
-                  sendNotification({
-                    msg: 'Store create success',
-                    variant: 'success',
-                  });
-                } else {
-                  sendNotification({
-                    msg: 'Store create fail',
-                    variant: 'error',
-                  });
-                }
-              })
-              .catch((err) => {
-                console.log(err);
-              });
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      if (fileApi) {
+        postImage(formData)
+          .then((res) => {
+            if (res.status === 200) {
+              const api = {
+                name: values.name,
+                imgUrl: res.data.url,
+                province: values.province.name,
+                city: values.district.name,
+                district: values.ward.name,
+                street: '',
+                address: values.address,
+                description: values.description,
+                storeTypeId: values.storeType.id,
+                areaId: values.area.id,
+                serviceTypeId: values.serviceType.id,
+                userId: userInfo.id,
+              };
+              createStore(api)
+                .then((res) => {
+                  if (res.status == 201) {
+                    navigate('/admin/user/user-information', {
+                      state: {
+                        accountInfo: userInfo,
+                      },
+                    });
+                    sendNotification({
+                      msg: 'Store create success',
+                      variant: 'success',
+                    });
+                  } else {
+                    sendNotification({
+                      msg: 'Store create fail',
+                      variant: 'error',
+                    });
+                  }
+                })
+                .catch((err) => {
+                  console.log(err);
+                });
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
     },
   });
 
@@ -295,10 +309,10 @@ const index = () => {
                   sx={{
                     fontWeight: '600',
                     marginBottom: '0.5rem',
+                    color: invalid ? errColor : 'black',
                   }}
                 >
-                  Cover image
-                  {/* <span style={{ color: 'red' }}>*</span> */}
+                  Cover image *{/* <span style={{ color: 'red' }}>*</span> */}
                 </Typography>
                 <Box
                   onClick={handleClick}
@@ -311,7 +325,9 @@ const index = () => {
                     alignItems: 'center',
                     width: '100%',
                     padding: '0 3%',
-                    border: ' 2px lightgrey dashed',
+                    border: invalid
+                      ? `2px ${errColor} dashed`
+                      : '2px lightgrey dashed',
                     borderRadius: '8px',
                     ':hover': {
                       cursor: 'pointer',
@@ -412,6 +428,17 @@ const index = () => {
                     </Box>
                   )}
                 </Box>
+                {invalid && (
+                  <Typography
+                    variant='caption'
+                    sx={{
+                      color: errColor,
+                      margin: '3px 14px 0 14px',
+                    }}
+                  >
+                    Image can not be empty
+                  </Typography>
+                )}
               </Box>
             </Box>
             <Divider />
@@ -438,12 +465,24 @@ const index = () => {
                   options={provinceList}
                   getOptionLabel={(option) => option.name}
                   onChange={(_, e) => {
-                    setProvince(e);
+                    // setProvince(e);
+                    formik.setFieldValue('province', e, true);
                     callApiDistrict(host + 'p/' + e.code + '?depth=2');
                   }}
                   sx={{ width: '100%' }}
                   renderInput={(params) => (
-                    <TextField {...params} label='Province' />
+                    <TextField
+                      {...params}
+                      label='Province'
+                      required
+                      error={
+                        formik.touched.province &&
+                        Boolean(formik.errors.province)
+                      }
+                      helperText={
+                        formik.touched.province && formik.errors.province
+                      }
+                    />
                   )}
                 />
                 <Autocomplete
@@ -452,12 +491,23 @@ const index = () => {
                   options={districtList}
                   getOptionLabel={(option) => option.name}
                   onChange={(_, e) => {
-                    setDistrict(e);
+                    formik.setFieldValue('district', e, true);
                     callApiWard(host + 'd/' + e.code + '?depth=2');
                   }}
                   sx={{ width: '100%' }}
                   renderInput={(params) => (
-                    <TextField {...params} label='District' />
+                    <TextField
+                      {...params}
+                      label='District'
+                      required
+                      error={
+                        formik.touched.district &&
+                        Boolean(formik.errors.district)
+                      }
+                      helperText={
+                        formik.touched.district && formik.errors.district
+                      }
+                    />
                   )}
                 />
                 <Autocomplete
@@ -466,11 +516,17 @@ const index = () => {
                   options={wardList}
                   getOptionLabel={(option) => option.name}
                   onChange={(_, e) => {
-                    setWard(e);
+                    formik.setFieldValue('ward', e, true);
                   }}
                   sx={{ width: '100%' }}
                   renderInput={(params) => (
-                    <TextField {...params} label='Ward' />
+                    <TextField
+                      {...params}
+                      label='Ward'
+                      required
+                      error={formik.touched.ward && Boolean(formik.errors.ward)}
+                      helperText={formik.touched.ward && formik.errors.ward}
+                    />
                   )}
                 />
               </Box>
@@ -510,11 +566,22 @@ const index = () => {
                   options={storeTypeList}
                   getOptionLabel={(option) => option.name}
                   onChange={(_, e) => {
-                    setStoreType(e);
+                    formik.setFieldValue('storeType', e, true);
                   }}
                   sx={{ width: '100%' }}
                   renderInput={(params) => (
-                    <TextField {...params} label='Store type' />
+                    <TextField
+                      {...params}
+                      label='Store type'
+                      required
+                      error={
+                        formik.touched.storeType &&
+                        Boolean(formik.errors.storeType)
+                      }
+                      helperText={
+                        formik.touched.storeType && formik.errors.storeType
+                      }
+                    />
                   )}
                 />
                 <Autocomplete
@@ -523,11 +590,17 @@ const index = () => {
                   options={areaList}
                   getOptionLabel={(option) => option.name}
                   onChange={(_, e) => {
-                    setArea(e);
+                    formik.setFieldValue('area', e, true);
                   }}
                   sx={{ width: '100%' }}
                   renderInput={(params) => (
-                    <TextField {...params} label='Area' />
+                    <TextField
+                      {...params}
+                      label='Area'
+                      required
+                      error={formik.touched.area && Boolean(formik.errors.area)}
+                      helperText={formik.touched.area && formik.errors.area}
+                    />
                   )}
                 />
                 <Autocomplete
@@ -537,11 +610,22 @@ const index = () => {
                   options={serviceTypeList}
                   getOptionLabel={(option) => option.name}
                   onChange={(_, e) => {
-                    setServiceType(e);
+                    formik.setFieldValue('serviceType', e, true);
                   }}
                   sx={{ width: '100%' }}
                   renderInput={(params) => (
-                    <TextField {...params} label='Service type' />
+                    <TextField
+                      {...params}
+                      label='Service type'
+                      required
+                      error={
+                        formik.touched.serviceType &&
+                        Boolean(formik.errors.serviceType)
+                      }
+                      helperText={
+                        formik.touched.serviceType && formik.errors.serviceType
+                      }
+                    />
                   )}
                 />
               </Box>
@@ -568,7 +652,11 @@ const index = () => {
             >
               Cancel
             </Button>
-            <Button type='submit' variant='contained'>
+            <Button
+              type='submit'
+              variant='contained'
+              onClick={handleInvalidImg}
+            >
               Create new store
             </Button>
           </Box>

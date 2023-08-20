@@ -219,7 +219,7 @@ const LockerTable = ({ search, isEnable }) => {
   return (
     <Box>
       <AssignModal open={open2} setOpen={setOpen2} field={field2} />
-      <Box>
+      {/* <Box>
         <Modal
           open={open}
           onClose={handleClose}
@@ -303,7 +303,7 @@ const LockerTable = ({ search, isEnable }) => {
             </Box>
           </Box>
         </Modal>
-      </Box>
+      </Box> */}
       <Box>
         <Modal
           open={open}
@@ -320,7 +320,7 @@ const LockerTable = ({ search, isEnable }) => {
               fontWeight='bold'
               color={blue[500]}
             >
-              UPDATE LOCKER
+              UPDATE CABINET
             </Typography>
             <Box
               component='form'

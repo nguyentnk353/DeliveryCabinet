@@ -23,12 +23,43 @@ import {
   PersonOutlineOutlined,
 } from '@mui/icons-material';
 import LogoutFunction from '../../utils/LogoutFunction';
+import { useNavigate } from 'react-router-dom';
+import { useMount } from 'ahooks';
+import getUserList from '../../services/getUserList';
+import { useState } from 'react';
+import useNotification from '../../utils/useNotification';
 
 const index = ({ toggle, setToggle }) => {
+  const navigate = useNavigate();
   const loginUser = JSON.parse(localStorage.getItem('loginUser'));
+  const [user, setUser] = useState(null);
   const sidebarToggle = JSON.parse(localStorage.getItem('sidebarToggle'));
   const [anchorEl, setAnchorEl] = React.useState(null);
 
+  useMount(() => {
+    const payload = {
+      Id: loginUser?.Id,
+    };
+    getUserList(payload)
+      .then((res) => {
+        setUser(res.items[0]);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  });
+  // useEffect(() => {
+  //   const payload = {
+  //     Id: loginUser?.Id,
+  //   };
+  //   getUserList(payload)
+  //     .then((res) => {
+  //       setUser(res.items[0]);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // }, []);
   const logout = LogoutFunction();
 
   const handleMenu = (event) => {
@@ -44,6 +75,12 @@ const index = ({ toggle, setToggle }) => {
   }
   function handleDrawerClose() {
     setToggle(false);
+  }
+  function toProfile() {
+    handleClose();
+    loginUser.Role == 1
+      ? navigate('/admin/profile', { replace: true })
+      : navigate('/store-owner/profile', { replace: true });
   }
 
   return (
@@ -124,10 +161,10 @@ const index = ({ toggle, setToggle }) => {
             sx={{ display: 'flex', gap: 1, padding: 1, borderRadius: '8px' }}
             onClick={handleMenu}
           >
-            {loginUser ? (
+            {user ? (
               <Avatar
                 alt='login user avatar'
-                src={loginUser?.ImgUrl}
+                src={user?.imgUrl}
                 sx={{ width: '34px', height: '34px' }}
               />
             ) : (
@@ -136,7 +173,7 @@ const index = ({ toggle, setToggle }) => {
               </Avatar>
             )}
             <Typography variant='body1' sx={{ fontWeight: '600' }}>
-              {loginUser?.Name}
+              {user?.fullName}
             </Typography>
             <KeyboardArrowDown />
           </ButtonBase>
@@ -185,11 +222,11 @@ const index = ({ toggle, setToggle }) => {
             width: '100%',
           }}
         >
-          {loginUser ? (
+          {user ? (
             <Avatar
               alt='login user avatar'
               variant='rounded'
-              src={loginUser?.ImgUrl}
+              src={user?.imgUrl}
               sx={{ width: '40px!important', height: '40px!important' }}
             />
           ) : (
@@ -199,7 +236,7 @@ const index = ({ toggle, setToggle }) => {
           )}
           <Box>
             <Typography variant='body1' sx={{ fontWeight: '600' }}>
-              {loginUser?.Name}
+              {user?.fullName}
             </Typography>
             <Typography variant='body2' sx={{ fontWeight: '400' }}>
               {loginUser?.Role == 1 ? 'Admin' : 'Store owner'}
@@ -207,7 +244,7 @@ const index = ({ toggle, setToggle }) => {
           </Box>
         </Box>
         <Divider />
-        <MenuItem onClick={handleClose}>
+        <MenuItem onClick={toProfile}>
           <ListItemIcon>
             <PersonOutlineOutlined fontSize='small' />
           </ListItemIcon>

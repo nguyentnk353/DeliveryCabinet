@@ -304,13 +304,13 @@ const LockerTable = ({ search, isEnable, storeId }) => {
                       },
                       cursor: 'pointer',
                     }}
-                    // onClick={() =>
-                    //   navigate('/admin/locker', {
-                    //     state: {
-                    //       storeId: row.id,
-                    //     },
-                    //   })
-                    // }
+                    onClick={() =>
+                      navigate('/admin/cabinet-detail', {
+                        state: {
+                          cabinetInfo: row,
+                        },
+                      })
+                    }
                   >
                     <TableCell component='th' scope='row'>
                       {row.name}
