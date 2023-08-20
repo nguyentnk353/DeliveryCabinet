@@ -354,14 +354,17 @@ const OrderDetail = () => {
                     <span> Shipping Cost (+) </span>
                     <span> $10.00 </span>
                   </p> */}
-                  <p className='border-stroke dark:border-strokedark mb-4 mt-2 flex justify-between border-t pt-6 font-medium text-black dark:text-white'>
+                  {(order?.status == 2 || order?.status == 4) &&
+                    <p className='border-stroke dark:border-strokedark mb-4 mt-2 flex justify-between border-t pt-6 font-medium text-black dark:text-white'>
                     <span> Đã thanh toán: </span>
-                    <span> {order?.total} VNĐ</span>
+                    <span> {order?.total} VND</span>
                   </p>
+                  }
+                  
                   {(order?.status != 2 && order?.status != 4) && 
                     <p className='border-stroke dark:border-strokedark mb-4 flex justify-between font-medium text-black dark:text-white'>
-                      <span> Tổng tiền: </span>
-                      <span> {currentPrice} VNĐ</span>
+                      <span> Tổng tiền thuê hiện tại: </span>
+                      <span> {currentPrice} VND</span>
                     </p>
                   }
                   

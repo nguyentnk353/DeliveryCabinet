@@ -47,7 +47,7 @@ const CardsSidebar = ({info}) => {
                                         <div className="text-sm">Số dư: </div>
                                         <div className="flex items-center whitespace-nowrap">
                                             {/* <div className="w-2 h-2 rounded-full bg-emerald-500 mr-2" /> */}    
-                                            <div className="text-sm font-medium text-slate-800">{wallet?.balance ? (<span>{new Intl.NumberFormat("nb-NO").format(wallet?.balance)}</span>) : (<span>0</span>)} VNĐ</div>
+                                            <div className="text-sm font-medium text-slate-800">{wallet?.balance ? (<span>{new Intl.NumberFormat("nb-NO").format(wallet?.balance)}</span>) : (<span>0</span>)} VND</div>
                                         </div>
                                     </li>
                                 </ul>
