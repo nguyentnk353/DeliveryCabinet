@@ -81,9 +81,9 @@ const TransactionDetailModal = ({ isOpen, setIsOpen, transaction }) => {
                                                         </div>
                                                         {transaction?.paymentId ?
                                                             (
-                                                                <div className="text-2xl font-semibold text-red-500 mb-1">- {new Intl.NumberFormat("nb-NO").format(transaction?.amount)} VNĐ</div>
+                                                                <div className="text-2xl font-semibold text-red-500 mb-1">- {new Intl.NumberFormat("nb-NO").format(transaction?.amount)} VND</div>
                                                             ) : (
-                                                                <div className="text-2xl font-semibold text-emerald-500 mb-1">+ {new Intl.NumberFormat("nb-NO").format(transaction?.amount)} VNĐ</div>
+                                                                <div className="text-2xl font-semibold text-emerald-500 mb-1">+ {new Intl.NumberFormat("nb-NO").format(transaction?.amount)} VND</div>
                                                             )
                                                         }
                                                         <div className="text-sm font-medium text-slate-800 mb-3">Giao dịch DC Pay</div>
@@ -125,7 +125,7 @@ const TransactionDetailModal = ({ isOpen, setIsOpen, transaction }) => {
                                                         </div>
                                                         <div className="flex justify-between space-x-1">
                                                             <span className="italic">Số tiền:</span>
-                                                            <span className="font-medium text-slate-700 text-right">{new Intl.NumberFormat("nb-NO").format(transaction?.amount)} VNĐ</span>
+                                                            <span className="font-medium text-slate-700 text-right">{new Intl.NumberFormat("nb-NO").format(transaction?.amount)} VND</span>
                                                         </div>
                                                         <div className="flex justify-between space-x-1">
                                                             <span className="italic">Thời gian:</span>

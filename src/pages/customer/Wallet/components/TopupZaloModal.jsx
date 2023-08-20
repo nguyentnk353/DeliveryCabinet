@@ -50,7 +50,7 @@ const TopupZaloModal = ({ isOpen, setIsOpen }) => {
                                         <label htmlFor="subscribe-form" className="sr-only">Nhập số tiền</label>
                                         <input id="topupmoney" type="text"
                                             className={`form-input w-full px-2 py-1 ${formik.touched.topupmoney && Boolean(formik.errors.topupmoney) == true ? "border-red-500 text-red-500" : ""}`} 
-                                            placeholder='VNĐ'
+                                            placeholder='VND'
                                             onChange={formik.handleChange}
                                             defaultValue={formik.values.topupmoney}
                                         />
