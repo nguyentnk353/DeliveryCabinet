@@ -11,13 +11,14 @@ const StyledAvatar = styled(Avatar)(({ theme }) => ({
   width: theme.spacing(25),
   height: theme.spacing(25),
   margin: "auto",
+  cursor:'pointer',
 }));
 
 const StyledButton = styled(Button)({
   display: "none",
 });
 
-const UpLoadImage = () => {
+const UpLoadImage = ({getFlie, setFile}) => {
   const location = useLocation();
   const [loading, setLoading] = useState(false);
   const [image, setImage] = useState(location?.state?.accountInfo?.imgUrl || defaultAvatar);
@@ -25,6 +26,7 @@ const UpLoadImage = () => {
   const handleImageChange = (event) => {
     setLoading(true);
     const file = event.target.files[0];
+    setFile(file);
     const reader = new FileReader();
     reader.onload = () => {
       setImage(reader.result);

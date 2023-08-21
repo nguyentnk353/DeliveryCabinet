@@ -110,7 +110,9 @@ const index = () => {
       </IconButton>
     </React.Fragment>
   );
-  const bcList = [{ name: 'Order', sidebar: 'Order', to: '/admin/order' }];
+  const bcList = [
+    { name: 'Order', sidebar: 'Order', to: '/store-owner/order' },
+  ];
   return (
     <Box>
       <Box
