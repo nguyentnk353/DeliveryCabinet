@@ -21,8 +21,7 @@ import { blue, red } from '@mui/material/colors';
 import { useNavigate } from 'react-router-dom';
 import deleteAccount from '../../../../services/deleteAccount';
 import useNotification from '../../../../utils/useNotification';
-import getStaffByStore from '../../../../services/getStaffByStore';
-import getStaffByOwner from '../../../../services/storeOwner/getStaffByOwner';
+import getStaffByOwner from './../../../../services/storeOwner/getStaffByOwner';
 
 const TableAccount = ({ status, search, role }) => {
   const [table, setTable] = useState([]);
@@ -45,7 +44,7 @@ const TableAccount = ({ status, search, role }) => {
     const payload = {
       PageIndex: page + 1,
       PageSize: rpg,
-      Role: 3,
+      Role: role,
       IsEnable: status,
     };
     getStaffByOwner(payload)
@@ -83,15 +82,15 @@ const TableAccount = ({ status, search, role }) => {
       ? {
           PageIndex: 1,
           PageSize: rpg,
-          Role: 3,
-          Name: search,
+          Role: role,
+          search: search,
           IsEnable: status,
         }
       : {
           PageIndex: page + 1,
           PageSize: rpg,
-          Role: 3,
-          Name: search,
+          Role: role,
+          search: search,
           IsEnable: status,
         };
     getStaffByOwner(payload)
@@ -129,11 +128,11 @@ const TableAccount = ({ status, search, role }) => {
             msg: 'Account delete success',
             variant: 'success',
           });
-          getStaffByOwner({
+          getAccountList({
             PageIndex: page + 1,
             PageSize: rpg,
-            Role: 3,
-            Name: search,
+            Role: role,
+            search: search,
             IsEnable: status,
           })
             .then((res) => {
@@ -237,7 +236,7 @@ const TableAccount = ({ status, search, role }) => {
                     <IconButton
                       onClick={(e) => {
                         e.stopPropagation();
-                        navigate('/admin/update-user', {
+                        navigate('/store-owner/update-staff', {
                           state: {
                             accountInfo: row,
                           },

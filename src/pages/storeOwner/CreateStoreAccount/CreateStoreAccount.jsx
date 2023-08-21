@@ -18,16 +18,14 @@ import UploadAvatar from './components/UploadAvatar/UploadAvatar';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import moment from 'moment/moment';
-import postAccount from './../../../services/postAccount';
+import postAccount from '../../../services/postAccount';
 import CustomBreadcrumb from '../../../components/CustomBreadcrumb';
 import postImage from '../../../services/postImage';
 import useNotification from '../../../utils/useNotification';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 
-const CreateAccount = () => {
-  const location = useLocation();
-  const storeInfo = location?.state?.storeInfo;
+const CreateStoreAccount = () => {
   const navigate = useNavigate();
   const [role, setRole] = useState({ name: 'Role', id: 0 });
   const [showPassword, setShowPassword] = useState(false);
@@ -114,22 +112,10 @@ const CreateAccount = () => {
         });
     },
   });
-  const bcList = storeInfo
-    ? [
-        { name: 'Store', sidebar: 'Store', to: '/store-owner/store' },
-        {
-          name: 'Store detail',
-          sidebar: 'Store',
-          to: '/store-owner/store-detail',
-          state: storeInfo,
-        },
-        { name: 'New staff', sidebar: 'Store', to: '/store-owner/new-staff' },
-      ]
-    : [
-        { name: 'Staff', sidebar: 'Staff', to: '/store-owner/staff' },
-
-        { name: 'New staff', sidebar: 'Store', to: '/store-owner/new-staff' },
-      ];
+  const bcList = [
+    { name: 'User', sidebar: 'User', to: '/admin/user' },
+    { name: 'New user', sidebar: 'User', to: '/admin/new-user' },
+  ];
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
   };
@@ -440,4 +426,4 @@ const CreateAccount = () => {
   );
 };
 
-export default CreateAccount;
+export default CreateStoreAccount;

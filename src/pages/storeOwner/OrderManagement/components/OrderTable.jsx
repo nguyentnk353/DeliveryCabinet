@@ -191,7 +191,7 @@ const OrderTable = ({ search, isEnable }) => {
                     cursor: 'pointer',
                   }}
                   onClick={() =>
-                    navigate('/admin/order-detail', {
+                    navigate('/store-owner/order-detail', {
                       state: {
                         orderInfo: row,
                       },

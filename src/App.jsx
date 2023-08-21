@@ -55,15 +55,21 @@ import ShowAccInfo from './pages/admin/AccountManagement/ShowAccInfo/ShowAccInfo
 import UpdateCustomer from './pages/admin/CustomerManagement/components/UpdateAccount/UpdateAccount';
 import ShowCustomerInfo from './pages/admin/CustomerManagement/ShowAccInfo/ShowAccInfo';
 import AdAnalytics from './pages/admin/Analytics';
+import AdDashboard from './pages/admin/Dashboard';
 import SOAnalytics from './pages/storeOwner/Analytics';
+import SODashboard from './pages/storeOwner/Dashboard';
 import StaffManagement from './pages/storeOwner/AccountManagement/AccountManagement';
 import CreateStaff from './pages/storeOwner/CreateAccount/CreateAccount';
-import UpdateStaff from './pages/storeOwner/StoreDetail/components/UpdateAccount/UpdateAccount';
-import ShowStaffInfo from './pages/storeOwner/StoreDetail/ShowAccInfo/ShowAccInfo';
+import UpdateStaff from './pages/storeOwner/AccountManagement/components/UpdateAccount/UpdateAccount';
+import ShowStaffInfo from './pages/storeOwner/AccountManagement/ShowAccInfo/ShowAccInfo';
+import CreateStoreStaff from './pages/storeOwner/CreateStoreAccount/CreateStoreAccount';
+import UpdateStoreStaff from './pages/storeOwner/StoreDetail/components/UpdateAccount/UpdateAccount';
+import ShowStoreStaffInfo from './pages/storeOwner/StoreDetail/ShowAccInfo/ShowAccInfo';
 import SOStoreManagement from './pages/storeOwner/StoreManagement';
 import SOStoreDetail from './pages/storeOwner/StoreDetail';
 import SOCabinetDetail from './pages/storeOwner/CabinetDetail';
 import SOOrder from './pages/storeOwner/OrderManagement';
+import SOOrderDetail from './pages/storeOwner/OrderDetail';
 import CreateAccount from './pages/admin/CreateAccount/CreateAccount';
 import Profile from './components/Profile';
 import { CusAuthRoute } from './context/CusAuthRoute';
@@ -107,7 +113,8 @@ function App() {
             >
               <Route path='home' element={<AdminHome />} />
               <Route path='profile' element={<Profile />} />
-              <Route path='dashboard' element={<AdAnalytics />} />
+              {/* <Route path='dashboard' element={<AdAnalytics />} /> */}
+              <Route path='dashboard' element={<AdDashboard />} />
               <Route path='user' element={<AccountManagement />} />
               <Route path='customer' element={<CustomerManagement />} />
               <Route path='new-user' element={<CreateAccount />} />
@@ -155,7 +162,7 @@ function App() {
               }
             >
               <Route path='home' element={<StoreOwnerHome />} />
-              <Route path='dashboard' element={<SOAnalytics />} />
+              <Route path='dashboard' element={<SODashboard />} />
               <Route path='staff' element={<StaffManagement />} />
               <Route path='new-staff' element={<CreateStaff />} />
               <Route path='update-staff' element={<UpdateStaff />} />
@@ -165,8 +172,15 @@ function App() {
               />
               <Route path='store' element={<SOStoreManagement />} />
               <Route path='store-detail' element={<SOStoreDetail />} />
+              <Route path='store/new-staff' element={<CreateStoreStaff />} />
+              <Route path='store/update-staff' element={<UpdateStoreStaff />} />
+              <Route
+                path='store/staff-information'
+                element={<ShowStoreStaffInfo />}
+              />
               <Route path='cabinet-detail' element={<SOCabinetDetail />} />
               <Route path='order' element={<SOOrder />} />
+              <Route path='order-detail' element={<SOOrderDetail />} />
               <Route path='profile' element={<Profile />} />
             </Route>
             <Route

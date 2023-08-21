@@ -262,7 +262,7 @@ const TableAccount = ({ status, role, storeId, storeInfo }) => {
                     cursor: 'pointer',
                   }}
                   onClick={() =>
-                    navigate('/store-owner/staff/staff-information', {
+                    navigate('/store-owner/store/staff-information', {
                       state: {
                         accountInfo: row,
                         storeInfo: storeInfo,
@@ -307,7 +307,7 @@ const TableAccount = ({ status, role, storeId, storeInfo }) => {
                       <IconButton
                         onClick={(e) => {
                           e.stopPropagation();
-                          navigate('/store-owner/update-staff', {
+                          navigate('/store-owner/store/update-staff', {
                             state: {
                               accountInfo: row,
                               storeInfo: storeInfo,
