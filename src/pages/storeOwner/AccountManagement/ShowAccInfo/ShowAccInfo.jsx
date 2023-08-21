@@ -38,11 +38,11 @@ const ShowAccInfo = () => {
     margin: 'auto',
   }));
   const bcList = [
-    { name: 'User', sidebar: 'User', to: '/admin/user' },
+    { name: 'Staff', sidebar: 'Staff', to: '/store-owner/staff' },
     {
-      name: 'User detail',
-      sidebar: 'User',
-      to: '/admin/user/user-information',
+      name: 'Staff detail',
+      sidebar: 'Staff',
+      to: '/store-owner/staff/staff-information',
     },
   ];
   return (
@@ -123,7 +123,7 @@ const ShowAccInfo = () => {
                     variant='text'
                     sx={{ p: '0 20px 0 0' }}
                     onClick={() =>
-                      navigate('/admin/update-user', {
+                      navigate('/store-owner/update-staff', {
                         state: {
                           accountInfo: userInfo,
                         },

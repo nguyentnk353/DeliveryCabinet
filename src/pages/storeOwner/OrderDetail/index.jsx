@@ -20,8 +20,8 @@ const index = () => {
   };
 
   const bcList = [
-    { name: 'Order', sidebar: 'Order', to: '/admin/order' },
-    { name: 'Order detail', sidebar: 'Order', to: '/admin/order-detail' },
+    { name: 'Order', sidebar: 'Order', to: '/store-owner/order' },
+    { name: 'Order detail', sidebar: 'Order', to: '/store-owner/order-detail' },
   ];
 
   useMount(() => {

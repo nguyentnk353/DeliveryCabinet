@@ -17,6 +17,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TableAccount from './components/TableAccount';
 import CustomBreadcrumb from '../../../components/CustomBreadcrumb';
+import ModalNewUser from '../components/ModalNewUser';
+
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -61,9 +63,10 @@ const AccountManagement = () => {
   const theme = useTheme();
   const navigate = useNavigate();
   const [value, setValue] = useState(0);
+  const [open, setOpen] = useState(false);
   const [role, setRole] = useState({ name: '', id: undefined });
   const [searchText, setSearchText] = useState();
-
+  const handleOpen = () => setOpen(true);
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -72,6 +75,7 @@ const AccountManagement = () => {
   ];
   return (
     <Box>
+      <ModalNewUser open={open} setOpen={setOpen} />
       <Box
         sx={{
           marginBottom: '1.5rem',
@@ -95,8 +99,9 @@ const AccountManagement = () => {
           variant='contained'
           startIcon={<Add />}
           onClick={() => navigate('/store-owner/new-staff', { replace: true })}
+          // onClick={() => handleOpen()}
         >
-          New staff
+          New user
         </Button>
       </Box>
 
@@ -123,7 +128,9 @@ const AccountManagement = () => {
           sx={{
             p: '2%',
             display: 'flex',
-            justifyContent: 'space-between',
+            // justifyContent: 'space-between',
+            alignItems: 'center',
+            gap: 1,
           }}
         >
           {/* <Autocomplete
@@ -153,9 +160,7 @@ const AccountManagement = () => {
             variant='outlined'
             onChange={(e) => setSearchText(e.target.value)}
             value={searchText}
-            sx={{
-              width: '100%',
-            }}
+            fullWidth
             InputProps={{
               startAdornment: (
                 <InputAdornment position='start'>
@@ -168,7 +173,7 @@ const AccountManagement = () => {
             <Button
               color='error'
               startIcon={<DeleteOutline />}
-              sx={{ marginLeft: '1rem', paddingTop: '15px' }}
+              sx={{ marginLeft: '1rem' }}
               onClick={() => {
                 setRole({ name: '', id: undefined });
                 setSearchText('');

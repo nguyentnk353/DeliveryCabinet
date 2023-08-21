@@ -32,6 +32,7 @@ const ShowAccInfo = () => {
     ? location?.state?.stateLink
     : null;
   const storeInfo = location?.state?.storeInfo;
+
   const StyledAvatar = styled(Avatar)(({ theme }) => ({
     width: theme.spacing(25),
     height: theme.spacing(25),
@@ -130,10 +131,9 @@ const ShowAccInfo = () => {
                     variant='text'
                     sx={{ p: '0 20px 0 0' }}
                     onClick={() =>
-                      navigate('/store-owner/update-staff', {
+                      navigate('/store-owner/store/update-staff', {
                         state: {
                           accountInfo: userInfo,
-                          storeInfo: storeInfo,
                         },
                       })
                     }
