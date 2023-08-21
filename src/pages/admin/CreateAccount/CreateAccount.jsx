@@ -38,7 +38,7 @@ const CreateAccount = () => {
   const roleList = [
     { name: 'Admin', key: 1 },
     { name: 'Store Owner', key: 2 },
-    { name: 'Staff', key: 3 },
+    // { name: 'Staff', key: 3 },
     { name: 'Customer', key: 4 },
   ];
   const formik = useFormik({

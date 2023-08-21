@@ -18,6 +18,8 @@ import getAllLocker from '../../../services/Customer/getAllLocker';
 const StoreInformation = () => {
   const location = useLocation();
   const [storeInfo, setStoreInfo] = useState();
+  const [load, setLoad] = useState(0);
+  const [total, setTotal] = useState(0);
   const [showMoreModal, setShowMoreModal] = useState(false);
   const [orderBoxInfo, setOrderBoxInfo] = useState();
   const [rentBoxModalOpen, setRentBoxModalOpen] = useState(false);
@@ -28,6 +30,8 @@ const StoreInformation = () => {
       .then((res) => {
         const newListBoxApi = res.map((e) => e);
         setListBox(newListBoxApi);
+        setTotal(res.totalRecords)
+        setLoad(1);
       })
       .catch((err) => {
         console.log(err);
@@ -74,21 +78,62 @@ const StoreInformation = () => {
 
                 {/*Product*/}
                 <div className="grid grid-cols-2 gap-x-3 gap-y-3 sm:grid-cols-3 lg:gap-x-5 xl:grid-cols-4 xl:gap-x-7 xl:gap-y-5 2xl:grid-cols-5 2xl:gap-y-8">
-                  {listBox.map((row, index) => {
-                    if (row.boxSize.isEnable == true && row.boxType.isEnable == true && row.count != 0) {
-                      return (
-                        <div key={index}>
-                          <CustomerBox
-                            isOpen={rentBoxModalOpen}
-                            setIsOpen={setRentBoxModalOpen}
-                            setInfoModal={setOrderBoxInfo}
-                            box={row}
-                          />
+                  {load != 0 ?
+                    (total != 0 ? listBox.map((row, index) => {
+                      if (row.boxSize.isEnable == true && row.boxType.isEnable == true && row.count != 0) {
+                        return (
+                          <div key={index}>
+                            <CustomerBox
+                              isOpen={rentBoxModalOpen}
+                              setIsOpen={setRentBoxModalOpen}
+                              setInfoModal={setOrderBoxInfo}
+                              box={row}
+                            />
+                          </div>
+                        )
+                      }
+                      return null;
+                    }) : <div>
+                      <div className='flex justify-center'>
+                        <img src={NotFoundItem} alt="No Item Found" width='80%' />
+                      </div>
+                      <div className='flex justify-center font-semibold text-blue-700'>Cửa hàng hiện đã hết box trống</div>
+                    </div>
+                    ) : (
+
+                      <div className="w-[200%] relative items-center block max-w-sm p-6 bg-white border border-gray-100 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-800 dark:hover:bg-gray-700">
+                        <div className="mb-2 flex justify-center text-lg font-bold tracking-tight text-gray-900 dark:text-white opacity-20">
+                          Đang tải danh sách box
                         </div>
-                      )
-                    }
-                    return null;
-                  })}
+                        <p className="flex justify-center font-normal text-gray-700 dark:text-gray-400 opacity-20">
+                          Xin vui lòng đợi trong giây lát
+                        </p>
+                        <div
+                          role="status"
+                          className="absolute -translate-x-1/2 -translate-y-1/2 top-2/4 left-1/2"
+                        >
+                          <svg
+                            aria-hidden="true"
+                            className="w-8 h-8 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+                            viewBox="0 0 100 101"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                              fill="currentColor"
+                            />
+                            <path
+                              d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                              fill="currentFill"
+                            />
+                          </svg>
+                          <span className="sr-only">Loading...</span>
+                        </div>
+                      </div>
+
+                    )
+                  }
                 </div>
 
                 <div className="pt-8 text-center xl:pt-14 hidden">
