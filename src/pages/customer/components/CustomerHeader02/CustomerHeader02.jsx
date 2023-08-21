@@ -16,7 +16,7 @@ import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import LogoutIcon from '@mui/icons-material/Logout';
-import dlogo from '.././../../../assets/images/DeliveryLogo.png';
+import dlogo from '.././../../../assets/images/DeliveryLogo2.png';
 import { Fragment } from 'react';
 import { json, useNavigate } from 'react-router-dom';
 import CustomerMobileSibar from '../CustomerMobileSibar/CustomerMobileSibar';
@@ -155,14 +155,14 @@ export default function CustomerHeader02() {
       open={isMobileMenuOpen}
       onClose={(e) => { handleMobileMenuClose(); handleMenuClose(); }}
     >
-      {/* <MenuItem>
-        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={0} color="error">
-            <MailIcon />
-          </Badge>
-        </IconButton>
-        <p>Messages</p>
-      </MenuItem> */}
+        {/* <MenuItem>
+          <IconButton size="large" aria-label="show 4 new mails" color="inherit">
+            <Badge badgeContent={0} color="error">
+              <MailIcon />
+            </Badge>
+          </IconButton>
+          <p>Messages</p>
+        </MenuItem> */}
       {/* <MenuItem>
         <IconButton
           size="large"
@@ -288,6 +288,11 @@ export default function CustomerHeader02() {
               <></>
             )}
           </Box>
+          <div className='md:hidden'>
+            <img className="h-7 text-blue-600" alt="DC Logo"
+                src={dlogo} 
+              />
+          </div>
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
             {/* <IconButton size="large" aria-label="show 4 new mails" color="inherit">
               <Badge badgeContent={4} color="error">
