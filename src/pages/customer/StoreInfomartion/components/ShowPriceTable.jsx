@@ -48,7 +48,7 @@ const ShowPriceTable = ({ storeId, length, height, boxType }) => {
                                 <tr key={row.id} className="border-b border-gray-300 font-normal last:border-b-0">
                                     {/* <td className="p-4 text-center">{row?.boxSize?.length} x {row?.boxSize?.height}</td>
                                     <td className="p-4 text-center">{row?.boxType?.name}</td> */}
-                                    <td className="p-4 text-center">{row?.maxDuration?(row?.minDuration+'-'+row?.maxDuration):('>'+row?.minDuration)}</td>
+                                    <td className="p-4 text-center">{row?.maxDuration ? (row?.minDuration + '-' + row?.maxDuration) : ('>' + row?.minDuration)}</td>
                                     <td className="p-4 text-center">{row?.price}</td>
                                 </tr>
                             ))}

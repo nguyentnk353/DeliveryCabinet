@@ -80,7 +80,7 @@ function BankCard() {
           {wallet?.balance ? (<span>{new Intl.NumberFormat("nb-NO").format(wallet?.balance)}</span>) : (<span>0</span>)}
          
           {/* <span>, 000</span> */}
-          <span>VNĐ</span>
+          <span>VND</span>
 
         </div>
         {/* Card footer */}
