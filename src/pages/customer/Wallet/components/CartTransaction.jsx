@@ -57,7 +57,7 @@ const CartTransaction = ({ transaction, key }) => {
                         </div>
                         {/* Card limits */}
                         <div className="col-span-6 order-1 sm:order-none sm:col-span-4 text-right sm:text-center lg:sidebar-expanded:col-span-6 xl:sidebar-expanded:col-span-4">
-                            <div className="text-sm">{new Intl.NumberFormat("nb-NO").format(transaction?.amount)} / VND</div>
+                            <div className="text-sm">{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(transaction?.amount)}</div>
                         </div>
                         {/* Card status */}
                         <div className="col-span-6 order-2 sm:order-none sm:col-span-2 text-right lg:sidebar-expanded:hidden xl:sidebar-expanded:block">
