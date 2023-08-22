@@ -16,6 +16,7 @@ import GetAppTwoToneIcon from '@mui/icons-material/GetAppOutlined';
 import FileCopyTwoToneIcon from '@mui/icons-material/FileCopyOutlined';
 import PictureAsPdfTwoToneIcon from '@mui/icons-material/PictureAsPdfOutlined';
 import ArchiveTwoToneIcon from '@mui/icons-material/ArchiveOutlined';
+import { LocalMallOutlined } from '@mui/icons-material';
 
 const CardWrapper = styled(MainCard)(({ theme }) => ({
   backgroundColor: '#5e35b1',
@@ -88,7 +89,7 @@ const EarningCard = ({ sum }) => {
                       mt: 1,
                     }}
                   >
-                    <img src={EarningIcon} alt='Notification' />
+                    <LocalMallOutlined fontSize='inherit' />
                   </Avatar>
                 </Grid>
                 <Grid item></Grid>
