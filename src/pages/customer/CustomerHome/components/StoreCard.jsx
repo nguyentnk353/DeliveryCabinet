@@ -30,17 +30,24 @@ const StoreCard = ({ search, pg, onPageChange, province, district, ward, setTota
 
     getAllStore(payload)
       .then((res) => {
-        const newListStore = res.items.map((e) => e);
+        const newListStore = res.items.filter((e) => {
+          if(e?.isEnable == true &&
+            e?.user.isEnable == true &&
+            e?.storeType.isEnable == true &&
+            e?.serviceType.isEnable == true &&
+            e?.area.isEnable == true){
+              return e
+          }
+      });
         setListStore(newListStore);
         setTotalStore(res?.totalRecord);
-        setTotal(res?.totalRecord);
+        setTotal(newListStore.length);
         setLoad(1);
       })
       .catch((err) => {
         console.log(err);
       });
   }, [search, pg, province, district, ward]);
-  // console.log(province)
   return (
     <>
       <div className="border-t border-gray-300">
@@ -69,8 +76,8 @@ const StoreCard = ({ search, pg, onPageChange, province, district, ward, setTota
             {load != 0 ?
               (total != 0 ? listStore.map((store, index) => {
                 if (store.isEnable == true &&
-                  // store.user.isEnable == true &&
-                  // store.storeType.isEnable == true &&
+                  store.user.isEnable == true &&
+                  store.storeType.isEnable == true &&
                   store.serviceType.isEnable == true &&
                   store.area.isEnable == true) {
                   return (
