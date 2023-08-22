@@ -33,7 +33,7 @@ const ConfirmFinishRentModal = ({isOpen, setIsOpen, orderId}) => {
                     {/* Modal content */}
                     <div className="px-5 pt-4 pb-1">
                         <div className="text-sm">
-                            <div className="font-medium text-slate-800 mb-2">
+                            <div className="hidden font-medium text-slate-800 mb-2">
                                 Sau khi nhấn xác nhận, bạn có <span className='text-red-500'>10</span> giây để lấy hàng trước khi tủ tự đóng.
                             </div>
                             <div className="font-medium text-slate-800 mb-2">Xác nhận ngừng thuê box và lấy hàng ?</div>
