@@ -155,7 +155,7 @@ function AccountPanel() {
                 // onClick={()=>console.log("click file")}
                 onChange={handleImageChange}
               />
-              Thay doi
+              Thay đổi
             </div>
           </div>
         </section>
