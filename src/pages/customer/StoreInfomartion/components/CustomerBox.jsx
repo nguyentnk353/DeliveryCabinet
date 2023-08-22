@@ -17,7 +17,8 @@ const CustomerBox = ({ isOpen, setIsOpen, setInfoModal, box }) => {
             >
                 <div className="w-full overflow-hidden p-2 md:px-2.5 xl:px-4">
                     <h2 className="pr-[5px] mb-1 truncate text-sm font-semibold md:text-[15px] flex items-center">
-                        <ViewModuleIcon /> Thông tin box
+                        <ViewModuleIcon /> Thông tin box 
+                        {/* {`${box?.boxSize?.length} x ${box?.boxSize?.height}`} */}
                     </h2>
                     <p className="text-body max-w-[250px] truncate text-xs leading-normal lg:text-sm xl:leading-relaxed">
                         Chiều dài: {box?.boxSize?.length * UnitSizeBox} cm
