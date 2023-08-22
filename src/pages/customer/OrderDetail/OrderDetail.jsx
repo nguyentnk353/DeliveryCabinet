@@ -13,6 +13,7 @@ import { blue, yellow } from '@mui/material/colors';
 import ConfirmFinishRentModal from './components/ConfirmFinishRentModal';
 import getCurrentPrice from './../../../services/Customer/getCurrentPrice';
 import getLockerById from '../../../services/Customer/getLockerById';
+import { UnitSizeBox } from '../../../constant/boxConstant';
 
 const OrderDetail = () => {
   const location = useLocation();
@@ -201,8 +202,8 @@ const OrderDetail = () => {
                   <div className='md:flex md:gap-10'>
                     <span className='mt-2 block'>
                       <span className='font-semibold'>Kích thước:</span>{' '}
-                      {order?.box?.boxSize?.length} x{' '}
-                      {order?.box?.boxSize?.height}
+                      {order?.box?.boxSize?.length * UnitSizeBox} cm x{' '}
+                      {order?.box?.boxSize?.height * UnitSizeBox} cm
                     </span>
                     <span className='mt-2 block'>
                       <span className='font-semibold'>Phân loại:</span>{' '}

@@ -3,6 +3,7 @@ import ViewModuleIcon from '@mui/icons-material/ViewModule';
 import { useMount } from 'ahooks';
 import getAllBox from '../../../../services/Customer/getAllBox';
 import { useState } from 'react';
+import { UnitSizeBox } from '../../../../constant/boxConstant';
 
 const CustomerBox = ({ isOpen, setIsOpen, setInfoModal, box }) => {
     
@@ -19,10 +20,10 @@ const CustomerBox = ({ isOpen, setIsOpen, setInfoModal, box }) => {
                         <ViewModuleIcon /> Thông tin box
                     </h2>
                     <p className="text-body max-w-[250px] truncate text-xs leading-normal lg:text-sm xl:leading-relaxed">
-                        Chiều dài: {box?.boxSize?.length}
+                        Chiều dài: {box?.boxSize?.length * UnitSizeBox} cm
                     </p>
                     <p className="text-body max-w-[250px] truncate text-xs leading-normal lg:text-sm xl:leading-relaxed">
-                        Chiều rộng: {box?.boxSize?.height}
+                        Chiều rộng: {box?.boxSize?.height * UnitSizeBox} cm
                     </p>
                     <p className="text-body max-w-[250px] truncate text-xs leading-normal lg:text-sm xl:leading-relaxed">
                         Loại box: {box?.boxType?.name}
