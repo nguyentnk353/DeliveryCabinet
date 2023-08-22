@@ -134,14 +134,14 @@ const index = () => {
 
       if (
         values.name != data.name ||
-        values.description != data.description ||
-        values.isPattern != data.isPattern
+        values.description != data.description
+        // || values.isPattern != data.isPattern
       ) {
         setData((preState) => ({
           ...preState,
           name: values.name,
           description: values.description,
-          isPattern: values.isPattern,
+          isPattern: false,
         }));
       }
 
@@ -596,13 +596,13 @@ const index = () => {
                 />
               </Box>
               <Box>
-                <FormControlLabel
+                {/* <FormControlLabel
                   control={<Checkbox checked={formik.values.isPattern} />}
                   label='Use this as layout for other cabinet'
                   id='isPattern'
                   name='isPattern'
                   onChange={formik.handleChange}
-                />
+                /> */}
               </Box>
               <Box>
                 {boxClick ? (
@@ -768,7 +768,7 @@ const index = () => {
                   <></>
                 )}
               </Box>
-              <Box sx={{ textAlign: 'right' }}>
+              <Box sx={{ textAlign: 'right', marginTop: '1rem' }}>
                 <Button
                   variant='contained'
                   color='primary'

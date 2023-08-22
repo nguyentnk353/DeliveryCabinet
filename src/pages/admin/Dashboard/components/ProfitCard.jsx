@@ -16,6 +16,7 @@ import GetAppTwoToneIcon from '@mui/icons-material/GetAppOutlined';
 import FileCopyTwoToneIcon from '@mui/icons-material/FileCopyOutlined';
 import PictureAsPdfTwoToneIcon from '@mui/icons-material/PictureAsPdfOutlined';
 import ArchiveTwoToneIcon from '@mui/icons-material/ArchiveOutlined';
+import { PaidOutlined } from '@mui/icons-material';
 
 const CardWrapper = styled(MainCard)(({ theme }) => ({
   backgroundColor: '#43a047',
@@ -88,7 +89,7 @@ const ProfitCard = ({ sum }) => {
                       mt: 1,
                     }}
                   >
-                    <img src={EarningIcon} alt='Notification' />
+                    <PaidOutlined fontSize='inherit' />
                   </Avatar>
                 </Grid>
                 <Grid item></Grid>

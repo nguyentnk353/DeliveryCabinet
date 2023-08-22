@@ -81,6 +81,7 @@ const index = () => {
     name: yup.string('Enter price table name').required('Name is required'),
     applyFrom: yup.date().typeError('Invalid Date!'),
     applyTo: yup.date().typeError('Invalid Date!'),
+    rangePicker: yup.array().required('Date apply is required'),
   });
   const navigate = useNavigate();
   const [msg, sendNotification] = useNotification();
@@ -93,7 +94,7 @@ const index = () => {
   const [openRowItem, setOpenRowItem] = useState(false);
   const [selectService, setSelectService] = useState(null);
   const [selectBoxSize, setSelectBoxSize] = useState(null);
-  const [rowInput, setRowInput] = useState({ priority: '', dateRange: [] });
+  const [rowInput, setRowInput] = useState({ priority: 1, dateRange: [] });
   const [rowInputItem, setRowInputItem] = useState({
     min: '',
     max: null,
@@ -269,17 +270,19 @@ const index = () => {
   });
 
   function addService() {
-    setTable((parram) => [
-      ...parram,
-      {
-        id: Math.floor(Math.random() * 1001),
-        service: selectService,
-        priority: rowInput.priority,
-        applyDate: rowInput.dateRange,
-      },
-    ]);
+    if (selectService && rowInput.priority && rowInput.dateRange) {
+      setTable((parram) => [
+        ...parram,
+        {
+          id: Math.floor(Math.random() * 1001),
+          service: selectService,
+          priority: rowInput.priority,
+          applyDate: rowInput.dateRange,
+        },
+      ]);
+    }
     setSelectService(null);
-    setRowInput({ priority: '', dateRange: [] });
+    setRowInput({ priority: 1, dateRange: [] });
     setOpenRow(false);
   }
   function addServiceItem() {
@@ -298,18 +301,26 @@ const index = () => {
     setOpenRowItem(true);
   }
   function addItem() {
-    setPiList((parram) => [
-      ...parram,
-      {
-        id: Math.floor(Math.random() * 1001),
-        boxSize: selectBoxSize,
-        boxType: boxTypeList[value],
-        min: rowInputItem.min,
-        max: rowInputItem.max,
-        price: rowInputItem.price,
-        description: rowInputItem.description,
-      },
-    ]);
+    if (
+      selectBoxSize &&
+      boxTypeList[value] &&
+      rowInputItem.min &&
+      rowInputItem.max &&
+      rowInputItem.price
+    ) {
+      setPiList((parram) => [
+        ...parram,
+        {
+          id: Math.floor(Math.random() * 1001),
+          boxSize: selectBoxSize,
+          boxType: boxTypeList[value],
+          min: rowInputItem.min,
+          max: rowInputItem.max,
+          price: rowInputItem.price,
+          description: rowInputItem.description,
+        },
+      ]);
+    }
     setSelectBoxSize(null);
     setRowInputItem({ min: '', max: '', price: '', description: '' });
     setOpenRowItem(false);
@@ -368,7 +379,7 @@ const index = () => {
                   <Box sx={{ marginBottom: '1rem', display: 'flex', gap: 4 }}>
                     <TextField
                       margin='normal'
-                      sx={{ width: '410px' }}
+                      sx={{ width: '100%' }}
                       required
                       id='name'
                       label='Name'
@@ -378,26 +389,36 @@ const index = () => {
                       error={formik.touched.name && Boolean(formik.errors.name)}
                       helperText={formik.touched.name && formik.errors.name}
                     />
-                    <Box
-                      sx={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'center',
+                    <div
+                      style={{
+                        // marginTop: '0.5rem',
+                        // padding: '0.75rem',
+                        width: '100%',
                       }}
                     >
                       <RangePicker
-                        size='large'
+                        // size='large'
                         value={formik.values.rangePicker}
+                        status={
+                          formik.touched.rangePicker &&
+                          Boolean(formik.errors.rangePicker)
+                            ? 'error'
+                            : null
+                        }
                         onChange={(value) => {
                           formik.setFieldValue('rangePicker', value);
                         }}
                         style={{
-                          marginTop: '0.5rem',
-                          padding: '0.75rem',
-                          width: '410px',
+                          marginTop: '1rem',
+                          padding: '1rem',
+                          width: '100%',
                         }}
                       />
-                    </Box>
+                      <Typography variant='caption' color='error'>
+                        {formik.touched.rangePicker &&
+                          formik.errors.rangePicker}
+                      </Typography>
+                    </div>
                   </Box>
 
                   <Box sx={{ marginBottom: '1rem' }}>
@@ -488,7 +509,17 @@ const index = () => {
                                   <TableCell component='th' scope='row'>
                                     {row.service.name}
                                   </TableCell>
-                                  <TableCell>{row.priority}</TableCell>
+                                  <TableCell>
+                                    {
+                                      {
+                                        1: 'Daily (Yearly)',
+                                        2: 'Seasonly (Quarterly)',
+                                        3: 'Monthly',
+                                        4: 'Weekly',
+                                        5: 'Holiday',
+                                      }[row.priority]
+                                    }
+                                  </TableCell>
                                   <TableCell>
                                     {dayjs(row?.applyDate[0]).format(
                                       'DD /MM /YYYY'
@@ -547,7 +578,7 @@ const index = () => {
                           </Grid>
                           <Grid item xs={4}>
                             <Box>
-                              <TextField
+                              {/* <TextField
                                 required
                                 fullWidth
                                 id='priority'
@@ -559,7 +590,32 @@ const index = () => {
                                     priority: e.target.value,
                                   }));
                                 }}
-                              />
+                              /> */}
+                              <FormControl fullWidth>
+                                <InputLabel id='demo-simple-select-label'>
+                                  Priority
+                                </InputLabel>
+                                <Select
+                                  labelId='demo-simple-select-label'
+                                  id='demo-simple-select'
+                                  value={rowInput.priority}
+                                  label='Priority'
+                                  onChange={(e) => {
+                                    setRowInput((param) => ({
+                                      ...param,
+                                      priority: e.target.value,
+                                    }));
+                                  }}
+                                >
+                                  <MenuItem value={1}>Daily (Yearly)</MenuItem>
+                                  <MenuItem value={2}>
+                                    Seasonly (Quarterly)
+                                  </MenuItem>
+                                  <MenuItem value={3}>Monthly</MenuItem>
+                                  <MenuItem value={4}>Weekly</MenuItem>
+                                  <MenuItem value={5}>Holiday</MenuItem>
+                                </Select>
+                              </FormControl>
                             </Box>
                           </Grid>
                           <Grid item xs={4}>

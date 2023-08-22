@@ -189,10 +189,10 @@ const index = () => {
                           //   component={Link}
                           // to="/pages/register/register3"
                           href='/register'
-                          variant='subtitle2'
+                          variant='subtitle1'
                           sx={{ textDecoration: 'none' }}
                         >
-                          Chưa có tài khoản? Đăng ký tài khoản mới
+                          Chưa có tài khoản? Đăng ký ngay
                         </Link>
                         <Typography
                           //   component={Link}
