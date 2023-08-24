@@ -14,6 +14,7 @@ import ConfirmFinishRentModal from './components/ConfirmFinishRentModal';
 import getCurrentPrice from './../../../services/Customer/getCurrentPrice';
 import getLockerById from '../../../services/Customer/getLockerById';
 import { UnitSizeBox } from '../../../constant/boxConstant';
+import ConfirmOpenBox from './components/ConfirmOpenBox';
 
 const OrderDetail = () => {
   const location = useLocation();
@@ -26,6 +27,7 @@ const OrderDetail = () => {
   const [locker, setLocker] = useState([]);
   const [isOpenPriceTable, setIsOpenPriceTable] = useState(false);
   const [isOpenOpenCode, setIsOpenOpenCode] = useState(false);
+  const [isOpenBox, setIsOpenBox] = useState(false);
   const [isFinishOrder, setIsFinishOrder] = useState(false);
 
   const orderId = location.state?.orderInfo?.id;
@@ -123,6 +125,11 @@ const OrderDetail = () => {
         setIsOpen={setIsOpenOpenCode}
         openCode={openCode}
         orderStatus={order?.status}
+      />
+      <ConfirmOpenBox 
+        isOpen={isOpenBox}
+        setIsOpen={setIsOpenBox}
+        boxId={order?.box?.id}
       />
       <ConfirmFinishRentModal
         isOpen={isFinishOrder}
@@ -371,6 +378,7 @@ const OrderDetail = () => {
                   
                 </div>
                 {(order?.status == 1 || order?.status == 3 )? (
+                  <div>
                   <div className='max-md:grid max-md:grid-cols-2 mt-10 flex flex-col justify-end gap-4 sm:flex-row'>
                     <button
                       className='border-[#3c50e0] text-[#3c50e0] flex items-center justify-center rounded border px-8 py-2.5 text-center font-medium hover:bg-opacity-90'
@@ -383,13 +391,23 @@ const OrderDetail = () => {
                       Lấy mã
                     </button>
                     <button
-                      className='bg-[#3c50e0] text-white flex items-center justify-center rounded px-8 py-2.5 text-center font-medium hover:bg-opacity-90'
+                      className='border-[#3c50e0] text-[#3c50e0] flex items-center justify-center border rounded px-8 py-2.5 text-center font-medium hover:bg-opacity-90'
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setIsOpenBox(true);
+                      }}
+                    >
+                      Mở tủ
+                    </button>
+                  </div>
+                  <button
+                      className='bg-[#3c50e0] text-white w-full my-5 flex items-center justify-center rounded px-8 py-2.5 text-center font-medium hover:bg-opacity-90'
                       onClick={(e) => {
                         e.stopPropagation();
                         setIsFinishOrder(true);
                       }}
                     >
-                      Lấy hàng
+                      Thanh toán và lấy hàng
                     </button>
                   </div>
                 ) : (
