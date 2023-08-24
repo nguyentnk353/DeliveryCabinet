@@ -24,7 +24,7 @@ import {
   Typography,
   tabsClasses,
 } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import useNotification from '../../../utils/useNotification';
@@ -332,6 +332,7 @@ const index = () => {
     const newTable = piList.filter((e) => e.id != id);
     setPiList(newTable);
   }
+
   const bcList = [
     { name: 'Price table', sidebar: 'Service price', to: '/admin/price-table' },
     {
