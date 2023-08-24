@@ -29,9 +29,11 @@ const validationSchema = yup.object({
     .min(4, 'Mã phải chính xác 4 số')
     .max(4, 'Mã phải chính xác 4 số'),
 });
+
 const index = () => {
   const lockerId = location.href.substring(location.href.lastIndexOf('/') + 1);
   const count = parseInt(localStorage.getItem('countCode'));
+  const [left, setLeft] = useState(3 - count);
   const [open, setOpen] = React.useState(false);
   const [openD, setOpenD] = React.useState(false);
   const [box, setBox] = useState({});
@@ -72,7 +74,10 @@ const index = () => {
         }
       })
       .catch((err) => console.log(err));
-  }, [sendNotification, setDialogTitle]);
+  }, [sendNotification, dialogTitle]);
+  useEffect(() => {
+    console.log('Count' + count);
+  }, [count]);
   function colorStatus(s) {
     switch (s) {
       case 0:
@@ -174,13 +179,13 @@ const index = () => {
     boxShadow: 24,
     p: 4,
   };
-  console.log(box);
   const formik = useFormik({
     initialValues: {
       code: '',
     },
     validationSchema: validationSchema,
     onSubmit: (val) => {
+      console.log(count);
       const checkOpenCode = box.openCode == val.code;
       if (checkOpenCode) {
         const payload = {
@@ -194,6 +199,7 @@ const index = () => {
             if (res.status == 201) {
               setDialogTitle('Tủ này đã được mở');
               handleOpenD();
+              localStorage.setItem('countCode', 0);
               sendNotification({
                 msg: `Box #${box.id} open success`,
                 variant: 'success',
@@ -207,7 +213,7 @@ const index = () => {
             }
           })
           .catch((err) => console.log(err));
-      } else if (count > 4) {
+      } else if (count > 2) {
         setAlert(false);
         setDialogTitle(
           'Tủ này đã bị khóa sau 4 lần nhập sai, hay liên lạc với người phụ trách để lấy lại đồ dùng trong tủ'
@@ -225,13 +231,15 @@ const index = () => {
             }
           })
           .catch((err) => console.log(err));
-      } else if (!checkOpenCode) {
+        localStorage.setItem('countCode', 0);
+      } else if (!checkOpenCode && count < 4) {
         setAlert(true);
+        setLeft(3 - count);
         localStorage.setItem('countCode', count + 1);
       } else {
-        console.log(count);
+        // console.log(count);
       }
-      console.log(count);
+
       // const api = {
       //   openCode: val.code,
       // };
@@ -253,6 +261,7 @@ const index = () => {
       //   });
     },
   });
+
   return (
     <Box>
       <Dialog
@@ -297,7 +306,11 @@ const index = () => {
           >
             <Box sx={{ padding: '2rem' }}>
               <Typography variant='body1'>Bạn chỉ có 4 lần nhập *</Typography>
-              {alert && <Alert severity='warning'>Sai mã mở tủ</Alert>}
+              {alert && (
+                <Alert severity='warning'>
+                  Sai mã mở tủ .Số lần nhập còn lại: {left}
+                </Alert>
+              )}
               <TextField
                 margin='normal'
                 fullWidth
@@ -331,19 +344,30 @@ const index = () => {
         </Box>
       </Modal>
       <Box
-        sx={{ backgroundColor: '#fafafafa', paddingTop: '5%', height: '100vh' }}
+        sx={{
+          backgroundColor: '#fafafafa',
+          padding: '2rem 0',
+          minHeight: '100vh',
+        }}
       >
-        <Paper sx={{ width: '90%', padding: '5%', margin: 'auto' }}>
+        <Paper
+          sx={{
+            // width: '90%',
+            maxWidth: '338px',
+            padding: '2rem',
+            margin: 'auto',
+          }}
+        >
           <Box>
             <Typography variant='h6'>{locker.name}</Typography>
-            <Button
+            {/* <Button
               onClick={(c) => {
                 c.stopPropagation();
                 localStorage.setItem('countCode', 0);
               }}
             >
               reset local
-            </Button>
+            </Button> */}
           </Box>
           <div
             id='grid'
@@ -369,7 +393,7 @@ const index = () => {
                       // paddingBottom: '60%',
                       // paddingTop: '10%',
                       padding: '10%',
-                      border: '3px solid'
+                      border: '3px solid',
                       // display: 'flex',
                       // flexDirection: 'column',
                       // justifyContent: 'space-between',
@@ -390,11 +414,17 @@ const index = () => {
                       }}
                       label={stat.label}
                     /> */}
-                    
-                    <div 
-                      style={{color: stat.color, backgroundColor: stat.bgcolor, width: 'fit-content'}}
+
+                    <div
+                      style={{
+                        color: stat.color,
+                        backgroundColor: stat.bgcolor,
+                        width: 'fit-content',
+                      }}
                       className='m-auto p-[5px] rounded-lg md:mt-10 max-md:mt-2'
-                    >{stat.label}</div>
+                    >
+                      {stat.label}
+                    </div>
                   </Paper>
                 );
               })}

@@ -95,14 +95,14 @@ const AccountManagement = () => {
             <CustomBreadcrumb list={bcList} />
           </Box>
         </Box>
-        <Button
+        {/* <Button
           variant='contained'
           startIcon={<Add />}
           onClick={() => navigate('/store-owner/new-staff', { replace: true })}
           // onClick={() => handleOpen()}
         >
           New user
-        </Button>
+        </Button> */}
       </Box>
 
       <Paper sx={{ borderRadius: '16px' }}>

@@ -98,6 +98,7 @@ function App() {
             <Route path='/login-employee' element={<Login />} />
             <Route path='/login-customer' element={<LoginCustomer />} />
             <Route path='/open-box/39' element={<OpenBox />} />
+            <Route path='/open-box/83' element={<OpenBox />} />
 
             {/* <Route path='*' element={<MissingPage />} /> */}
             {/* protected routes */}
