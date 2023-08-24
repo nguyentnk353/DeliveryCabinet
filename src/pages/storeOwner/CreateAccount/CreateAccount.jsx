@@ -24,6 +24,7 @@ import postImage from '../../../services/postImage';
 import useNotification from '../../../utils/useNotification';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
+import postStaff from '../../../services/storeOwner/postStaff';
 
 const CreateAccount = () => {
   const location = useLocation();
@@ -48,7 +49,7 @@ const CreateAccount = () => {
       email: '',
       phone: '',
       dob: null,
-      role: '',
+      role: { name: 'Staff', key: 3 },
       login_name: '',
       password: '',
       confirm_password: '',
@@ -87,11 +88,16 @@ const CreateAccount = () => {
         phone: values.phone,
         dob: values.dob,
         role: values.role?.key,
+        storeId: storeInfo?.id,
       };
-      postAccount(api)
+      postStaff(api)
         .then((res) => {
           if (res.status == 201) {
-            navigate('/admin/user');
+            navigate('/store-owner/store-detail', {
+              state: {
+                storeInfo: storeInfo,
+              },
+            });
 
             sendNotification({
               msg: 'User create success',
@@ -287,6 +293,7 @@ const CreateAccount = () => {
                         disablePortal
                         id='role'
                         name='role'
+                        disabled
                         sx={{ paddingTop: '4.5%' }}
                         options={roleList}
                         getOptionLabel={(option) => option.name}
@@ -294,6 +301,7 @@ const CreateAccount = () => {
                         error={
                           formik.touched.role && Boolean(formik.errors.role)
                         }
+                        defaultValue={{ name: 'Staff', key: 3 }}
                         onChange={(event, newValue) => {
                           // console.log(newValue)
                           formik.setFieldValue('role', newValue, true);
