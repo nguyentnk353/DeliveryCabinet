@@ -13,6 +13,7 @@ import { blue, yellow } from '@mui/material/colors';
 import ConfirmFinishRentModal from './components/ConfirmFinishRentModal';
 import getCurrentPrice from './../../../services/Customer/getCurrentPrice';
 import getLockerById from '../../../services/Customer/getLockerById';
+import { UnitSizeBox } from '../../../constant/boxConstant';
 
 const OrderDetail = () => {
   const location = useLocation();
@@ -201,8 +202,8 @@ const OrderDetail = () => {
                   <div className='md:flex md:gap-10'>
                     <span className='mt-2 block'>
                       <span className='font-semibold'>Kích thước:</span>{' '}
-                      {order?.box?.boxSize?.length} x{' '}
-                      {order?.box?.boxSize?.height}
+                      {order?.box?.boxSize?.length * UnitSizeBox} cm x{' '}
+                      {order?.box?.boxSize?.height * UnitSizeBox} cm
                     </span>
                     <span className='mt-2 block'>
                       <span className='font-semibold'>Phân loại:</span>{' '}
@@ -357,14 +358,14 @@ const OrderDetail = () => {
                   {(order?.status == 2 || order?.status == 4) &&
                     <p className='border-stroke dark:border-strokedark mb-4 mt-2 flex justify-between border-t pt-6 font-medium text-black dark:text-white'>
                     <span> Đã thanh toán: </span>
-                    <span> {order?.total} VND</span>
+                    <span> {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(order?.total)} </span>
                   </p>
                   }
                   
                   {(order?.status != 2 && order?.status != 4) && 
                     <p className='border-stroke dark:border-strokedark mb-4 flex justify-between font-medium text-black dark:text-white'>
                       <span> Tổng tiền thuê hiện tại: </span>
-                      <span> {currentPrice} VND</span>
+                      <span> {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(currentPrice)} </span>
                     </p>
                   }
                   

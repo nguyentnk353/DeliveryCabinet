@@ -288,7 +288,7 @@ export default function CustomerHeader02() {
               <></>
             )}
           </Box>
-          <div className='md:hidden'>
+          <div className='md:hidden cursor-pointer' onClick={(e)=>{navigate('/customer')}}>
             <img className="h-7 text-blue-600" alt="DC Logo"
                 src={dlogo} 
               />

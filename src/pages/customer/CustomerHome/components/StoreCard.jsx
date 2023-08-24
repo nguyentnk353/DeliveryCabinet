@@ -31,7 +31,8 @@ const StoreCard = ({ search, pg, onPageChange, province, district, ward, setTota
     getAllStore(payload)
       .then((res) => {
         const newListStore = res.items.filter((e) => {
-          if(e?.isEnable == true &&
+          if(e?.id != 0 &&
+            e?.isEnable == true &&
             e?.user.isEnable == true &&
             e?.storeType.isEnable == true &&
             e?.serviceType.isEnable == true &&

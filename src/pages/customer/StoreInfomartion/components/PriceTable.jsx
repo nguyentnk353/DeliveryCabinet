@@ -42,7 +42,7 @@ const PriceTable = ({ storeId, priceTableId, length, height, boxType }) => {
                                 {/* <th className="bg-gray-150 w-1/4 p-4 ltr:text-left ltr:first:rounded-tl-md rtl:text-right rtl:first:rounded-tr-md">Kích thước</th>
                                 <th className="bg-gray-150 w-1/4 p-4 ltr:text-left ltr:last:rounded-tr-md rtl:text-right rtl:last:rounded-tl-md">Loại box</th> */}
                                 <th className="bg-gray-150 w-1/4 p-4 ltr:text-left ltr:first:rounded-tl-md rtl:text-right rtl:first:rounded-tr-md">Thời lượng (phút)</th>
-                                <th className="bg-gray-150 w-1/4 p-4 ltr:text-left ltr:last:rounded-tr-md rtl:text-right rtl:last:rounded-tl-md">Giá (VNĐ)/ 15 phút</th>
+                                <th className="bg-gray-150 w-1/4 p-4 ltr:text-left ltr:last:rounded-tr-md rtl:text-right rtl:last:rounded-tl-md">Giá (đ)/ 15 phút</th>
                             </tr>
                         </thead>
                         <tbody>

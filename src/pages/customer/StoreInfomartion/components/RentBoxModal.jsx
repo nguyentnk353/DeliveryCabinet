@@ -4,6 +4,7 @@ import rentBox from '../../../../services/Customer/rentBox';
 import useNotification from '../../../../utils/useNotification';
 import ShowPriceTable from './ShowPriceTable';
 import ModalBasic from './ModalBasic';
+import { UnitSizeBox } from '../../../../constant/boxConstant';
 
 const RentBoxModal = ({ isOpen, setIsOpen, boxInfo, storeInfo, serviceTypeId }) => {
     const navigate = useNavigate();
@@ -54,8 +55,8 @@ const RentBoxModal = ({ isOpen, setIsOpen, boxInfo, storeInfo, serviceTypeId }) 
                             </div>
                             <div className="font-medium text-slate-800 mb-2">Xác nhận thuê box có thông tin sau:</div>
                             <div className="space-y-2">
-                                <p>Chiều dài: {boxInfo?.boxSize?.length}</p>
-                                <p>Chiều rộng: {boxInfo?.boxSize?.height}</p>
+                                <p>Chiều dài: {boxInfo?.boxSize?.length * UnitSizeBox} cm</p>
+                                <p>Chiều rộng: {boxInfo?.boxSize?.height * UnitSizeBox} cm</p>
                                 <p>Loại  box: {boxInfo?.boxType?.name}</p>
                                 <input></input>
                             </div>
