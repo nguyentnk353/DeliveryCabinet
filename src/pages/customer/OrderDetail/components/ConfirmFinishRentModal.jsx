@@ -4,13 +4,14 @@ import ModalBasic from './../../components/ModalBasic/ModalBasic';
 import completeOrder from '../../../../services/Customer/completeOrder';
 import useNotification from '../../../../utils/useNotification';
 
-const ConfirmFinishRentModal = ({isOpen, setIsOpen, orderId}) => {
+const ConfirmFinishRentModal = ({isOpen, setIsOpen, orderId, setLoadFinish}) => {
     const navigate = useNavigate();
     const [msg, sendNotification] = useNotification();
 
     const handleFinishOrder = () => {
         completeOrder(orderId)
             .then(async(res) => {
+                setLoadFinish(false);
                 if (res.status == 200) {
                     sendNotification({
                       msg: 'Thanh toán đơn hàng thành công',
@@ -47,6 +48,7 @@ const ConfirmFinishRentModal = ({isOpen, setIsOpen, orderId}) => {
                                 onClick={(e) => {
                                     e.stopPropagation();
                                     setIsOpen(false);
+                                    setLoadFinish(true);
                                     handleFinishOrder();
                                 }}>
                                 Xác nhận
