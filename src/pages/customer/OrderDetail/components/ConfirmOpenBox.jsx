@@ -10,7 +10,7 @@ const ConfirmOpenBox = ({isOpen, setIsOpen, boxId}) => {
 
     const handleFinishOrder = () => {
         openBox(boxId)
-            .then(async(res) => {
+            .then((res) => {
                 if (res.status == 200) {
                     sendNotification({
                       msg: 'Mở tủ thành công',
