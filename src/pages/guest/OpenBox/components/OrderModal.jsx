@@ -1,66 +1,31 @@
-import React from 'react';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
-import createServiceType from '../../../../../services/createServiceType';
-import useNotification from '../../../../../utils/useNotification';
-import { Box, Button, Modal, TextField, Typography } from '@mui/material';
-import { blue } from '@mui/material/colors';
+import React from 'react';
 
-const validationSchema = yup.object({
-  name: yup.string().required('Name is required'),
-});
-const AddService = ({ open, setOpen, msg, sendNotification }) => {
+const OrderModal = ({ open, setOpen }) => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
-    formik.resetForm({
-      values: {
-        name: '',
-      },
-    });
     setOpen(false);
   };
   const formik = useFormik({
     initialValues: {
-      name: '',
+      code: '',
     },
     validationSchema: validationSchema,
-    onSubmit: (val) => {
-      const api = {
-        name: val.name,
-      };
-      createServiceType(api)
-        .then((res) => {
-          if (res.status == 201) {
-            sendNotification({
-              msg: 'Service type create success',
-              variant: 'success',
-            });
-          } else {
-            sendNotification({
-              msg: 'Service type create fail',
-              variant: 'error',
-            });
-          }
-          handleClose();
-        })
-        .catch((err) => {
-          console.log({ msg: err, variant: 'error' });
-        });
-    },
+    onSubmit: (val) => {},
   });
   const style = {
     position: 'absolute',
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 400,
+    width: 300,
     bgcolor: 'background.paper',
     border: 'none',
     borderRadius: '16px',
     boxShadow: 24,
-    p: '2rem',
+    p: 4,
   };
-
   return (
     <Modal
       open={open}
@@ -77,7 +42,7 @@ const AddService = ({ open, setOpen, msg, sendNotification }) => {
           fontWeight='bold'
           color={blue[500]}
         >
-          ADD SERVICE TYPE
+          XÁC NHẬN MỞ TỦ
         </Typography>
         <Box
           component='form'
@@ -85,18 +50,18 @@ const AddService = ({ open, setOpen, msg, sendNotification }) => {
           noValidate
           sx={{ mt: 1 }}
         >
-          <Box sx={{ paddingBottom: '1rem' }}>
+          <Box sx={{ padding: '2rem' }}>
             <TextField
               margin='normal'
               fullWidth
-              id='name'
-              label='Name'
+              id='code'
+              label='Nhập mã mở tủ'
               autoFocus
-              required
-              value={formik.values.name}
+              // type='number'
+              value={formik.values.code}
               onChange={formik.handleChange}
-              error={formik.touched.name && Boolean(formik.errors.name)}
-              helperText={formik.touched.name && formik.errors.name}
+              error={formik.touched.code && Boolean(formik.errors.code)}
+              helperText={formik.touched.code && formik.errors.code}
             />
           </Box>
           <Box
@@ -109,10 +74,10 @@ const AddService = ({ open, setOpen, msg, sendNotification }) => {
             }}
           >
             <Button variant='contained' type='submit'>
-              Add
+              Xác nhận
             </Button>
             <Button variant='outlined' onClick={handleClose}>
-              Cancel
+              Hủy
             </Button>
           </Box>
         </Box>
@@ -121,4 +86,4 @@ const AddService = ({ open, setOpen, msg, sendNotification }) => {
   );
 };
 
-export default AddService;
+export default OrderModal;

@@ -20,6 +20,8 @@ import { useFormik } from 'formik';
 import postOpenBox from '../../../services/postOpenBox';
 import useNotification from '../../../utils/useNotification';
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import OrderModal from './components/OrderModal';
 
 const validationSchema = yup.object({
   code: yup
@@ -31,10 +33,13 @@ const validationSchema = yup.object({
 });
 
 const index = () => {
+  const navigate = useNavigate();
   const lockerId = location.href.substring(location.href.lastIndexOf('/') + 1);
+  const loginUser = JSON.parse(localStorage.getItem('loginUser'));
   const count = parseInt(localStorage.getItem('countCode'));
   const [left, setLeft] = useState(3 - count);
   const [open, setOpen] = React.useState(false);
+  const [openOrder, setOpenOrder] = React.useState(false);
   const [openD, setOpenD] = React.useState(false);
   const [box, setBox] = useState({});
   const [locker, setLocker] = useState({});
@@ -43,7 +48,7 @@ const index = () => {
   const [alert, setAlert] = useState(false);
 
   useMount(() => {
-    if (count === null) {
+    if (!count) {
       localStorage.setItem('countCode', 0);
     }
     const api = {
@@ -75,9 +80,9 @@ const index = () => {
       })
       .catch((err) => console.log(err));
   }, [sendNotification, dialogTitle]);
-  useEffect(() => {
-    console.log('Count' + count);
-  }, [count]);
+  // useEffect(() => {
+  //   console.log('Count' + count);
+  // }, [count]);
   function colorStatus(s) {
     switch (s) {
       case 0:
@@ -119,33 +124,17 @@ const index = () => {
         };
     }
   }
-  // function dialogTitle(s) {
-  //   switch (s) {
-  //     case 0:
-  //       return {
-  //         title: 'Tủ đã được mở',
-  //       };
 
-  //     case 1:
-  //       return {
-  //         title: 'Tủ này không được mở',
-  //       };
-  //     case 2:
-  //       return {
-  //         title: 'Tủ này đã bị khóa do nhập sai 4 lần',
-  //       };
-  //     default:
-  //       return {
-  //         title: 'Tủ này không hoạt động',
-  //       };
-  //   }
-  // }
-  const handleWrongBox = (s) => {
-    if (s != 2) {
-      setDialogTitle('Tủ này đã không được mở');
+  const handleWrongBox = (b) => {
+    if (b.status == 2) {
+      handleOpen();
+    } else if (b.status == 1) {
+      // console.log('box empty');
+      setDialogTitle('Tủ này không được mở');
       handleOpenD();
     } else {
-      handleOpen();
+      setDialogTitle('Tủ này không được mở');
+      handleOpenD();
     }
   };
   const handleOpen = () => setOpen(true);
@@ -172,20 +161,20 @@ const index = () => {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: '90%',
+    width: 300,
     bgcolor: 'background.paper',
     border: 'none',
     borderRadius: '16px',
     boxShadow: 24,
     p: 4,
   };
+
   const formik = useFormik({
     initialValues: {
       code: '',
     },
     validationSchema: validationSchema,
     onSubmit: (val) => {
-      console.log(count);
       const checkOpenCode = box.openCode == val.code;
       if (checkOpenCode) {
         const payload = {
@@ -205,7 +194,7 @@ const index = () => {
                 variant: 'success',
               });
             } else {
-              setDialogTitle('Tủ này đã không mở được');
+              setDialogTitle('Tủ này không mở được');
               sendNotification({
                 msg: `Box #${box.id} open fail`,
                 variant: 'error',
@@ -264,6 +253,7 @@ const index = () => {
 
   return (
     <Box>
+      {/* <OrderModal open={openOrder} setOpen={setOpenOrder} /> */}
       <Dialog
         open={openD}
         onClose={handleCloseD}
@@ -402,7 +392,7 @@ const index = () => {
                     onClick={(c) => {
                       // c.stopPropagation();
                       setBox(e);
-                      handleWrongBox(e.status);
+                      handleWrongBox(e);
                     }}
                   >
                     <div>{e.code}</div>

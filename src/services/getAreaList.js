@@ -1,15 +1,10 @@
 import { request } from '../utils/request';
 
-export default function getAreaList(props) {
+export default function getAreaList(payload) {
   const url = '/areas';
   return request
     .get(url, {
-      params: {
-        Name: props.search,
-        IsEnable: props.IsEnable,
-        PageIndex: props.PageIndex,
-        PageSize: props.PageSize,
-      },
+      params: payload,
     })
     .then((response) => response.data)
     .catch((err) => err.response.data);

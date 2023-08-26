@@ -2,7 +2,7 @@ import React from 'react';
 import CustomBreadcrumb from '../../../components/CustomBreadcrumb';
 import { Box, Paper, Tab, Tabs, TextField, Typography } from '@mui/material';
 import { PropTypes } from 'prop-types';
-import BoxSizeTable from './components/BoxSzieTable/BoxSizeTable';
+import BoxSizeTable from './components/BoxSizeTable/BoxSizeTable';
 import BoxTypeTable from './components/BoxTypeTable/BoxTypeTable';
 
 function TabPanel(props) {

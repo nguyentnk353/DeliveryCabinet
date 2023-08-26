@@ -24,6 +24,7 @@ import {
 import React, { useEffect, useState } from 'react';
 import { useMount } from 'ahooks';
 import {
+  Add,
   DeleteForever,
   DeleteOutline,
   Edit,
@@ -77,19 +78,12 @@ const BoxSizeTable = ({ createSuccess, isEnable }) => {
       });
   });
   useEffect(() => {
-    const api = searchText
-      ? {
-          Name: searchText,
-          PageIndex: 1,
-          PageSize: rpg,
-          IsEnable: isEnable,
-        }
-      : {
-          Name: searchText,
-          PageIndex: pg + 1,
-          PageSize: rpg,
-          IsEnable: isEnable,
-        };
+    const api = {
+      Name: searchText,
+      PageIndex: pg + 1,
+      PageSize: rpg,
+      IsEnable: isEnable,
+    };
     getBoxSizeList(api)
       .then((res) => {
         const newTable = res.items.map((e) => e);
@@ -129,12 +123,12 @@ const BoxSizeTable = ({ createSuccess, isEnable }) => {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 700,
+    width: 500,
     bgcolor: 'background.paper',
     border: 'none',
     borderRadius: '16px',
     boxShadow: 24,
-    p: 4,
+    p: '2rem',
   };
 
   const handleChange = (event, newValue) => {
@@ -150,7 +144,7 @@ const BoxSizeTable = ({ createSuccess, isEnable }) => {
         id: field.id,
         name: val.name,
         description: val.description,
-        isEnable: field.status,
+        isEnable: val.status,
       };
       updateBoxSize(api)
         .then((res) => {
@@ -165,7 +159,7 @@ const BoxSizeTable = ({ createSuccess, isEnable }) => {
           handleClose();
         })
         .catch((err) => {
-          sendNotification({ msg: err, variant: 'error' });
+          console.log({ msg: err, variant: 'error' });
         });
     },
   });
@@ -197,7 +191,12 @@ const BoxSizeTable = ({ createSuccess, isEnable }) => {
   }
   return (
     <Box>
-      <AddBoxSize open={openAdd} setOpen={setOpenAdd} />
+      <AddBoxSize
+        open={openAdd}
+        setOpen={setOpenAdd}
+        msg={msg}
+        sendNotification={sendNotification}
+      />
       <Box>
         <Modal
           open={open}
@@ -222,7 +221,7 @@ const BoxSizeTable = ({ createSuccess, isEnable }) => {
               noValidate
               sx={{ mt: 1 }}
             >
-              <Box sx={{ padding: '2rem' }}>
+              <Box sx={{ paddingBottom: '1rem' }}>
                 <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
                   <TextField
                     margin='normal'
@@ -322,8 +321,12 @@ const BoxSizeTable = ({ createSuccess, isEnable }) => {
           </Button>
         </Box>
         <Box>
-          <Button variant='contained' onClick={handleOpenAdd}>
-            Add Box Size
+          <Button
+            variant='contained'
+            startIcon={<Add />}
+            onClick={handleOpenAdd}
+          >
+            New box size
           </Button>
         </Box>
       </Box>
@@ -331,6 +334,7 @@ const BoxSizeTable = ({ createSuccess, isEnable }) => {
         <Table sx={{ minWidth: 650 }} aria-label='simple table'>
           <TableHead sx={{ backgroundColor: '#f4f6f8' }}>
             <TableRow>
+              <TableCell>Id</TableCell>
               <TableCell>Name</TableCell>
               <TableCell>Length</TableCell>
               <TableCell>Height</TableCell>
@@ -348,8 +352,9 @@ const BoxSizeTable = ({ createSuccess, isEnable }) => {
                 }}
               >
                 <TableCell component='th' scope='row'>
-                  {row.name}
+                  {row.id}
                 </TableCell>
+                <TableCell>{row.name}</TableCell>
                 <TableCell>{row.length}</TableCell>
                 <TableCell>{row.height}</TableCell>
                 <TableCell>{row.description}</TableCell>

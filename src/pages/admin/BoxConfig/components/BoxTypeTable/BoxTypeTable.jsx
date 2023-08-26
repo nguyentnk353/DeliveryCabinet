@@ -24,6 +24,7 @@ import {
 import React, { useEffect, useState } from 'react';
 import { useMount } from 'ahooks';
 import {
+  Add,
   DeleteForever,
   DeleteOutline,
   Edit,
@@ -120,12 +121,12 @@ const BoxTypeTable = ({ createSuccess, isEnable }) => {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 700,
+    width: 500,
     bgcolor: 'background.paper',
     border: 'none',
     borderRadius: '16px',
     boxShadow: 24,
-    p: 4,
+    p: '2rem',
   };
 
   const formik = useFormik({
@@ -177,12 +178,17 @@ const BoxTypeTable = ({ createSuccess, isEnable }) => {
         }
       })
       .catch((err) => {
-        sendNotification({ msg: err, variant: 'error' });
+        console.log({ msg: err, variant: 'error' });
       });
   }
   return (
     <Box>
-      <AddBoxType open={openAdd} setOpen={setOpenAdd} />
+      <AddBoxType
+        open={openAdd}
+        setOpen={setOpenAdd}
+        msg={msg}
+        sendNotification={sendNotification}
+      />
       <Box>
         <Modal
           open={open}
@@ -207,7 +213,7 @@ const BoxTypeTable = ({ createSuccess, isEnable }) => {
               noValidate
               sx={{ mt: 1 }}
             >
-              <Box sx={{ padding: '2rem' }}>
+              <Box sx={{ paddingBottom: '1rem' }}>
                 <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
                   <TextField
                     margin='normal'
@@ -298,8 +304,12 @@ const BoxTypeTable = ({ createSuccess, isEnable }) => {
           </Button>
         </Box>
         <Box>
-          <Button variant='contained' onClick={handleOpenAdd}>
-            Add Box Type
+          <Button
+            variant='contained'
+            startIcon={<Add />}
+            onClick={handleOpenAdd}
+          >
+            New box type
           </Button>
         </Box>
       </Box>

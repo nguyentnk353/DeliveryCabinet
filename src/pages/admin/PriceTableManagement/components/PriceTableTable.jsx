@@ -79,23 +79,16 @@ const PriceTableTable = ({ searchText, createSuccess, isEnable }) => {
         setTableTotal(res.totalRecord);
       })
       .catch((err) => {
-        sendNotification({ msg: err, variant: 'error' });
+        console.log({ msg: err, variant: 'error' });
       });
   });
   useEffect(() => {
-    const api = searchText
-      ? {
-          Name: searchText,
-          PageIndex: 1,
-          PageSize: rpg,
-          IsEnable: isEnable,
-        }
-      : {
-          Name: searchText,
-          PageIndex: pg + 1,
-          PageSize: rpg,
-          IsEnable: isEnable,
-        };
+    const api = {
+      Name: searchText,
+      PageIndex: pg + 1,
+      PageSize: rpg,
+      IsEnable: isEnable,
+    };
     getPriceTableList(api)
       .then((res) => {
         const newTable = res.items.map((e) => e);
@@ -104,7 +97,7 @@ const PriceTableTable = ({ searchText, createSuccess, isEnable }) => {
         createSuccess = false;
       })
       .catch((err) => {
-        sendNotification({ msg: err, variant: 'error' });
+        console.log({ msg: err, variant: 'error' });
       });
   }, [createSuccess, pg, rpg, searchText, msg]);
 
@@ -439,6 +432,7 @@ const PriceTableTable = ({ searchText, createSuccess, isEnable }) => {
         <Table sx={{ minWidth: 650 }} aria-label='simple table'>
           <TableHead sx={{ backgroundColor: '#f4f6f8' }}>
             <TableRow>
+              <TableCell>Id</TableCell>
               <TableCell>Name</TableCell>
               <TableCell>Apply from</TableCell>
               <TableCell>Apply to</TableCell>
@@ -461,8 +455,9 @@ const PriceTableTable = ({ searchText, createSuccess, isEnable }) => {
                 onClick={() => handleOpenPrice(row.id)}
               >
                 <TableCell component='th' scope='row'>
-                  {row?.name}
+                  {row?.id}
                 </TableCell>
+                <TableCell>{row?.name}</TableCell>
                 <TableCell>
                   {moment(row?.applyFrom).format('DD /MM /YYYY')}
                 </TableCell>

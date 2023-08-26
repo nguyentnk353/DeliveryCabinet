@@ -311,30 +311,6 @@ const index = () => {
                 Store Info
               </Typography>
             </Box>
-            {/* <Box
-              sx={{
-                display: 'flex',
-                gap: 3,
-                padding: '8px 16px',
-              }}
-            >
-              <Box>
-                <Typography variant='body1'>Name: </Typography>
-                <Typography variant='body1'>Phone: </Typography>
-                <Typography variant='body1'>Address: </Typography>
-              </Box>
-              <Box>
-                <Typography variant='body1' sx={{ fontWeight: '600' }}>
-                  {locker?.store?.name}
-                </Typography>
-                <Typography variant='body1' sx={{ fontWeight: '600' }}>
-                  {locker?.store?.user?.phone}
-                </Typography>
-                <Typography variant='body1' sx={{ fontWeight: '600' }}>
-                  {locker?.store?.address}
-                </Typography>
-              </Box>
-            </Box> */}
             <Box sx={{ padding: '8px 16px' }}>
               <Box sx={{ display: 'flex' }}>
                 <Typography variant='body1' sx={{ minWidth: '80px' }}>
@@ -358,6 +334,46 @@ const index = () => {
                 </Typography>
                 <Typography variant='body1' sx={{ fontWeight: '600' }}>
                   {locker?.store?.address}
+                </Typography>
+              </Box>
+            </Box>
+            <Divider />
+            <Box sx={{ padding: '1rem 1rem 0.25rem 1rem' }}>
+              <Typography variant='body1' sx={{ fontWeight: '700' }}>
+                Cabinet Info
+              </Typography>
+            </Box>
+            <Box sx={{ padding: '8px 16px' }}>
+              <Box sx={{ display: 'flex' }}>
+                <Typography variant='body1' sx={{ minWidth: '140px' }}>
+                  ID:{' '}
+                </Typography>
+                <Typography variant='body1' sx={{ fontWeight: '600' }}>
+                  {locker?.id}
+                </Typography>
+              </Box>
+              <Box sx={{ display: 'flex' }}>
+                <Typography variant='body1' sx={{ minWidth: '140px' }}>
+                  Name:{' '}
+                </Typography>
+                <Typography variant='body1' sx={{ fontWeight: '600' }}>
+                  {locker?.name}
+                </Typography>
+              </Box>
+              <Box sx={{ display: 'flex' }}>
+                <Typography variant='body1' sx={{ minWidth: '140px' }}>
+                  Size (Row x Col):{' '}
+                </Typography>
+                <Typography variant='body1' sx={{ fontWeight: '600' }}>
+                  {locker?.row} x {locker?.col}
+                </Typography>
+              </Box>
+              <Box sx={{ display: 'flex' }}>
+                <Typography variant='body1' sx={{ minWidth: '140px' }}>
+                  Description:{' '}
+                </Typography>
+                <Typography variant='body1' sx={{ fontWeight: '600' }}>
+                  {locker?.description}
                 </Typography>
               </Box>
             </Box>

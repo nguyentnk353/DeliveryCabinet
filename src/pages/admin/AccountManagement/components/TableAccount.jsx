@@ -23,6 +23,7 @@ import deleteAccount from '../../../../services/deleteAccount';
 import useNotification from '../../../../utils/useNotification';
 
 const TableAccount = ({ status, search, role }) => {
+  const loginUser = JSON.parse(localStorage.getItem('loginUser'));
   const [table, setTable] = useState([]);
   const [page, setPage] = useState(0);
   const [rpg, setrpg] = React.useState(5);
@@ -231,28 +232,32 @@ const TableAccount = ({ status, search, role }) => {
                   )}
                 </TableCell>
                 <TableCell>
-                  <Box sx={{ display: 'flex' }}>
-                    <IconButton
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        navigate('/admin/update-user', {
-                          state: {
-                            accountInfo: row,
-                          },
-                        });
-                      }}
-                    >
-                      <Edit sx={{ color: blue[500] }} />
-                    </IconButton>
-                    <IconButton
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        deleteAccountFunction(row.id);
-                      }}
-                    >
-                      <DeleteForever sx={{ color: red[600] }} />
-                    </IconButton>
-                  </Box>
+                  {loginUser?.Id == row?.id ? (
+                    <></>
+                  ) : (
+                    <Box sx={{ display: 'flex' }}>
+                      <IconButton
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          navigate('/admin/update-user', {
+                            state: {
+                              accountInfo: row,
+                            },
+                          });
+                        }}
+                      >
+                        <Edit sx={{ color: blue[500] }} />
+                      </IconButton>
+                      <IconButton
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          deleteAccountFunction(row.id);
+                        }}
+                      >
+                        <DeleteForever sx={{ color: red[600] }} />
+                      </IconButton>
+                    </Box>
+                  )}
                 </TableCell>
               </TableRow>
             ))}

@@ -1,4 +1,5 @@
 import {
+  Add,
   DeleteForever,
   DeleteOutline,
   Edit,
@@ -29,7 +30,7 @@ import useNotification from '../../../../../utils/useNotification';
 import deleteArea from '../../../../../services/deleteArea';
 import AddArea from './../AddArea/AddArea';
 
-const TableAreaList = ({ status, search }) => {
+const TableAreaList = ({ status }) => {
   const [table, setTable] = useState([]);
   const [page, setPage] = useState(0);
   const [rpg, setrpg] = React.useState(5);
@@ -39,6 +40,7 @@ const TableAreaList = ({ status, search }) => {
   const [msg, sendNotification] = useNotification();
   const [searchText, setSearchText] = useState('');
   const [showModalAdd, setShowModalAdd] = useState(false);
+
   const handleModalOpen = () => {
     setShowModal(true);
   };
@@ -81,22 +83,12 @@ const TableAreaList = ({ status, search }) => {
   });
 
   useEffect(() => {
-    if (search) {
-      setPage(0);
-    }
-    const payload = search
-      ? {
-          PageIndex: 1,
-          PageSize: rpg,
-          search: search,
-          IsEnable: status,
-        }
-      : {
-          PageIndex: page + 1,
-          PageSize: rpg,
-          search: search,
-          IsEnable: status,
-        };
+    const payload = {
+      PageIndex: page + 1,
+      PageSize: rpg,
+      Name: searchText,
+      IsEnable: status,
+    };
     getAreaList(payload)
       .then((res) => {
         const newTable = res.items.map((e) => e);
@@ -106,7 +98,7 @@ const TableAreaList = ({ status, search }) => {
       .catch((err) => {
         console.log(err);
       });
-  }, [page, rpg, search]);
+  }, [page, rpg, searchText, msg]);
   function deleteAreaFunction(id) {
     deleteArea(id)
       .then((res) => {
@@ -120,7 +112,7 @@ const TableAreaList = ({ status, search }) => {
         }
       })
       .catch((err) => {
-        sendNotification({ msg: err, variant: 'error' });
+        console.log({ msg: err, variant: 'error' });
       });
   }
   return (
@@ -128,11 +120,20 @@ const TableAreaList = ({ status, search }) => {
       <Box>
         <UpdateAreaModal
           showModal={showModal}
+          setShowModal={setShowModal}
+          onOpen={handleModalOpen}
           onClose={handleModalClose}
           info={infoModal}
+          msg={msg}
+          sendNotification={sendNotification}
         />
       </Box>
-      <AddArea showModal={showModalAdd} onClose={handleModalCloseAdd} />
+      <AddArea
+        showModal={showModalAdd}
+        onClose={handleModalCloseAdd}
+        msg={msg}
+        sendNotification={sendNotification}
+      />
       <Box
         sx={{
           p: '2%',
@@ -176,8 +177,9 @@ const TableAreaList = ({ status, search }) => {
             variant='contained'
             onClick={handleModalOpenAdd}
             sx={{ marginLeft: '1rem' }}
+            startIcon={<Add />}
           >
-            Add New Area
+            New area
           </Button>
         </Box>
       </Box>

@@ -376,7 +376,8 @@ const index = () => {
             variant='outlined'
             onChange={(e) => setSearchText(e.target.value)}
             value={searchText}
-            sx={{ width: '30%' }}
+            // sx={{ width: '75%' }}
+            fullWidth
             InputProps={{
               startAdornment: (
                 <InputAdornment position='start'>

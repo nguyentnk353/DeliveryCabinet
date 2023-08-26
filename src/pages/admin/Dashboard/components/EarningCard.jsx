@@ -107,7 +107,7 @@ const EarningCard = ({ sum }) => {
                       mb: 0.75,
                     }}
                   >
-                    {sum}
+                    {new Intl.NumberFormat('vi-VN').format(sum)}
                   </Typography>
                 </Grid>
                 <Grid item></Grid>

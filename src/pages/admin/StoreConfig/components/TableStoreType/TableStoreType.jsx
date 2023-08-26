@@ -1,4 +1,5 @@
 import {
+  Add,
   DeleteForever,
   DeleteOutline,
   Edit,
@@ -30,7 +31,7 @@ import deleteStoreType from './../../../../../services/deleteStoreType';
 import UpdateStoreTypeModal from '../UpdateStoreTypeModal/UpdateStoreTypeModal';
 import AddStoreType from './../AddStoreType/AddStoreType';
 
-const TableStoreType = ({ status, search }) => {
+const TableStoreType = ({ status }) => {
   const [table, setTable] = useState([]);
   const [page, setPage] = useState(0);
   const [rpg, setrpg] = React.useState(5);
@@ -82,22 +83,12 @@ const TableStoreType = ({ status, search }) => {
   });
 
   useEffect(() => {
-    if (search) {
-      setPage(0);
-    }
-    const payload = search
-      ? {
-          PageIndex: 1,
-          PageSize: rpg,
-          search: search,
-          IsEnable: status,
-        }
-      : {
-          PageIndex: page + 1,
-          PageSize: rpg,
-          search: search,
-          IsEnable: status,
-        };
+    const payload = {
+      PageIndex: page + 1,
+      PageSize: rpg,
+      Name: searchText,
+      IsEnable: status,
+    };
     getStoreTypeList(payload)
       .then((res) => {
         const newTable = res.items.map((e) => e);
@@ -107,7 +98,7 @@ const TableStoreType = ({ status, search }) => {
       .catch((err) => {
         console.log(err);
       });
-  }, [page, rpg, search]);
+  }, [page, rpg, searchText, msg]);
 
   function deleteStoreTypeFunction(id) {
     deleteStoreType(id)
@@ -130,11 +121,19 @@ const TableStoreType = ({ status, search }) => {
       <Box>
         <UpdateStoreTypeModal
           showModal={showModal}
+          onOpen={handleModalOpen}
           onClose={handleModalClose}
           info={infoModal}
+          msg={msg}
+          sendNotification={sendNotification}
         />
       </Box>
-      <AddStoreType showModal={showModalAdd} onClose={handleModalCloseAdd} />
+      <AddStoreType
+        showModal={showModalAdd}
+        onClose={handleModalCloseAdd}
+        msg={msg}
+        sendNotification={sendNotification}
+      />
       <Box
         sx={{
           p: '2%',
@@ -173,8 +172,12 @@ const TableStoreType = ({ status, search }) => {
           </Button>
         </Box>
         <Box>
-          <Button variant='contained' onClick={handleModalOpenAdd}>
-            Add Store Type
+          <Button
+            variant='contained'
+            startIcon={<Add />}
+            onClick={handleModalOpenAdd}
+          >
+            New store type
           </Button>
         </Box>
       </Box>

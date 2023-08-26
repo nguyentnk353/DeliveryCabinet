@@ -43,10 +43,7 @@ import deleteServiceType from '../../../../services/deleteServiceType';
 import AddService from './AddService/AddService';
 
 const validationSchema = yup.object({
-  price: yup
-    .number('Accept only positive number > 0')
-    .required('Price is required')
-    .positive('Accept only positive number > 0'),
+  name: yup.string().required('Name is required'),
 });
 
 const ServiceTypeTable = ({ createSuccess, isEnable }) => {
@@ -80,23 +77,16 @@ const ServiceTypeTable = ({ createSuccess, isEnable }) => {
         setTableTotal(res.totalRecord);
       })
       .catch((err) => {
-        sendNotification({ msg: err, variant: 'error' });
+        console.log({ msg: err, variant: 'error' });
       });
   });
   useEffect(() => {
-    const api = searchText
-      ? {
-          Id: searchText,
-          PageIndex: 1,
-          PageSize: rpg,
-          IsEnable: isEnable,
-        }
-      : {
-          Id: searchText,
-          PageIndex: pg + 1,
-          PageSize: rpg,
-          IsEnable: isEnable,
-        };
+    const api = {
+      Name: searchText,
+      PageIndex: pg + 1,
+      PageSize: rpg,
+      IsEnable: isEnable,
+    };
     getServiceTypeList(api)
       .then((res) => {
         const newTable = res.items.map((e) => e);
@@ -134,12 +124,12 @@ const ServiceTypeTable = ({ createSuccess, isEnable }) => {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 700,
+    width: 400,
     bgcolor: 'background.paper',
     border: 'none',
     borderRadius: '16px',
     boxShadow: 24,
-    p: 4,
+    p: '2rem',
   };
 
   const formik = useFormik({
@@ -205,7 +195,12 @@ const ServiceTypeTable = ({ createSuccess, isEnable }) => {
 
   return (
     <Box>
-      <AddService open={openAdd} setOpen={setOpenAdd} />
+      <AddService
+        open={openAdd}
+        setOpen={setOpenAdd}
+        msg={msg}
+        sendNotification={sendNotification}
+      />
       <Box>
         <Modal
           open={open}
@@ -230,7 +225,7 @@ const ServiceTypeTable = ({ createSuccess, isEnable }) => {
               noValidate
               sx={{ mt: 1 }}
             >
-              <Box sx={{ padding: '2rem' }}>
+              <Box sx={{ paddingBottom: '1rem' }}>
                 <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
                   <TextField
                     margin='normal'
@@ -244,7 +239,7 @@ const ServiceTypeTable = ({ createSuccess, isEnable }) => {
                     error={formik.touched.name && Boolean(formik.errors.name)}
                     helperText={formik.touched.name && formik.errors.name}
                   />
-                  <Box sx={{ width: '40%', paddingTop: '1%' }}>
+                  <Box sx={{ width: '60%', paddingTop: '0.5rem' }}>
                     <FormControl fullWidth>
                       <InputLabel id='statusLabel'>Status</InputLabel>
                       <Select

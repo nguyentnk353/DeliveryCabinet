@@ -7,6 +7,6 @@ export default function postStoreType(props) {
       name: props.name,
       description: props.description,
     })
-    .then((response) => console.log(response))
-    .catch((err) => console.log(err));
+    .then((response) => response)
+    .catch((err) => err);
 }

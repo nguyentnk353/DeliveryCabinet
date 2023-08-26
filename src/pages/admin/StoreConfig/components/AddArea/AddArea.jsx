@@ -6,16 +6,14 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import createArea from '../../../../../services/postArea';
-import useNotification from './../../../../../utils/useNotification';
 
-const AddArea = ({ showModal, onClose }) => {
+const AddArea = ({ showModal, onClose, msg, sendNotification }) => {
   const [input1, setInput1] = useState('');
   const [input2, setInput2] = useState('');
   const [error, setError] = useState(false);
   const [values, setValues] = useState({ name: '', description: '' });
-  const [msg, sendNotification] = useNotification();
 
   const handleInputChange1 = (e) => {
     setInput1(e.target.value);
@@ -65,10 +63,12 @@ const AddArea = ({ showModal, onClose }) => {
       setValues({ name: '', description: '' });
     }
   };
-
+  useEffect(() => {
+    setError(false);
+  }, [onClose]);
   const modalStyle = {
     position: 'absolute',
-    width: 600,
+    width: 400,
     backgroundColor: '#fff',
     boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.1)',
     padding: '3%',
@@ -88,43 +88,44 @@ const AddArea = ({ showModal, onClose }) => {
             fontWeight: '700',
             textAlign: 'center',
             color: '#2196f3',
-            paddingBottom: '8%',
           }}
         >
           ADD NEW AREA
         </Typography>
-        <TextField
-          label='Name'
-          variant='outlined'
-          value={input1}
-          onChange={handleInputChange1}
-          fullWidth
-          margin='normal'
-          required
-        />
-        {error && (
-          <FormHelperText sx={{ fontSize: '15px', color: 'red' }}>
-            This field is required
-          </FormHelperText>
-        )}
-        <TextField
-          label='Description'
-          variant='outlined'
-          value={input2}
-          onChange={handleInputChange2}
-          fullWidth
-          margin='normal'
-        />
+        <Box sx={{ padding: '1rem 0' }}>
+          <TextField
+            label='Name'
+            variant='outlined'
+            value={input1}
+            onChange={handleInputChange1}
+            fullWidth
+            margin='normal'
+            required
+            error={error}
+          />
+          {error && (
+            <FormHelperText error>This field is required</FormHelperText>
+          )}
+          <TextField
+            label='Description'
+            variant='outlined'
+            value={input2}
+            onChange={handleInputChange2}
+            fullWidth
+            margin='normal'
+          />
+        </Box>
         <Box
           sx={{
             display: 'flex',
-            justifyContent: 'space-between',
+            gap: 1,
+            textAlign: 'center',
+            justifyContent: 'center',
             alignItems: 'center',
-            padding: '20px 20%',
           }}
         >
           <Button variant='contained' color='primary' onClick={handleSave}>
-            Save
+            Add
           </Button>
           <Button variant='outlined' onClick={onClose}>
             Cancel

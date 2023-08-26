@@ -8,6 +8,7 @@ import IncomeCard from './components/IncomeCard';
 import ProfitCard from './components/ProfitCard';
 import getOrderIncome from '../../../services/getOrderIncome';
 import getOrderList from '../../../services/getOrderList';
+import { currencyTail } from '../../../constant/constant';
 
 const index = () => {
   const gridSpacing = 3;
@@ -129,6 +130,11 @@ const index = () => {
         title: {
           text: 'VND',
         },
+        labels: {
+          formatter: function (val) {
+            return new Intl.NumberFormat('vi-VN').format(val);
+          },
+        },
       },
       fill: {
         opacity: 1,
@@ -136,7 +142,7 @@ const index = () => {
       tooltip: {
         y: {
           formatter: function (val) {
-            return val + ' VND';
+            return new Intl.NumberFormat('vi-VN').format(val) + currencyTail;
           },
         },
       },
