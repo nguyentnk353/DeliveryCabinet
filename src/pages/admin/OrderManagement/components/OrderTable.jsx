@@ -33,6 +33,7 @@ import { useNavigate } from 'react-router-dom';
 import useNotification from '../../../../utils/useNotification';
 import getOrderList from '../../../../services/getOrderList';
 import moment from 'moment/moment';
+import { formatVND } from '../../../../utils/formatNumber';
 
 const OrderTable = ({ search, isEnable }) => {
   const theme = useTheme();
@@ -68,22 +69,12 @@ const OrderTable = ({ search, isEnable }) => {
       });
   });
   useEffect(() => {
-    if (search) {
-      setpg(0);
-    }
-    const payload = search
-      ? {
-          PageIndex: 1,
-          PageSize: rpg,
-          Id: search,
-          Status: isEnable,
-        }
-      : {
-          PageIndex: pg + 1,
-          PageSize: rpg,
-          Id: search,
-          Status: isEnable,
-        };
+    const payload = {
+      PageIndex: pg + 1,
+      PageSize: rpg,
+      Id: search,
+      Status: isEnable,
+    };
     getOrderList(payload)
       .then((res) => {
         const newTable = res.items.map((e) => e);
@@ -183,7 +174,7 @@ const OrderTable = ({ search, isEnable }) => {
             <TableHead sx={{ backgroundColor: '#f4f6f8' }}>
               <TableRow>
                 <TableCell>Id</TableCell>
-                <TableCell>Total price</TableCell>
+                <TableCell>Total price (VND)</TableCell>
                 <TableCell>Start time</TableCell>
                 <TableCell>End time</TableCell>
                 <TableCell>Box</TableCell>
@@ -214,7 +205,7 @@ const OrderTable = ({ search, isEnable }) => {
                     {row?.id}
                   </TableCell>
                   <TableCell component='th' scope='row'>
-                    {row?.total}
+                    {formatVND(row?.total)}
                   </TableCell>
                   <TableCell>
                     {moment(row?.createTime).format('DD/MM/YYYY [at] HH:mm')}

@@ -9,6 +9,7 @@ import ProfitCard from './components/ProfitCard';
 import getOrderIncome from '../../../services/getOrderIncome';
 import getOrderList from '../../../services/getOrderList';
 import { currencyTail } from '../../../constant/constant';
+import { formatVND } from '../../../utils/formatNumber';
 
 const index = () => {
   const gridSpacing = 3;
@@ -132,7 +133,7 @@ const index = () => {
         },
         labels: {
           formatter: function (val) {
-            return new Intl.NumberFormat('vi-VN').format(val);
+            return formatVND(val);
           },
         },
       },
@@ -142,7 +143,7 @@ const index = () => {
       tooltip: {
         y: {
           formatter: function (val) {
-            return new Intl.NumberFormat('vi-VN').format(val) + currencyTail;
+            return formatVND(val) + currencyTail;
           },
         },
       },

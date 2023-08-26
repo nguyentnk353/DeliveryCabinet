@@ -18,6 +18,7 @@ import PictureAsPdfTwoToneIcon from '@mui/icons-material/PictureAsPdfOutlined';
 import ArchiveTwoToneIcon from '@mui/icons-material/ArchiveOutlined';
 import { PaidOutlined } from '@mui/icons-material';
 import { currencyTail } from '../../../../constant/constant';
+import { formatVND } from '../../../../utils/formatNumber';
 
 const CardWrapper = styled(MainCard)(({ theme }) => ({
   backgroundColor: '#43a047',
@@ -108,10 +109,7 @@ const ProfitCard = ({ sum }) => {
                       mb: 0.75,
                     }}
                   >
-                    {new Intl.NumberFormat('vi-VN').format(
-                      sum - sum * (8 / 10)
-                    )}{' '}
-                    {currencyTail}
+                    {formatVND(sum - sum * (8 / 10))} {currencyTail}
                   </Typography>
                 </Grid>
                 <Grid item>

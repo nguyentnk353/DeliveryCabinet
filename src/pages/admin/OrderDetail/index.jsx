@@ -8,6 +8,8 @@ import { blue, yellow } from '@mui/material/colors';
 import dayjs from 'dayjs';
 import { VisibilityOutlined } from '@mui/icons-material';
 import ModalPriceTable from './ModalPriceTable';
+import { currencyTail } from './../../../constant/constant';
+import { formatVND } from '../../../utils/formatNumber';
 
 const index = () => {
   const location = useLocation();
@@ -26,12 +28,7 @@ const index = () => {
 
   useMount(() => {
     const payload = {
-      Name: '',
-      IsEnable: true,
       Id: orderInfo?.box?.lockerId,
-      StoreId: '',
-      PageIndex: 1,
-      PageSize: 5,
     };
     getLockerList(payload)
       .then((res) => {
@@ -226,18 +223,20 @@ const index = () => {
                   <Box>
                     <Typography variant='body1' sx={{ fontWeight: '600' }}>
                       {orderInfo?.status == 4
-                        ? (orderInfo?.total * 100) / 110
-                        : orderInfo?.total}{' '}
-                      (VND)
+                        ? formatVND((orderInfo?.total * 100) / 110)
+                        : formatVND(orderInfo?.total)}{' '}
+                      {currencyTail}
                     </Typography>
                     <Typography variant='body1' sx={{ fontWeight: '600' }}>
                       {orderInfo?.status == 4
-                        ? orderInfo?.total - (orderInfo?.total * 100) / 110
+                        ? formatVND(
+                            orderInfo?.total - (orderInfo?.total * 100) / 110
+                          )
                         : 0}{' '}
-                      (VND)
+                      {currencyTail}
                     </Typography>
                     <Typography variant='body1' sx={{ fontWeight: '600' }}>
-                      {orderInfo?.total} (VND)
+                      {formatVND(orderInfo?.total)} {currencyTail}
                     </Typography>
                   </Box>
                 </Box>
@@ -349,7 +348,7 @@ const index = () => {
                   ID:{' '}
                 </Typography>
                 <Typography variant='body1' sx={{ fontWeight: '600' }}>
-                  {locker?.id}
+                  #{locker?.id}
                 </Typography>
               </Box>
               <Box sx={{ display: 'flex' }}>

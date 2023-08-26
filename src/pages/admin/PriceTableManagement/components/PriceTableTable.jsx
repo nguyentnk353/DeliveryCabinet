@@ -434,6 +434,7 @@ const PriceTableTable = ({ searchText, createSuccess, isEnable }) => {
             <TableRow>
               <TableCell>Id</TableCell>
               <TableCell>Name</TableCell>
+              <TableCell>Service type</TableCell>
               <TableCell>Apply from</TableCell>
               <TableCell>Apply to</TableCell>
               <TableCell>Date apply</TableCell>
@@ -458,6 +459,15 @@ const PriceTableTable = ({ searchText, createSuccess, isEnable }) => {
                   {row?.id}
                 </TableCell>
                 <TableCell>{row?.name}</TableCell>
+                <TableCell>
+                  {row?.serviceConfigs.map((e) => (
+                    <Chip
+                      label={e?.serviceType?.name}
+                      size='small'
+                      variant='outlined'
+                    />
+                  ))}
+                </TableCell>
                 <TableCell>
                   {moment(row?.applyFrom).format('DD /MM /YYYY')}
                 </TableCell>

@@ -94,8 +94,9 @@ const index = ({ open, setOpen, priceId }) => {
                     </TableCell>
                     <TableCell>{row?.boxType?.name}</TableCell>
                     <TableCell>
-                      {row?.minDuration} -{' '}
-                      {row.maxDuration === null ? 'Onwards' : row?.maxDuration}
+                      {row.maxDuration === null
+                        ? '>' + row?.minDuration
+                        : row?.minDuration + ' - ' + row?.maxDuration}
                     </TableCell>
                     <TableCell>{row?.price}</TableCell>
                   </TableRow>

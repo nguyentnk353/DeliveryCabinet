@@ -95,7 +95,9 @@ const index = ({ open, setOpen, storeId }) => {
                     </TableCell>
                     <TableCell>{row?.boxType?.name}</TableCell>
                     <TableCell>
-                      {row?.minDuration} - {row?.maxDuration}
+                      {row.maxDuration === null
+                        ? '>' + row?.minDuration
+                        : row?.minDuration + ' - ' + row?.maxDuration}
                     </TableCell>
                     <TableCell>{row?.price}</TableCell>
                   </TableRow>

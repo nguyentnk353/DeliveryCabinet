@@ -33,6 +33,7 @@ import { useNavigate } from 'react-router-dom';
 import useNotification from '../../../../utils/useNotification';
 import moment from 'moment/moment';
 import getOrderByOwner from '../../../../services/storeOwner/getOrderByOwner';
+import { formatVND } from '../../../../utils/formatNumber';
 
 const OrderTable = ({ search, isEnable }) => {
   const theme = useTheme();
@@ -171,7 +172,7 @@ const OrderTable = ({ search, isEnable }) => {
             <TableHead sx={{ backgroundColor: '#f4f6f8' }}>
               <TableRow>
                 <TableCell>Id</TableCell>
-                <TableCell>Total price</TableCell>
+                <TableCell>Total price (VND)</TableCell>
                 <TableCell>Start time</TableCell>
                 <TableCell>End time</TableCell>
                 <TableCell>Box</TableCell>
@@ -202,7 +203,7 @@ const OrderTable = ({ search, isEnable }) => {
                     {row?.id}
                   </TableCell>
                   <TableCell component='th' scope='row'>
-                    {row?.total}
+                    {formatVND(row?.total)}
                   </TableCell>
                   <TableCell>
                     {moment(row?.createTime).format('DD/MM/YYYY [at] HH:mm')}

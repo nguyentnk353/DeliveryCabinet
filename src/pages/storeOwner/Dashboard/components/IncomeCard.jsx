@@ -16,6 +16,8 @@ import GetAppTwoToneIcon from '@mui/icons-material/GetAppOutlined';
 import FileCopyTwoToneIcon from '@mui/icons-material/FileCopyOutlined';
 import PictureAsPdfTwoToneIcon from '@mui/icons-material/PictureAsPdfOutlined';
 import ArchiveTwoToneIcon from '@mui/icons-material/ArchiveOutlined';
+import { currencyTail } from '../../../../constant/constant';
+import { formatVND } from '../../../../utils/formatNumber';
 
 const CardWrapper = styled(MainCard)(({ theme }) => ({
   backgroundColor: '#1e88e5',
@@ -106,7 +108,7 @@ const IncomeCard = ({ sum }) => {
                       mb: 0.75,
                     }}
                   >
-                    {sum} VND
+                    {formatVND(sum)} {currencyTail}
                   </Typography>
                 </Grid>
                 <Grid item>
