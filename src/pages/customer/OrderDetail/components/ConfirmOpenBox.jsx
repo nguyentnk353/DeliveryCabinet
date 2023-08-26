@@ -1,43 +1,37 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
 import ModalBasic from './../../components/ModalBasic/ModalBasic';
-import completeOrder from '../../../../services/Customer/completeOrder';
 import useNotification from '../../../../utils/useNotification';
+import openBox from '../../../../services/Customer/openBox';
 
-const ConfirmFinishRentModal = ({isOpen, setIsOpen, orderId, setLoadFinish}) => {
+const ConfirmOpenBox = ({isOpen, setIsOpen, boxId}) => {
     const navigate = useNavigate();
     const [msg, sendNotification] = useNotification();
 
     const handleFinishOrder = () => {
-        completeOrder(orderId)
-            .then(async(res) => {
-                setLoadFinish(false);
+        openBox(boxId)
+            .then((res) => {
                 if (res.status == 200) {
                     sendNotification({
-                      msg: 'Thanh toán đơn hàng thành công',
+                      msg: 'Mở tủ thành công',
                       variant: 'success',
-                    });
-                    await new Promise((resolve)=>setTimeout(resolve, 3000))
-                    navigate('/customer'); 
+                    }); 
                   } else {
                     sendNotification({ msg: 'Số dư tài khoản không đủ', variant: 'error' });
                   }
             })
             .catch((err) => {
-                sendNotification({ msg: "không hoàn thành được đơn hàng", variant: 'error' });
+                sendNotification({ msg: "Lỗi mở box", variant: 'error' });
         });
     }
     return (
         <>
-            <ModalBasic modalOpen={isOpen} setModalOpen={setIsOpen} title="XÁC NHẬN LẤY HÀNG">
+            <ModalBasic modalOpen={isOpen} setModalOpen={setIsOpen} title="XÁC NHẬN MỞ BOX">
                 <>
                     {/* Modal content */}
                     <div className="px-5 pt-4 pb-1">
                         <div className="text-sm">
-                            <div className="hidden font-medium text-slate-800 mb-2">
-                                Sau khi nhấn xác nhận, bạn có <span className='text-red-500'>10</span> giây để lấy hàng trước khi tủ tự đóng.
-                            </div>
-                            <div className="font-medium text-slate-800 mb-2">Xác nhận ngừng thuê box và lấy hàng ?</div>
+                            <div className="font-medium text-slate-800 mb-2">Xác nhận mở tủ để gửi hoặc lấy hàng ?</div>
                         </div>
                     </div>
                     {/* Modal footer */}
@@ -48,7 +42,6 @@ const ConfirmFinishRentModal = ({isOpen, setIsOpen, orderId, setLoadFinish}) => 
                                 onClick={(e) => {
                                     e.stopPropagation();
                                     setIsOpen(false);
-                                    setLoadFinish(true);
                                     handleFinishOrder();
                                 }}>
                                 Xác nhận
@@ -61,4 +54,4 @@ const ConfirmFinishRentModal = ({isOpen, setIsOpen, orderId, setLoadFinish}) => 
     )
 }
 
-export default ConfirmFinishRentModal
+export default ConfirmOpenBox

@@ -25,7 +25,7 @@ function PaginationClassic({currentPage, onPageChange, totalStore}) {
           } 
           
           </li>
-          {currentTotalLoaded <= totalStore ? (
+          {currentTotalLoaded < totalStore ? (
           <li className="ml-3 first:ml-0">
             <button
               className="btn bg-white border-slate-200 hover:border-slate-300 text-indigo-500 p-2 flex items-center"          

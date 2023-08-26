@@ -10,10 +10,19 @@ function CardOrderCustomer({ order }) {
     <>
       <ul>
         <div className='pt-2 flex justify-between'>
-          {(order?.status == 2 || order?.status == 4) ?
-            <div className="inline-flex text-sm font-medium bg-emerald-100 text-emerald-600 rounded-full px-2 pt-1">{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(order?.total)}</div> : <div></div>
+          {(order?.status == 2 || order?.status == 4 || order?.status == 3) ?
+            order?.status != 3 ?
+              (
+                <div className="inline-flex text-sm font-medium bg-emerald-100 text-emerald-600 rounded-full px-2 pt-1">
+                  <span>{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(order?.total)}</span>
+                </div>
+              ) : (
+                <span className='text-red-600'>Chưa thanh toán</span>
+              )
+
+            : <div></div>
           }
-          <div className={`font-medium ${(order?.status == 0 || order?.status == 3) ? "text-red-500" : "text-green-500" }`}>{order?.statusName}</div> 
+          <div className={`font-medium ${(order?.status == 0 || order?.status == 3) ? "text-red-500" : "text-green-500"}`}>{order?.statusName}</div>
         </div>
         {/* Cart item */}
         <li className="sm:flex items-center md:py-6 max-md:py-2 border-b border-slate-200">

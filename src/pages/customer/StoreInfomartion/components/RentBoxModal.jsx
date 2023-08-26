@@ -6,7 +6,7 @@ import ShowPriceTable from './ShowPriceTable';
 import ModalBasic from './ModalBasic';
 import { UnitSizeBox } from '../../../../constant/boxConstant';
 
-const RentBoxModal = ({ isOpen, setIsOpen, boxInfo, storeInfo, serviceTypeId }) => {
+const RentBoxModal = ({ isOpen, setIsOpen, boxInfo, storeInfo, serviceTypeId, setLoadFinish}) => {
     const navigate = useNavigate();
     const [msg, sendNotification] = useNotification();
     const [showPrice, setShowPrice] = useState(false);
@@ -20,6 +20,7 @@ const RentBoxModal = ({ isOpen, setIsOpen, boxInfo, storeInfo, serviceTypeId }) 
         }
         rentBox(payload)
             .then(async (res) => {
+                setLoadFinish(false);
                 if (res.status == 201) {
                     sendNotification({ msg: 'Thuê tủ thành công', variant: 'success' });
                     await new Promise((resolve)=>setTimeout(resolve, 3000))
@@ -76,6 +77,7 @@ const RentBoxModal = ({ isOpen, setIsOpen, boxInfo, storeInfo, serviceTypeId }) 
                                 onClick={(e) => {
                                     e.stopPropagation();
                                     setIsOpen(false);
+                                    setLoadFinish(true)
                                     handleRentBox();
                                 }}>
                                 Xác nhận
