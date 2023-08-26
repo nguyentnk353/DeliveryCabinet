@@ -214,6 +214,9 @@ const index = () => {
                     <Box sx={{ display: 'flex', gap: 3 }}>
                       <Box>
                         <Typography variant='body1' sx={{ fontWeight: '600' }}>
+                          Box ID:
+                        </Typography>
+                        <Typography variant='body1' sx={{ fontWeight: '600' }}>
                           Box name:
                         </Typography>{' '}
                         <Typography variant='body1' sx={{ fontWeight: '600' }}>
@@ -237,13 +240,16 @@ const index = () => {
                       </Box>
                       <Box>
                         <Typography variant='body1' sx={{ fontWeight: '600' }}>
-                          {box.code}
+                          #{box?.id}
                         </Typography>
                         <Typography variant='body1' sx={{ fontWeight: '600' }}>
-                          {box.openCode}
+                          {box?.code}
                         </Typography>
                         <Typography variant='body1' sx={{ fontWeight: '600' }}>
-                          {box.isOpen ? (
+                          {box?.openCode}
+                        </Typography>
+                        <Typography variant='body1' sx={{ fontWeight: '600' }}>
+                          {box?.isOpen ? (
                             <Chip
                               size='small'
                               sx={{
@@ -299,16 +305,16 @@ const index = () => {
                           } */}
                         </Typography>
                         <Typography variant='body1' sx={{ fontWeight: '600' }}>
-                          {box.boxSize.length} x {box.boxSize.height}
+                          {box?.boxSize.length} x {box?.boxSize.height}
                         </Typography>
                         <Typography variant='body1' sx={{ fontWeight: '600' }}>
-                          {box.boxType.name}
+                          {box?.boxType.name}
                         </Typography>
                         <Typography variant='body1' sx={{ fontWeight: '600' }}>
-                          {box.fromTop} / {box.fromLeft}
+                          {box?.fromTop} / {box?.fromLeft}
                         </Typography>
                         <Typography variant='body1' sx={{ fontWeight: '600' }}>
-                          {box.description}
+                          {box?.description}
                         </Typography>
                       </Box>
                     </Box>
@@ -361,7 +367,7 @@ const index = () => {
                   <Box>
                     <Table>
                       <TableBody>
-                        {table.map((row) => (
+                        {table?.map((row) => (
                           <TableRow
                             sx={{
                               '&:nth-of-type(odd)': {
@@ -395,13 +401,13 @@ const index = () => {
             id='grid'
             style={{
               display: 'grid',
-              gridTemplateColumns: `repeat(${cabinetInfo.col}, 1fr)`,
-              gridTemplateRows: `repeat(${cabinetInfo.row}, 1fr)`,
+              gridTemplateColumns: `repeat(${cabinetInfo?.col}, 1fr)`,
+              gridTemplateRows: `repeat(${cabinetInfo?.row}, 1fr)`,
               gridGap: '8px',
             }}
           >
             {cabinetInfo?.boxes &&
-              cabinetInfo.boxes?.map((e, i) => {
+              cabinetInfo?.boxes?.map((e, i) => {
                 const stat = colorStatus(e.status);
                 return (
                   <Paper
@@ -428,10 +434,10 @@ const index = () => {
                     <Chip
                       sx={{
                         marginTop: '50%',
-                        color: stat.color,
-                        bgcolor: stat.bgcolor,
+                        color: stat?.color,
+                        bgcolor: stat?.bgcolor,
                       }}
-                      label={stat.label}
+                      label={stat?.label}
                     />
                   </Paper>
                 );

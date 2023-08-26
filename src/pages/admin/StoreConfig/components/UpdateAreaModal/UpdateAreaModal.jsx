@@ -8,18 +8,25 @@ import {
   Select,
   TextField,
   Typography,
-} from "@mui/material";
-import React, { useEffect, useState } from "react";
-import { blue } from "@mui/material/colors";
-import { useFormik } from "formik";
-import * as yup from "yup";
-import { MenuItem } from "@mui/material";
-import { useMount } from "ahooks";
-import updateArea from "../../../../../services/updateArea";
-import useNotification from "../../../../../utils/useNotification";
-const UpdateAreaModal = ({ showModal, onClose, info }) => {
-  const [openModal, setOpenModal] = useState(showModal);
-  const [msg, sendNotification] = useNotification();
+} from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { blue } from '@mui/material/colors';
+import { useFormik } from 'formik';
+import * as yup from 'yup';
+import { MenuItem } from '@mui/material';
+import { useMount } from 'ahooks';
+import updateArea from '../../../../../services/updateArea';
+const UpdateAreaModal = ({
+  showModal,
+  setShowModal,
+  onOpen,
+  onClose,
+  info,
+  msg,
+  sendNotification,
+}) => {
+  // const [openModal, setOpenModal] = useState(showModal);
+
   const [field, setField] = useState({
     id: info?.id,
     name: info?.name,
@@ -27,19 +34,19 @@ const UpdateAreaModal = ({ showModal, onClose, info }) => {
     description: info?.description,
   });
 
-  useEffect(()=>{
+  useEffect(() => {
     setField({
-        id: info?.id,
-        name: info?.name,
-        status: info?.isEnable,
-        description: info?.description, 
-    })
-  }, [info])
-  useEffect(()=>{
-    setOpenModal(showModal)
-  }, [showModal])
+      id: info?.id,
+      name: info?.name,
+      status: info?.isEnable,
+      description: info?.description,
+    });
+  }, [info, showModal]);
+  // useEffect(() => {
+  //   setOpenModal(showModal);
+  // }, [showModal]);
   const validationSchema = yup.object({
-    name: yup.string("Enter area name").required("Name is required"),
+    name: yup.string('Enter area name').required('Name is required'),
   });
 
   const formik = useFormik({
@@ -54,7 +61,7 @@ const UpdateAreaModal = ({ showModal, onClose, info }) => {
         isEnable: field.status,
       };
       updateArea(api)
-        .then((res) => {         
+        .then((res) => {
           if (res.status == 200) {
             sendNotification({
               msg: 'Area update success',
@@ -66,7 +73,7 @@ const UpdateAreaModal = ({ showModal, onClose, info }) => {
           handleClose();
         })
         .catch((err) => {
-          sendNotification({ msg: err, variant: 'error' });
+          console.log({ msg: err, variant: 'error' });
         });
     },
   });
@@ -79,67 +86,68 @@ const UpdateAreaModal = ({ showModal, onClose, info }) => {
         status: '',
       },
     });
-    setOpenModal(false);
+    // setOpenModal(false);
+    onClose();
   };
   const style = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: 600,
-    bgcolor: "background.paper",
-    border: "none",
-    borderRadius: "16px",
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 500,
+    bgcolor: 'background.paper',
+    border: 'none',
+    borderRadius: '16px',
     boxShadow: 24,
-    p: 2,
+    p: '2rem',
   };
 
   return (
     <Modal
-      open={openModal}
+      open={showModal}
       onClose={onClose}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
+      aria-labelledby='modal-modal-title'
+      aria-describedby='modal-modal-description'
     >
       <Box sx={style}>
         <Typography
-          id="modal-modal-title"
-          variant="h5"
-          component="h2"
-          textAlign="center"
-          fontWeight="bold"
+          id='modal-modal-title'
+          variant='h5'
+          component='h2'
+          textAlign='center'
+          fontWeight='bold'
           color={blue[500]}
         >
           UPDATE AREA
         </Typography>
         <Box
-          component="form"
+          component='form'
           onSubmit={formik.handleSubmit}
           noValidate
           sx={{ mt: 1 }}
         >
-          <Box sx={{ padding: "2rem" }}>
-            <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
+          <Box sx={{ paddingBottom: '1rem' }}>
+            <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
               <TextField
-                margin="normal"
+                margin='normal'
                 fullWidth
                 required
-                id="name"
-                label="Name"
+                id='name'
+                label='Name'
                 autoFocus
                 value={formik.values.name}
                 onChange={formik.handleChange}
                 error={formik.touched.name && Boolean(formik.errors.name)}
                 helperText={formik.touched.name && formik.errors.name}
               />
-              <Box sx={{ width: "50%", paddingTop: "1%" }}>
+              <Box sx={{ width: '50%', paddingTop: '1%' }}>
                 <FormControl fullWidth>
-                  <InputLabel id="statusLabel">Status</InputLabel>
+                  <InputLabel id='statusLabel'>Status</InputLabel>
                   <Select
-                    labelId="statusLabel"
-                    id="status"
+                    labelId='statusLabel'
+                    id='status'
                     value={field.status}
-                    label="Status"
+                    label='Status'
                     onChange={(e) => {
                       setField((preState) => ({
                         ...preState,
@@ -154,10 +162,10 @@ const UpdateAreaModal = ({ showModal, onClose, info }) => {
               </Box>
             </Box>
             <TextField
-              margin="normal"
+              margin='normal'
               fullWidth
-              id="description"
-              label="Description"
+              id='description'
+              label='Description'
               autoFocus
               value={formik.values.description}
               onChange={formik.handleChange}
@@ -165,17 +173,17 @@ const UpdateAreaModal = ({ showModal, onClose, info }) => {
           </Box>
           <Box
             sx={{
-              display: "flex",
+              display: 'flex',
               gap: 1,
-              textAlign: "center",
-              justifyContent: "center",
-              alignItems: "center",
+              textAlign: 'center',
+              justifyContent: 'center',
+              alignItems: 'center',
             }}
           >
-            <Button variant="contained" type="submit">
+            <Button variant='contained' type='submit'>
               Update
             </Button>
-            <Button variant="outlined" onClick={onClose}>
+            <Button variant='outlined' onClick={onClose}>
               Cancel
             </Button>
           </Box>

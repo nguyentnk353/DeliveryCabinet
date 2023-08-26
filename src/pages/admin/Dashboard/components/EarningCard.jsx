@@ -17,6 +17,7 @@ import FileCopyTwoToneIcon from '@mui/icons-material/FileCopyOutlined';
 import PictureAsPdfTwoToneIcon from '@mui/icons-material/PictureAsPdfOutlined';
 import ArchiveTwoToneIcon from '@mui/icons-material/ArchiveOutlined';
 import { LocalMallOutlined } from '@mui/icons-material';
+import { formatVND } from '../../../../utils/formatNumber';
 
 const CardWrapper = styled(MainCard)(({ theme }) => ({
   backgroundColor: '#5e35b1',
@@ -107,7 +108,7 @@ const EarningCard = ({ sum }) => {
                       mb: 0.75,
                     }}
                   >
-                    {sum}
+                    {formatVND(sum)}
                   </Typography>
                 </Grid>
                 <Grid item></Grid>

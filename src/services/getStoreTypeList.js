@@ -1,15 +1,10 @@
 import { request } from '../utils/request';
 
-export default function getStoreTypeList(props) {
+export default function getStoreTypeList(payload) {
   const url = '/store-types';
   return request
     .get(url, {
-      params: {
-        Name: props.search,
-        IsEnable: props.IsEnable,
-        PageIndex: props.PageIndex,
-        PageSize: props.PageSize,
-      },
+      params: payload,
     })
     .then((response) => response.data)
     .catch((err) => err.response.data);

@@ -7,6 +7,8 @@ import EarningCard from './components/EarningCard';
 import ReactApexChart from 'react-apexcharts';
 import IncomeCard from './components/IncomeCard';
 import ProfitCard from './components/ProfitCard';
+import { formatVND } from '../../../utils/formatNumber';
+import { currencyTail } from '../../../constant/constant';
 
 const index = () => {
   const gridSpacing = 3;
@@ -128,6 +130,11 @@ const index = () => {
         title: {
           text: 'VND',
         },
+        labels: {
+          formatter: function (val) {
+            return formatVND(val);
+          },
+        },
       },
       fill: {
         opacity: 1,
@@ -135,7 +142,7 @@ const index = () => {
       tooltip: {
         y: {
           formatter: function (val) {
-            return val + ' VND';
+            return formatVND(val) + currencyTail;
           },
         },
       },

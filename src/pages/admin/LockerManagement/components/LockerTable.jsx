@@ -78,24 +78,13 @@ const LockerTable = ({ search, isEnable }) => {
       });
   });
   useEffect(() => {
-    if (search) {
-      setpg(0);
-    }
-    const payload = search
-      ? {
-          Name: search,
-          IsEnable: isEnable,
-          StoreId: search,
-          PageIndex: 1,
-          PageSize: rpg,
-        }
-      : {
-          Name: search,
-          IsEnable: isEnable,
-          StoreId: search,
-          PageIndex: pg + 1,
-          PageSize: rpg,
-        };
+    const payload = {
+      Name: search,
+      IsEnable: isEnable,
+      StoreId: search,
+      PageIndex: pg + 1,
+      PageSize: rpg,
+    };
     getLockerList(payload)
       .then((res) => {
         const newTable = res.items.map((e) => e);
@@ -219,91 +208,7 @@ const LockerTable = ({ search, isEnable }) => {
   return (
     <Box>
       <AssignModal open={open2} setOpen={setOpen2} field={field2} />
-      {/* <Box>
-        <Modal
-          open={open}
-          onClose={handleClose}
-          aria-labelledby='modal-modal-title'
-          aria-describedby='modal-modal-description'
-        >
-          <Box sx={style}>
-            <Typography
-              id='modal-modal-title'
-              variant='h5'
-              component='h2'
-              textAlign='center'
-              fontWeight='bold'
-              color={blue[500]}
-            >
-              UPDATE CABINET
-            </Typography>
-            <Box
-              component='form'
-              onSubmit={formik.handleSubmit}
-              noValidate
-              sx={{ mt: 1 }}
-            >
-              <Box sx={{ padding: '2rem' }}>
-                <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-                  <TextField
-                    margin='normal'
-                    fullWidth
-                    required
-                    id='name'
-                    label='Name'
-                    autoFocus
-                    value={formik.values.name}
-                    onChange={formik.handleChange}
-                    error={formik.touched.name && Boolean(formik.errors.name)}
-                    helperText={formik.touched.name && formik.errors.name}
-                  />
-                  <Box sx={{ width: '50%', paddingTop: '1%' }}>
-                    <FormControl fullWidth>
-                      <InputLabel id='statusLabel'>Status</InputLabel>
-                      <Select
-                        labelId='statusLabel'
-                        id='status'
-                        label='Status'
-                        value={formik.values.status}
-                        onChange={(e) => {
-                          formik.setFieldValue('status', e.target.value);
-                        }}
-                      >
-                        <MenuItem value={true}>Active</MenuItem>
-                        <MenuItem value={false}>Inactive</MenuItem>
-                      </Select>
-                    </FormControl>
-                  </Box>
-                </Box>
-                <TextField
-                  margin='normal'
-                  fullWidth
-                  id='description'
-                  label='Description'
-                  value={formik.values.description}
-                  onChange={formik.handleChange}
-                />
-              </Box>
-              <Box
-                sx={{
-                  display: 'flex',
-                  gap: 1,
-                  textAlign: 'center',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
-              >
-                <Button variant='contained' type='submit'>
-                  Update
-                </Button>
-                <Button variant='outlined' onClick={handleClose}>
-                  Cancel
-                </Button>
-              </Box>
-            </Box>
-          </Box>
-        </Modal>
-      </Box> */}
+
       <Box>
         <Modal
           open={open}
@@ -434,7 +339,7 @@ const LockerTable = ({ search, isEnable }) => {
                     <TableCell>{row.row}</TableCell>
                     <TableCell>{row.col}</TableCell>
                     <TableCell>
-                      {row.store.name ? row.store.name : 'Unassign'}
+                      {row.store.id != 0 ? row.store.name : 'Unassign'}
                     </TableCell>
                     <TableCell>
                       {row.isEnable ? (

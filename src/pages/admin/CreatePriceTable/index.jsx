@@ -651,17 +651,11 @@ const index = () => {
                             padding: '1rem 0',
                           }}
                         >
-                          <IconButton>
-                            <Save
-                              onClick={addService}
-                              sx={{ color: blue[500] }}
-                            />
+                          <IconButton onClick={addService}>
+                            <Save sx={{ color: blue[500] }} />
                           </IconButton>
-                          <IconButton>
-                            <Close
-                              onClick={cancelServiceItem}
-                              sx={{ color: red[500] }}
-                            />
+                          <IconButton onClick={cancelServiceItem}>
+                            <Close sx={{ color: red[500] }} />
                           </IconButton>
                         </Box>
                       </Box>
@@ -879,17 +873,11 @@ const index = () => {
                                       padding: '1rem 0',
                                     }}
                                   >
-                                    <IconButton>
-                                      <Save
-                                        onClick={addItem}
-                                        sx={{ color: blue[500] }}
-                                      />
+                                    <IconButton onClick={addItem}>
+                                      <Save sx={{ color: blue[500] }} />
                                     </IconButton>
-                                    <IconButton>
-                                      <Close
-                                        onClick={cancelItem}
-                                        sx={{ color: red[500] }}
-                                      />
+                                    <IconButton onClick={cancelItem}>
+                                      <Close sx={{ color: red[500] }} />
                                     </IconButton>
                                   </Box>
                                 </Box>

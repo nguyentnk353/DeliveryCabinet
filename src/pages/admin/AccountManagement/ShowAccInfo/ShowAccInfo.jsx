@@ -23,6 +23,7 @@ import StoreManagement_2 from './components/StoreManagement_2';
 import CustomBreadcrumb from '../../../../components/CustomBreadcrumb';
 
 const ShowAccInfo = () => {
+  const loginUser = JSON.parse(localStorage.getItem('loginUser'));
   const [loading, setLoading] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
@@ -119,19 +120,23 @@ const ShowAccInfo = () => {
                   >
                     Personal Information
                   </Typography>
-                  <Button
-                    variant='text'
-                    sx={{ p: '0 20px 0 0' }}
-                    onClick={() =>
-                      navigate('/admin/update-user', {
-                        state: {
-                          accountInfo: userInfo,
-                        },
-                      })
-                    }
-                  >
-                    Edit Account
-                  </Button>
+                  {loginUser?.Id == userInfo?.id ? (
+                    <></>
+                  ) : (
+                    <Button
+                      variant='text'
+                      sx={{ p: '0 1rem' }}
+                      onClick={() =>
+                        navigate('/admin/update-user', {
+                          state: {
+                            accountInfo: userInfo,
+                          },
+                        })
+                      }
+                    >
+                      Edit Account
+                    </Button>
+                  )}
                 </Box>
                 <List component='nav' aria-label='mailbox folders'>
                   <ItemInfoAcc

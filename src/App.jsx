@@ -1,8 +1,14 @@
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { SnackbarProvider } from 'notistack';
-import { Suspense } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { ProSidebarProvider } from 'react-pro-sidebar';
-import { Navigate, Route, Routes } from 'react-router-dom';
+import {
+  Navigate,
+  Route,
+  Routes,
+  useLocation,
+  useMatch,
+} from 'react-router-dom';
 import { RolesAuthRoute } from './context/RolesAuthRoute';
 import AccountManagement from './pages/admin/AccountManagement/AccountManagement';
 import Admin from './pages/admin/Admin';
@@ -46,7 +52,10 @@ import LoginCustomer from './pages/guest/Guest/LoginCustomer/LoginCustomer';
 import Login from './pages/guest/Login';
 import LoginCustomerV2 from './pages/guest/LoginCustomerV2';
 import RegisterCustomerV2 from './pages/guest/RegisterCustomerV2';
+import LoginOrder from './pages/guest/LoginOrder';
+import RegisterOrder from './pages/guest/RegisterOrder';
 import OpenBox from './pages/guest/OpenBox';
+import GuestError from './pages/guest/GuestError';
 import theme from './theme';
 import Wallet from './pages/customer/Wallet/Wallet';
 import CustomerLanding from './pages/customer/CustomerLanding/CustomerLanding';
@@ -77,6 +86,16 @@ import 'antd/dist/reset.css';
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import './index.css';
 function App() {
+  const location = useLocation();
+  const [lockerId, setLockerId] = useState(83);
+  useEffect(() => {
+    if (location) {
+      if (location.pathname.includes('/open-box')) {
+        setLockerId(location.pathname.slice(10));
+      }
+    }
+  }, [location]);
+
   return (
     <ProSidebarProvider>
       <ThemeProvider theme={theme}>
@@ -95,12 +114,15 @@ function App() {
             <Route path='/home' element={<Guest />} />
             <Route path='/login' element={<LoginCustomerV2 />} />
             <Route path='/register' element={<RegisterCustomerV2 />} />
+            <Route path='/order/login' element={<LoginOrder />} />
+            <Route path='/order/register' element={<RegisterOrder />} />
             <Route path='/login-employee' element={<Login />} />
             <Route path='/login-customer' element={<LoginCustomer />} />
             <Route path='/open-box/39' element={<OpenBox />} />
             <Route path='/open-box/83' element={<OpenBox />} />
+            <Route path={`/open-box/${lockerId}`} element={<OpenBox />} />
 
-            {/* <Route path='*' element={<MissingPage />} /> */}
+            <Route path='*' element={<GuestError />} />
             {/* protected routes */}
             <Route
               path='/admin'

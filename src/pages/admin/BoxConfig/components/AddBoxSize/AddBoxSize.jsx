@@ -9,18 +9,17 @@ import { blue } from '@mui/material/colors';
 const validationSchema = yup.object({
   name: yup.string('Enter box size name').required('Name is required'),
   length: yup
-    .number()
+    .number('Length must be a number')
     .required('Length is required')
     .positive('Accept only positive integer > 0')
     .integer('Accept only positive integer > 0'),
   height: yup
-    .number()
+    .number('Height must be a number')
     .required('Height is required')
     .positive('Accept only positive integer > 0')
     .integer('Accept only positive integer > 0'),
 });
-const AddBoxSize = ({ open, setOpen }) => {
-  const [msg, sendNotification] = useNotification();
+const AddBoxSize = ({ open, setOpen, msg, sendNotification }) => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
     formik.resetForm({
@@ -38,12 +37,12 @@ const AddBoxSize = ({ open, setOpen }) => {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 700,
+    width: 500,
     bgcolor: 'background.paper',
     border: 'none',
     borderRadius: '16px',
     boxShadow: 24,
-    p: 4,
+    p: '2rem',
   };
 
   const handleChange = (event, newValue) => {
@@ -103,7 +102,7 @@ const AddBoxSize = ({ open, setOpen }) => {
           fontWeight='bold'
           color={blue[500]}
         >
-          ADD NEW BOX SIZE
+          ADD BOX SIZE
         </Typography>
         <Box
           component='form'
@@ -111,7 +110,7 @@ const AddBoxSize = ({ open, setOpen }) => {
           noValidate
           sx={{ mt: 1 }}
         >
-          <Box sx={{ padding: '2rem' }}>
+          <Box sx={{ paddingBottom: '1rem' }}>
             <TextField
               margin='normal'
               fullWidth

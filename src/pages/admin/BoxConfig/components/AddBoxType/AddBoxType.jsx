@@ -9,8 +9,7 @@ import { Box, Button, Modal, TextField, Typography } from '@mui/material';
 const validationSchema = yup.object({
   name: yup.string('Enter box type name').required('Name is required'),
 });
-const AddBoxType = ({ open, setOpen }) => {
-  const [msg, sendNotification] = useNotification();
+const AddBoxType = ({ open, setOpen, msg, sendNotification }) => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
     formik.resetForm({
@@ -25,12 +24,12 @@ const AddBoxType = ({ open, setOpen }) => {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 700,
+    width: 400,
     bgcolor: 'background.paper',
     border: 'none',
     borderRadius: '16px',
     boxShadow: 24,
-    p: 4,
+    p: '2rem',
   };
 
   const handleChange = (event, newValue) => {
@@ -55,14 +54,13 @@ const AddBoxType = ({ open, setOpen }) => {
               msg: 'Box type create success',
               variant: 'success',
             });
-            setCreateSuccess(true);
           } else {
             sendNotification({ msg: 'Box type create fail', variant: 'error' });
           }
           handleClose();
         })
         .catch((err) => {
-          sendNotification({ msg: err, variant: 'error' });
+          console.log({ msg: err, variant: 'error' });
         });
     },
   });
@@ -82,7 +80,7 @@ const AddBoxType = ({ open, setOpen }) => {
           fontWeight='bold'
           color={blue[500]}
         >
-          ADD NEW BOX TYPE
+          ADD BOX TYPE
         </Typography>
         <Box
           component='form'
@@ -90,7 +88,7 @@ const AddBoxType = ({ open, setOpen }) => {
           noValidate
           sx={{ mt: 1 }}
         >
-          <Box sx={{ padding: '2rem', display: 'flex', gap: 2 }}>
+          <Box sx={{ paddingBottom: '1rem' }}>
             <TextField
               margin='normal'
               fullWidth
