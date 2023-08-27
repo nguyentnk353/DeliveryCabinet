@@ -22,6 +22,7 @@ import { useNavigate } from 'react-router-dom';
 import deleteAccount from '../../../../services/deleteAccount';
 import useNotification from '../../../../utils/useNotification';
 import getStaffByOwner from './../../../../services/storeOwner/getStaffByOwner';
+import { Empty } from 'antd';
 
 const TableAccount = ({ status, search, role }) => {
   const [table, setTable] = useState([]);
@@ -257,6 +258,13 @@ const TableAccount = ({ status, search, role }) => {
                 </TableCell>
               </TableRow>
             ))}
+            {table.length === 0 && (
+              <TableRow>
+                <TableCell colSpan={7}>
+                  <Empty />
+                </TableCell>
+              </TableRow>
+            )}
           </TableBody>
         </Table>
       </TableContainer>

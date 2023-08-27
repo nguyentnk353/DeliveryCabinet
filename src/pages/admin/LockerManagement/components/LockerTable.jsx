@@ -37,6 +37,7 @@ import updateLocker from './../../../../services/updateLocker';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import AssignModal from './AssignModal';
+import { Empty } from 'antd';
 
 const validationSchema = yup.object({
   name: yup.string('Enter box size name').required('Name is required'),
@@ -102,6 +103,7 @@ const LockerTable = ({ search, isEnable }) => {
     id: '',
     name: '',
     status: true,
+    storeId: 0,
     description: '',
   });
   const [field2, setField2] = React.useState({
@@ -148,7 +150,7 @@ const LockerTable = ({ search, isEnable }) => {
       const api = {
         id: field.id,
         name: val.name,
-        storeId: val.storeId,
+        storeId: field.storeId,
         description: val.description,
         isEnable: val.status,
       };
@@ -156,11 +158,11 @@ const LockerTable = ({ search, isEnable }) => {
         .then((res) => {
           if (res.status == 200) {
             sendNotification({
-              msg: 'Locker update success',
+              msg: 'Cabinet update success',
               variant: 'success',
             });
           } else {
-            sendNotification({ msg: 'Locker update fail', variant: 'error' });
+            sendNotification({ msg: 'Cabinet update fail', variant: 'error' });
           }
           handleClose();
         })
@@ -175,6 +177,7 @@ const LockerTable = ({ search, isEnable }) => {
       id: row.id,
       name: row.name,
       status: row.isEnable,
+      storeId: row.storeId,
       description: row.description,
     });
     setOpen(true);
@@ -184,11 +187,11 @@ const LockerTable = ({ search, isEnable }) => {
       .then((res) => {
         if (res.status == 200) {
           sendNotification({
-            msg: 'Locker delete success',
+            msg: 'Cabinet delete success',
             variant: 'success',
           });
         } else {
-          sendNotification({ msg: 'Locker delete fail', variant: 'error' });
+          sendNotification({ msg: 'Cabinet delete fail', variant: 'error' });
         }
       })
       .catch((err) => {
@@ -207,7 +210,13 @@ const LockerTable = ({ search, isEnable }) => {
   }
   return (
     <Box>
-      <AssignModal open={open2} setOpen={setOpen2} field={field2} />
+      <AssignModal
+        open={open2}
+        setOpen={setOpen2}
+        field={field2}
+        msg={msg}
+        sendNotification={sendNotification}
+      />
 
       <Box>
         <Modal
@@ -294,121 +303,125 @@ const LockerTable = ({ search, isEnable }) => {
           </Box>
         </Modal>
       </Box>
-      {table ? (
-        <Box>
-          <TableContainer>
-            <Table sx={{ minWidth: 650 }} aria-label='simple table'>
-              <TableHead sx={{ backgroundColor: '#f4f6f8' }}>
-                <TableRow>
-                  <TableCell>Id</TableCell>
-                  <TableCell>Name</TableCell>
-                  <TableCell>Description</TableCell>
-                  <TableCell>Rows</TableCell>
-                  <TableCell>Columns</TableCell>
-                  <TableCell>Store</TableCell>
-                  <TableCell>Status</TableCell>
-                  <TableCell>Action</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {table.map((row) => (
-                  <TableRow
-                    key={row.id}
-                    sx={{
-                      '&:last-child td,&:last-child th': { border: 0 },
-                      '&:hover': {
-                        backgroundColor: '#f5f5f5',
+
+      <Box>
+        <TableContainer>
+          <Table sx={{ minWidth: 650 }} aria-label='simple table'>
+            <TableHead sx={{ backgroundColor: '#f4f6f8' }}>
+              <TableRow>
+                <TableCell>Id</TableCell>
+                <TableCell>Name</TableCell>
+                <TableCell>Description</TableCell>
+                <TableCell>Rows</TableCell>
+                <TableCell>Columns</TableCell>
+                <TableCell>Store</TableCell>
+                <TableCell>Status</TableCell>
+                <TableCell>Action</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {table.map((row) => (
+                <TableRow
+                  key={row.id}
+                  sx={{
+                    '&:last-child td,&:last-child th': { border: 0 },
+                    '&:hover': {
+                      backgroundColor: '#f5f5f5',
+                    },
+                    cursor: 'pointer',
+                  }}
+                  onClick={() =>
+                    navigate('/admin/cabinet-detail', {
+                      state: {
+                        cabinetInfo: row,
                       },
-                      cursor: 'pointer',
-                    }}
-                    onClick={() =>
-                      navigate('/admin/cabinet-detail', {
-                        state: {
-                          cabinetInfo: row,
-                        },
-                      })
-                    }
-                  >
-                    <TableCell component='th' scope='row'>
-                      {row.id}
-                    </TableCell>
-                    <TableCell component='th' scope='row'>
-                      {row.name}
-                    </TableCell>
-                    <TableCell>{row.description}</TableCell>
-                    <TableCell>{row.row}</TableCell>
-                    <TableCell>{row.col}</TableCell>
-                    <TableCell>
-                      {row.store.id != 0 ? row.store.name : 'Unassign'}
-                    </TableCell>
-                    <TableCell>
-                      {row.isEnable ? (
-                        <Chip
-                          label='Active'
-                          size='small'
-                          sx={{
-                            color: '#1bcd7a',
-                            bgcolor: '#e5fceb',
-                          }}
-                        />
-                      ) : (
-                        <Chip
-                          label='Inactive'
-                          size='small'
-                          sx={{
-                            color: '#e26e2a',
-                            bgcolor: '#fdf4f3',
-                          }}
-                        />
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      <Box sx={{ display: 'flex' }}>
-                        <IconButton
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            openUpdate(row);
-                          }}
-                        >
-                          <Edit sx={{ color: blue[500] }} />
-                        </IconButton>
-                        <IconButton
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            apiDelete(row.id);
-                          }}
-                        >
-                          <DeleteForever sx={{ color: red[600] }} />
-                        </IconButton>
-                        <IconButton
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            openAssign(row);
-                          }}
-                        >
-                          <AssignmentTurnedIn sx={{ color: green[500] }} />
-                        </IconButton>
-                      </Box>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          <Divider />
-          <TablePagination
-            rowsPerPageOptions={[5, 10, 25]}
-            component='div'
-            count={tableTotal}
-            rowsPerPage={rpg}
-            page={pg}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          />
-        </Box>
-      ) : (
-        <Skeleton variant='rectangular' width={210} height={118} />
-      )}
+                    })
+                  }
+                >
+                  <TableCell component='th' scope='row'>
+                    {row.id}
+                  </TableCell>
+                  <TableCell component='th' scope='row'>
+                    {row.name}
+                  </TableCell>
+                  <TableCell>{row.description}</TableCell>
+                  <TableCell>{row.row}</TableCell>
+                  <TableCell>{row.col}</TableCell>
+                  <TableCell>
+                    {row.store.id != 0 ? row.store.name : 'Unassign'}
+                  </TableCell>
+                  <TableCell>
+                    {row.isEnable ? (
+                      <Chip
+                        label='Active'
+                        size='small'
+                        sx={{
+                          color: '#1bcd7a',
+                          bgcolor: '#e5fceb',
+                        }}
+                      />
+                    ) : (
+                      <Chip
+                        label='Inactive'
+                        size='small'
+                        sx={{
+                          color: '#e26e2a',
+                          bgcolor: '#fdf4f3',
+                        }}
+                      />
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    <Box sx={{ display: 'flex' }}>
+                      <IconButton
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          openUpdate(row);
+                        }}
+                      >
+                        <Edit sx={{ color: blue[500] }} />
+                      </IconButton>
+                      <IconButton
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          apiDelete(row.id);
+                        }}
+                      >
+                        <DeleteForever sx={{ color: red[600] }} />
+                      </IconButton>
+                      <IconButton
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          openAssign(row);
+                        }}
+                      >
+                        <AssignmentTurnedIn sx={{ color: green[500] }} />
+                      </IconButton>
+                    </Box>
+                  </TableCell>
+                </TableRow>
+              ))}
+              {table.length === 0 && (
+                <TableRow>
+                  <TableCell colSpan={8}>
+                    <Empty />
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <Divider />
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25]}
+          component='div'
+          count={tableTotal}
+          rowsPerPage={rpg}
+          page={pg}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+      </Box>
     </Box>
   );
 };

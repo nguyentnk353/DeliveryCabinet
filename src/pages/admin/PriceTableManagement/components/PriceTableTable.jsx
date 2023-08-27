@@ -39,7 +39,7 @@ import deletePriceTable from './../../../../services/deletePriceTable';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import updatePriceTable from './../../../../services/updatePriceTable';
 import { useNavigate } from 'react-router-dom';
-import { DatePicker, Space, Modal } from 'antd';
+import { DatePicker, Space, Modal, Empty } from 'antd';
 const { RangePicker } = DatePicker;
 import * as dayjs from 'dayjs';
 import ModalPriceTable from './ModalPriceTable';
@@ -256,13 +256,26 @@ const PriceTableTable = ({ searchText, createSuccess, isEnable }) => {
     const check = tf?.map((e, i) => {
       let d = i + 2;
       if (d == 8) d = 'Sun';
-      return (
-        <FormControlLabel
-          disabled
-          control={<Checkbox checked={e} />}
-          label={d}
-        />
-      );
+      if (i == 2) {
+        return (
+          <>
+            <FormControlLabel
+              disabled
+              control={<Checkbox checked={e} />}
+              label={d}
+            />
+            <br />
+          </>
+        );
+      } else {
+        return (
+          <FormControlLabel
+            disabled
+            control={<Checkbox checked={e} />}
+            label={d}
+          />
+        );
+      }
     });
 
     return check;
@@ -280,9 +293,9 @@ const PriceTableTable = ({ searchText, createSuccess, isEnable }) => {
           onClose={handleClose}
           footer={null}
           closable={false}
-          width={700}
+          width={600}
         >
-          <Box sx={{ padding: '2rem 7rem' }}>
+          <Box>
             <Typography
               id='modal-modal-title'
               variant='h5'
@@ -299,7 +312,7 @@ const PriceTableTable = ({ searchText, createSuccess, isEnable }) => {
               noValidate
               sx={{ mt: 1 }}
             >
-              <Box>
+              <Box sx={{ padding: '0 4rem 1rem 4rem' }}>
                 <Box
                   sx={{
                     display: 'flex',
@@ -518,6 +531,13 @@ const PriceTableTable = ({ searchText, createSuccess, isEnable }) => {
                 </TableCell>
               </TableRow>
             ))}
+            {table.length === 0 && (
+              <TableRow>
+                <TableCell colSpan={8}>
+                  <Empty />
+                </TableCell>
+              </TableRow>
+            )}
           </TableBody>
         </Table>
       </TableContainer>

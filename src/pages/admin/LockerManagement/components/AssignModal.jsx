@@ -16,10 +16,9 @@ import { useMount } from 'ahooks';
 import getStoreList from '../../../../services/getStoreList';
 import updateLocker from '../../../../services/updateLocker';
 
-const AssignModal = ({ open, setOpen, field }) => {
+const AssignModal = ({ open, setOpen, field, msg, sendNotification }) => {
   const [select, setSelect] = useState({ name: '' });
   const [storeList, setStoreList] = useState([]);
-  const [msg, sendNotification] = useNotification();
 
   useMount(() => {
     const payload = {

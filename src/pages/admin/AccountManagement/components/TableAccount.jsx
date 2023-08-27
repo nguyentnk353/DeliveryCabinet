@@ -21,6 +21,7 @@ import { blue, red } from '@mui/material/colors';
 import { useNavigate } from 'react-router-dom';
 import deleteAccount from '../../../../services/deleteAccount';
 import useNotification from '../../../../utils/useNotification';
+import { Empty } from 'antd';
 
 const TableAccount = ({ status, search, role }) => {
   const loginUser = JSON.parse(localStorage.getItem('loginUser'));
@@ -261,6 +262,13 @@ const TableAccount = ({ status, search, role }) => {
                 </TableCell>
               </TableRow>
             ))}
+            {table.length === 0 && (
+              <TableRow>
+                <TableCell colSpan={7}>
+                  <Empty />
+                </TableCell>
+              </TableRow>
+            )}
           </TableBody>
         </Table>
       </TableContainer>

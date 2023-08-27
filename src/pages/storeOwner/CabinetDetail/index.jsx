@@ -50,9 +50,22 @@ const index = () => {
     { name: 'ID', info: cabinetInfo?.id },
     { name: 'Rows', info: cabinetInfo?.row },
     { name: 'Columns', info: cabinetInfo?.col },
-    { name: 'Store', info: cabinetInfo?.store?.name },
-    { name: 'Address', info: cabinetInfo?.store?.address },
-    { name: 'Store owner', info: cabinetInfo?.store?.user?.fullName },
+    {
+      name: 'Store',
+      info: cabinetInfo?.store?.id == 0 ? 'Unassign' : cabinetInfo?.store?.name,
+    },
+    {
+      name: 'Address',
+      info:
+        cabinetInfo?.store?.id == 0 ? 'Unassign' : cabinetInfo?.store?.address,
+    },
+    {
+      name: 'Store owner',
+      info:
+        cabinetInfo?.store?.id == 0
+          ? 'Unassign'
+          : cabinetInfo?.store?.user?.fullName,
+    },
   ];
 
   // function openLockBox(payload) {
@@ -331,7 +344,7 @@ const index = () => {
                       >
                         Open
                       </Button>
-                      <Button
+                      {/* <Button
                         variant='outlined'
                         onClick={(e) => {
                           e.stopPropagation();
@@ -339,7 +352,7 @@ const index = () => {
                         }}
                       >
                         Close
-                      </Button>
+                      </Button> */}
                       {/* <Button variant='outlined' onClick={lockBox}>
                         Lock
                       </Button> */}

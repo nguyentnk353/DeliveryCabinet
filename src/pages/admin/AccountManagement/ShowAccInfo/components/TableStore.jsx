@@ -20,6 +20,7 @@ import useNotification from '../../../../../utils/useNotification';
 import getStoreList from '../../../../../services/getStoreList';
 import deleteStore from '../../../../../services/deleteStore';
 import getStoreByStoreOwnerId from '../../../../../services/getStoreByStoreOwnerId';
+import { Empty } from 'antd';
 
 const TableStore = ({
   province,
@@ -120,6 +121,7 @@ const TableStore = ({
               <TableHead sx={{ backgroundColor: '#f4f6f8' }}>
                 <TableRow>
                   <TableCell>Id</TableCell>
+                  <TableCell>Name</TableCell>
                   <TableCell>Address</TableCell>
                   <TableCell>Description</TableCell>
                   <TableCell>Owner</TableCell>
@@ -139,9 +141,9 @@ const TableStore = ({
                       cursor: 'pointer',
                     }}
                     onClick={() =>
-                      navigate('/admin/cabinet', {
+                      navigate('/admin/store-detail', {
                         state: {
-                          storeId: row.id,
+                          storeInfo: row,
                         },
                       })
                     }
@@ -149,6 +151,7 @@ const TableStore = ({
                     <TableCell component='th' scope='row'>
                       {row.id}
                     </TableCell>
+                    <TableCell>{row.name}</TableCell>
                     <TableCell>{row.address}</TableCell>
                     <TableCell>{row.description}</TableCell>
                     <TableCell>{row.user.fullName}</TableCell>
@@ -199,6 +202,13 @@ const TableStore = ({
                     </TableCell>
                   </TableRow>
                 ))}
+                {table.length === 0 && (
+                  <TableRow>
+                    <TableCell colSpan={7}>
+                      <Empty />
+                    </TableCell>
+                  </TableRow>
+                )}
               </TableBody>
             </Table>
           </TableContainer>

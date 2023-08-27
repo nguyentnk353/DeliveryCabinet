@@ -23,6 +23,7 @@ import { blue, red } from '@mui/material/colors';
 import deleteStore from '../../../../services/deleteStore';
 import { CloseIcon } from '@mui/icons-material/Close';
 import useNotification from '../../../../utils/useNotification';
+import { Empty } from 'antd';
 
 const SOStoreTable = ({ province, city, district, search, isEnable }) => {
   const [pg, setpg] = React.useState(0);
@@ -196,6 +197,13 @@ const SOStoreTable = ({ province, city, district, search, isEnable }) => {
                     </TableCell> */}
                   </TableRow>
                 ))}
+                {table.length === 0 && (
+                  <TableRow>
+                    <TableCell colSpan={7}>
+                      <Empty />
+                    </TableCell>
+                  </TableRow>
+                )}
               </TableBody>
             </Table>
           </TableContainer>
