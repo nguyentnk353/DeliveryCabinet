@@ -682,7 +682,7 @@ const index = () => {
                         id='boxSize'
                         name='boxSize'
                         options={boxSizeList}
-                        getOptionLabel={(option) => option.description}
+                        getOptionLabel={(option) => option.name}
                         value={boxSize}
                         disableClearable
                         style={{ width: '25%' }}
