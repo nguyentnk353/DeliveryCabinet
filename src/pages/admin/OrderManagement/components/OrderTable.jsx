@@ -34,6 +34,7 @@ import useNotification from '../../../../utils/useNotification';
 import getOrderList from '../../../../services/getOrderList';
 import moment from 'moment/moment';
 import { formatVND } from '../../../../utils/formatNumber';
+import { Empty } from 'antd';
 
 const OrderTable = ({ search, isEnable }) => {
   const theme = useTheme();
@@ -219,6 +220,13 @@ const OrderTable = ({ search, isEnable }) => {
                   <TableCell>{switchStatus(row)}</TableCell>
                 </TableRow>
               ))}
+              {table.length === 0 && (
+                <TableRow>
+                  <TableCell colSpan={7}>
+                    <Empty />
+                  </TableCell>
+                </TableRow>
+              )}
             </TableBody>
           </Table>
         </TableContainer>

@@ -1,19 +1,15 @@
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import React from 'react';
+import { Box, Button, Modal, Typography } from '@mui/material';
+import { blue } from '@mui/material/colors';
 
-const OrderModal = ({ open, setOpen }) => {
+const OrderModal = ({ open, setOpen, box }) => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
     setOpen(false);
   };
-  const formik = useFormik({
-    initialValues: {
-      code: '',
-    },
-    validationSchema: validationSchema,
-    onSubmit: (val) => {},
-  });
+  console.log(box);
   const style = {
     position: 'absolute',
     top: '50%',
@@ -37,49 +33,29 @@ const OrderModal = ({ open, setOpen }) => {
         <Typography
           id='modal-modal-title'
           variant='h5'
-          component='h2'
           textAlign='center'
           fontWeight='bold'
           color={blue[500]}
         >
-          XÁC NHẬN MỞ TỦ
+          THUÊ TỦ
         </Typography>
+
+        <Box sx={{ padding: '1rem' }}>{box.id}</Box>
         <Box
-          component='form'
-          onSubmit={formik.handleSubmit}
-          noValidate
-          sx={{ mt: 1 }}
+          sx={{
+            display: 'flex',
+            gap: 1,
+            textAlign: 'center',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
         >
-          <Box sx={{ padding: '2rem' }}>
-            <TextField
-              margin='normal'
-              fullWidth
-              id='code'
-              label='Nhập mã mở tủ'
-              autoFocus
-              // type='number'
-              value={formik.values.code}
-              onChange={formik.handleChange}
-              error={formik.touched.code && Boolean(formik.errors.code)}
-              helperText={formik.touched.code && formik.errors.code}
-            />
-          </Box>
-          <Box
-            sx={{
-              display: 'flex',
-              gap: 1,
-              textAlign: 'center',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <Button variant='contained' type='submit'>
-              Xác nhận
-            </Button>
-            <Button variant='outlined' onClick={handleClose}>
-              Hủy
-            </Button>
-          </Box>
+          <Button variant='contained' type='submit'>
+            Xác nhận
+          </Button>
+          <Button variant='outlined' onClick={handleClose}>
+            Hủy
+          </Button>
         </Box>
       </Box>
     </Modal>

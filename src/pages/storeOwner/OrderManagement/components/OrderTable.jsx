@@ -34,6 +34,7 @@ import useNotification from '../../../../utils/useNotification';
 import moment from 'moment/moment';
 import getOrderByOwner from '../../../../services/storeOwner/getOrderByOwner';
 import { formatVND } from '../../../../utils/formatNumber';
+import { Empty } from 'antd';
 
 const OrderTable = ({ search, isEnable }) => {
   const theme = useTheme();
@@ -72,19 +73,12 @@ const OrderTable = ({ search, isEnable }) => {
     if (search) {
       setpg(0);
     }
-    const payload = search
-      ? {
-          PageIndex: 1,
-          PageSize: rpg,
-          Id: search,
-          Status: isEnable,
-        }
-      : {
-          PageIndex: pg + 1,
-          PageSize: rpg,
-          Id: search,
-          Status: isEnable,
-        };
+    const payload = {
+      PageIndex: pg + 1,
+      PageSize: rpg,
+      Id: search,
+      Status: isEnable,
+    };
     getOrderByOwner(payload)
       .then((res) => {
         console.log(res);
@@ -92,7 +86,7 @@ const OrderTable = ({ search, isEnable }) => {
         setTable(newTable);
       })
       .catch((err) => {
-        sendNotification({ msg: err, variant: 'error' });
+        console.log({ msg: err, variant: 'error' });
       });
   }, [pg, rpg, search, msg]);
 
@@ -217,6 +211,13 @@ const OrderTable = ({ search, isEnable }) => {
                   <TableCell>{switchStatus(row)}</TableCell>
                 </TableRow>
               ))}
+              {table.length === 0 && (
+                <TableRow>
+                  <TableCell colSpan={7}>
+                    <Empty />
+                  </TableCell>
+                </TableRow>
+              )}
             </TableBody>
           </Table>
         </TableContainer>

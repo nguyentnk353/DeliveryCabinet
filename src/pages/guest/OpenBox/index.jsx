@@ -22,6 +22,8 @@ import useNotification from '../../../utils/useNotification';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import OrderModal from './components/OrderModal';
+import Footer from './../../../components/Footer/index';
+import CustomerHeader02 from '../../../components/CustomerHeader02/CustomerHeader02';
 
 const validationSchema = yup.object({
   code: yup
@@ -132,6 +134,7 @@ const index = () => {
       // console.log('box empty');
       setDialogTitle('Tủ này không được mở');
       handleOpenD();
+      // setOpenOrder(true);
     } else {
       setDialogTitle('Tủ này không được mở');
       handleOpenD();
@@ -166,7 +169,7 @@ const index = () => {
     border: 'none',
     borderRadius: '16px',
     boxShadow: 24,
-    p: 4,
+    p: '1.5rem 1rem',
   };
 
   const formik = useFormik({
@@ -253,7 +256,7 @@ const index = () => {
 
   return (
     <Box>
-      {/* <OrderModal open={openOrder} setOpen={setOpenOrder} /> */}
+      <OrderModal open={openOrder} setOpen={setOpenOrder} box={box} />
       <Dialog
         open={openD}
         onClose={handleCloseD}
@@ -281,7 +284,6 @@ const index = () => {
           <Typography
             id='modal-modal-title'
             variant='h5'
-            component='h2'
             textAlign='center'
             fontWeight='bold'
             color={blue[500]}
@@ -294,7 +296,7 @@ const index = () => {
             noValidate
             sx={{ mt: 1 }}
           >
-            <Box sx={{ padding: '2rem' }}>
+            <Box sx={{ padding: '1rem' }}>
               <Typography variant='body1'>Bạn chỉ có 4 lần nhập *</Typography>
               {alert && (
                 <Alert severity='warning'>
@@ -333,6 +335,7 @@ const index = () => {
           </Box>
         </Box>
       </Modal>
+      <CustomerHeader02 />
       <Box
         sx={{
           backgroundColor: '#fafafafa',
@@ -344,12 +347,25 @@ const index = () => {
           sx={{
             // width: '90%',
             maxWidth: '338px',
-            padding: '2rem',
+            padding: '1rem 1rem 2rem 1rem',
             margin: 'auto',
           }}
         >
           <Box>
-            <Typography variant='h6'>{locker.name}</Typography>
+            <Typography variant='h6'>{locker?.name}</Typography>
+            <Typography
+              variant='body2'
+              sx={{ marginBottom: '1rem', fontWeight: '600' }}
+            >
+              Địa chỉ :{' '}
+              <Typography
+                display='inline'
+                variant='caption'
+                sx={{ opacity: '80%' }}
+              >
+                {locker?.store?.address}
+              </Typography>
+            </Typography>
             {/* <Button
               onClick={(c) => {
                 c.stopPropagation();
@@ -369,7 +385,7 @@ const index = () => {
             }}
           >
             {locker?.boxes &&
-              locker.boxes?.map((e, i) => {
+              locker?.boxes?.map((e, i) => {
                 const stat = colorStatus(e.status);
                 return (
                   <Paper
@@ -421,6 +437,7 @@ const index = () => {
           </div>
         </Paper>
       </Box>
+      <Footer />
     </Box>
   );
 };

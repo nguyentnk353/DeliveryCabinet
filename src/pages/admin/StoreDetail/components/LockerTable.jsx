@@ -31,6 +31,7 @@ import useNotification from '../../../../utils/useNotification';
 import updateLocker from '../../../../services/updateLocker';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
+import { Empty } from 'antd';
 
 const validationSchema = yup.object({
   name: yup.string('Enter box size name').required('Name is required'),
@@ -67,35 +68,27 @@ const LockerTable = ({ search, isEnable, storeId }) => {
         setTableTotal(res.totalRecord);
       })
       .catch((err) => {
-        sendNotification({ msg: err, variant: 'error' });
+        console.log({ msg: err, variant: 'error' });
       });
   });
   useEffect(() => {
     if (search) {
       setpg(0);
     }
-    const payload = search
-      ? {
-          Name: search,
-          IsEnable: isEnable,
-          StoreId: storeId,
-          PageIndex: 1,
-          PageSize: rpg,
-        }
-      : {
-          Name: search,
-          IsEnable: isEnable,
-          StoreId: storeId,
-          PageIndex: pg + 1,
-          PageSize: rpg,
-        };
+    const payload = {
+      Name: search,
+      IsEnable: isEnable,
+      StoreId: storeId,
+      PageIndex: pg + 1,
+      PageSize: rpg,
+    };
     getLockerList(payload)
       .then((res) => {
         const newTable = res.items.map((e) => e);
         setTable(newTable);
       })
       .catch((err) => {
-        sendNotification({ msg: err, variant: 'error' });
+        console.log({ msg: err, variant: 'error' });
       });
   }, [pg, rpg, search, msg]);
 
@@ -105,6 +98,7 @@ const LockerTable = ({ search, isEnable, storeId }) => {
     id: '',
     name: '',
     status: true,
+    storeId: 0,
     description: '',
   });
   const handleOpen = () => setOpen(true);
@@ -129,7 +123,7 @@ const LockerTable = ({ search, isEnable, storeId }) => {
     border: 'none',
     borderRadius: '16px',
     boxShadow: 24,
-    p: 4,
+    p: '2rem',
   };
 
   const handleChange = (event, newValue) => {
@@ -144,7 +138,7 @@ const LockerTable = ({ search, isEnable, storeId }) => {
       const api = {
         id: field.id,
         name: val.name,
-        storeId: val.storeId,
+        storeId: field.storeId,
         description: val.description,
         isEnable: val.status,
       };
@@ -152,11 +146,11 @@ const LockerTable = ({ search, isEnable, storeId }) => {
         .then((res) => {
           if (res.status == 200) {
             sendNotification({
-              msg: 'Locker update success',
+              msg: 'Cabinet update success',
               variant: 'success',
             });
           } else {
-            sendNotification({ msg: 'Locker update fail', variant: 'error' });
+            sendNotification({ msg: 'Cabinet update fail', variant: 'error' });
           }
           handleClose();
         })
@@ -171,6 +165,7 @@ const LockerTable = ({ search, isEnable, storeId }) => {
       id: row.id,
       name: row.name,
       status: row.isEnable,
+      storeId: row.storeId,
       description: row.description,
     });
     setOpen(true);
@@ -180,11 +175,11 @@ const LockerTable = ({ search, isEnable, storeId }) => {
       .then((res) => {
         if (res.status == 200) {
           sendNotification({
-            msg: 'Locker delete success',
+            msg: 'Cabinet delete success',
             variant: 'success',
           });
         } else {
-          sendNotification({ msg: 'Locker delete fail', variant: 'error' });
+          sendNotification({ msg: 'Cabinet delete fail', variant: 'error' });
         }
       })
       .catch((err) => {
@@ -217,7 +212,7 @@ const LockerTable = ({ search, isEnable, storeId }) => {
               noValidate
               sx={{ mt: 1 }}
             >
-              <Box sx={{ padding: '2rem' }}>
+              <Box sx={{ padding: '1rem' }}>
                 <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
                   <TextField
                     margin='normal'
@@ -284,8 +279,8 @@ const LockerTable = ({ search, isEnable, storeId }) => {
             <Table sx={{ minWidth: 650 }} aria-label='simple table'>
               <TableHead sx={{ backgroundColor: '#f4f6f8' }}>
                 <TableRow>
+                  <TableCell>Id</TableCell>
                   <TableCell>Name</TableCell>
-
                   <TableCell>Description</TableCell>
                   <TableCell>Rows</TableCell>
                   <TableCell>Columns</TableCell>
@@ -313,8 +308,9 @@ const LockerTable = ({ search, isEnable, storeId }) => {
                     }
                   >
                     <TableCell component='th' scope='row'>
-                      {row.name}
+                      {row.id}
                     </TableCell>
+                    <TableCell>{row.name}</TableCell>
                     <TableCell>{row.description}</TableCell>
                     <TableCell>{row.row}</TableCell>
                     <TableCell>{row.col}</TableCell>
@@ -361,6 +357,13 @@ const LockerTable = ({ search, isEnable, storeId }) => {
                     </TableCell>
                   </TableRow>
                 ))}
+                {table.length === 0 && (
+                  <TableRow>
+                    <TableCell colSpan={7}>
+                      <Empty />
+                    </TableCell>
+                  </TableRow>
+                )}
               </TableBody>
             </Table>
           </TableContainer>

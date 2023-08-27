@@ -53,6 +53,8 @@ const index = () => {
         const payload = {
           startdate: e.startMonth,
           enddate: e.endMonth,
+          PageIndex: 1,
+          PageSize: 3000,
         };
         getOrderIncome(payload)
           .then((res) => {

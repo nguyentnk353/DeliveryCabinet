@@ -23,6 +23,7 @@ import { blue, red } from '@mui/material/colors';
 import deleteStore from '../../../../services/deleteStore';
 import { CloseIcon } from '@mui/icons-material/Close';
 import useNotification from '../../../../utils/useNotification';
+import { Empty } from 'antd';
 
 const StoreTable = ({ province, city, district, search, isEnable }) => {
   const [pg, setpg] = React.useState(0);
@@ -57,27 +58,16 @@ const StoreTable = ({ province, city, district, search, isEnable }) => {
       });
   });
   useEffect(() => {
-    const payload = search
-      ? {
-          PageIndex: 1,
-          PageSize: rpg,
-          Province: province.name,
-          City: city.name,
-          District: district.name,
-          Name: search,
-          Address: search,
-          IsEnable: isEnable,
-        }
-      : {
-          PageIndex: pg + 1,
-          PageSize: rpg,
-          Province: province.name,
-          City: city.name,
-          District: district.name,
-          Name: search,
-          Address: search,
-          IsEnable: isEnable,
-        };
+    const payload = {
+      PageIndex: pg + 1,
+      PageSize: rpg,
+      Province: province.name,
+      City: city.name,
+      District: district.name,
+      Name: search,
+      Address: search,
+      IsEnable: isEnable,
+    };
     getStoreList(payload)
       .then((res) => {
         const newTable = res.items.map((e) => e);
@@ -104,111 +94,118 @@ const StoreTable = ({ province, city, district, search, isEnable }) => {
 
   return (
     <Box>
-      {table ? (
-        <Box>
-          <TableContainer>
-            <Table sx={{ minWidth: 650 }} aria-label='simple table'>
-              <TableHead sx={{ backgroundColor: '#f4f6f8' }}>
-                <TableRow>
-                  <TableCell>Id</TableCell>
-                  <TableCell>Name</TableCell>
-                  <TableCell>Address</TableCell>
-                  <TableCell>Description</TableCell>
-                  <TableCell>Owner</TableCell>
-                  <TableCell>Status</TableCell>
-                  <TableCell>Action</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {table.map((row) => (
-                  <TableRow
-                    key={row.id}
-                    sx={{
-                      '&:last-child td,&:last-child th': { border: 0 },
-                      '&:hover': {
-                        backgroundColor: '#f5f5f5',
-                      },
-                      cursor: 'pointer',
-                    }}
-                    onClick={() =>
-                      navigate('/admin/store-detail', {
-                        state: {
-                          storeInfo: row,
+      <Box>
+        <TableContainer>
+          <Table sx={{ minWidth: 650 }} aria-label='simple table'>
+            <TableHead sx={{ backgroundColor: '#f4f6f8' }}>
+              <TableRow>
+                <TableCell>Id</TableCell>
+                <TableCell>Name</TableCell>
+                <TableCell>Address</TableCell>
+                <TableCell>Description</TableCell>
+                <TableCell>Owner</TableCell>
+                <TableCell>Status</TableCell>
+                <TableCell>Action</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {table.map((row) => {
+                if (row.id != 0) {
+                  return (
+                    <TableRow
+                      key={row.id}
+                      sx={{
+                        '&:last-child td,&:last-child th': { border: 0 },
+                        '&:hover': {
+                          backgroundColor: '#f5f5f5',
                         },
-                      })
-                    }
-                  >
-                    <TableCell component='th' scope='row'>
-                      {row.id}
-                    </TableCell>
-                    <TableCell>{row.name}</TableCell>
-                    <TableCell>{row.address}</TableCell>
-                    <TableCell>{row.description}</TableCell>
-                    <TableCell>{row.user.fullName}</TableCell>
-                    <TableCell>
-                      {row.isEnable ? (
-                        <Chip
-                          label='Active'
-                          size='small'
-                          sx={{
-                            color: '#1bcd7a',
-                            bgcolor: '#e5fceb',
-                          }}
-                        />
-                      ) : (
-                        <Chip
-                          label='Inactive'
-                          size='small'
-                          sx={{
-                            color: '#e26e2a',
-                            bgcolor: '#fdf4f3',
-                          }}
-                        />
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      <Box sx={{ display: 'flex' }}>
-                        <IconButton
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            navigate('/admin/update-store', {
-                              state: {
-                                storeInfo: row,
-                              },
-                            });
-                          }}
-                        >
-                          <Edit sx={{ color: blue[500] }} />
-                        </IconButton>
-                        <IconButton
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            deleteStoreId(row.id);
-                          }}
-                        >
-                          <DeleteForever sx={{ color: red[600] }} />
-                        </IconButton>
-                      </Box>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          <Divider />
-          <TablePagination
-            rowsPerPageOptions={[5, 10, 25]}
-            component='div'
-            count={tableTotal}
-            rowsPerPage={rpg}
-            page={pg}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          />
-        </Box>
-      ) : (
-        <Skeleton variant='rectangular' width={210} height={118} />
-      )}
+                        cursor: 'pointer',
+                      }}
+                      onClick={() =>
+                        navigate('/admin/store-detail', {
+                          state: {
+                            storeInfo: row,
+                          },
+                        })
+                      }
+                    >
+                      <TableCell component='th' scope='row'>
+                        {row.id}
+                      </TableCell>
+                      <TableCell>{row.name}</TableCell>
+                      <TableCell>{row.address}</TableCell>
+                      <TableCell>{row.description}</TableCell>
+                      <TableCell>{row.user.fullName}</TableCell>
+                      <TableCell>
+                        {row.isEnable ? (
+                          <Chip
+                            label='Active'
+                            size='small'
+                            sx={{
+                              color: '#1bcd7a',
+                              bgcolor: '#e5fceb',
+                            }}
+                          />
+                        ) : (
+                          <Chip
+                            label='Inactive'
+                            size='small'
+                            sx={{
+                              color: '#e26e2a',
+                              bgcolor: '#fdf4f3',
+                            }}
+                          />
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        <Box sx={{ display: 'flex' }}>
+                          <IconButton
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              navigate('/admin/update-store', {
+                                state: {
+                                  storeInfo: row,
+                                },
+                              });
+                            }}
+                          >
+                            <Edit sx={{ color: blue[500] }} />
+                          </IconButton>
+                          <IconButton
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              deleteStoreId(row.id);
+                            }}
+                          >
+                            <DeleteForever sx={{ color: red[600] }} />
+                          </IconButton>
+                        </Box>
+                      </TableCell>
+                    </TableRow>
+                  );
+                }
+              })}
+              {table.length === 0 && (
+                <TableRow>
+                  <TableCell colSpan={7}>
+                    <Empty />
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <Divider />
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25]}
+          component='div'
+          count={tableTotal}
+          rowsPerPage={rpg}
+          page={pg}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+      </Box>
     </Box>
   );
 };

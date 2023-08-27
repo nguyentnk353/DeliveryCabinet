@@ -38,6 +38,7 @@ import useNotification from '../../../../utils/useNotification';
 import updateLocker from '../../../../services/updateLocker';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
+import { Empty } from 'antd';
 
 const validationSchema = yup.object({
   name: yup.string('Enter box size name').required('Name is required'),
@@ -408,6 +409,13 @@ const LockerTable = ({ isEnable, storeId, storeInfo }) => {
                     </TableCell>
                   </TableRow>
                 ))}
+                {table.length === 0 && (
+                  <TableRow>
+                    <TableCell colSpan={7}>
+                      <Empty />
+                    </TableCell>
+                  </TableRow>
+                )}
               </TableBody>
             </Table>
           </TableContainer>

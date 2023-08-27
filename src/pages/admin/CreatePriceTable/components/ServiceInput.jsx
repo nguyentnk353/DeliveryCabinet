@@ -64,170 +64,159 @@ const ServiceInput = ({ serviceTypeList }) => {
       // addService(addTable);
     },
   });
-  function addService(a) {
-    setTable((parram) => [
-      ...parram,
-      {
-        id: Math.floor(Math.random() * 1001),
-        service: a.service,
-        priority: a.priority,
-        applyDate: a.applyDate,
-      },
-    ]);
-    // setSelectService(null);
-    // setRowInput({ priority: '', dateRange: [] });
-    setOpenRow(false);
-  }
-  function addServiceItem() {
-    setOpenRow(true);
-  }
-  function cancelServiceItem() {
-    // setSelectService(null);
-    // setRowInput({ priority: '', dateRange: [] });
-    setOpenRow(false);
-  }
-  function deleteServiceItem(id) {
-    const newTable = table.filter((e) => e.id != id);
-    setTable(newTable);
-  }
+
   return (
-    <Box component='form' onSubmit={formik.handleSubmit} noValidate>
-      {table.length > 0 && (
-        <Box>
-          <TableContainer>
-            <Table sx={{ minWidth: 650 }} aria-label='simple table'>
-              <TableHead sx={{ backgroundColor: '#f4f6f8' }}>
-                <TableRow>
-                  <TableCell>Service</TableCell>
-                  <TableCell>Priority</TableCell>
-                  <TableCell>Apply from</TableCell>
-                  <TableCell>Apply to</TableCell>
-                  <TableCell>Action</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {table.map((row) => (
-                  <TableRow
-                    // key={row.id}
-                    sx={{
-                      '&:last-child td,&:last-child th': {
-                        border: 0,
-                      },
+    <Formik
+      initialValues={{
+        serviceType: null,
+        priority: 1,
+        serviceDate: [],
+        // username: '',
+        // password: '',
+        // submit: null,
+      }}
+      validationSchema={yup.object().shape({
+        // username: Yup.string()
+        //   // .email('Must be a valid email')
+        //   .max(255)
+        //   .required('Tên đăng nhập không thể trống'),
+        // password: Yup.string().max(255).required('Mật khẩu không thể trống'),
+      })}
+      onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
+        try {
+          if (scriptedRef.current) {
+            setStatus({ success: true });
+            setSubmitting(false);
+          }
+          console.log(values);
+        } catch (err) {
+          console.log(err);
+        }
+      }}
+    >
+      {({
+        errors,
+        handleBlur,
+        handleChange,
+        handleSubmit,
+        setFieldValue,
+        isSubmitting,
+        touched,
+        values,
+      }) => (
+        <Form
+          id='form-service'
+          noValidate
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSubmit();
+          }}
+          {...others}
+        >
+          {openRow ? (
+            <Box>
+              <Grid container spacing={2}>
+                <Grid item xs={4}>
+                  <Box>
+                    <Autocomplete
+                      disablePortal
+                      id='serviceType'
+                      name='serviceType'
+                      form='form-service'
+                      autoFocus
+                      options={serviceTypeList}
+                      disableClearable
+                      getOptionLabel={(option) => option.name}
+                      onChange={(_, e) => {
+                        setFieldValue('serviceType', e, true);
+                      }}
+                      sx={{ width: '100%', margin: 'auto' }}
+                      renderInput={(params) => (
+                        <TextField {...params} required label='Service' />
+                      )}
+                    />
+                  </Box>
+                </Grid>
+                <Grid item xs={4}>
+                  {/* <Box>
+                  <Select
+                    labelId='demo-simple-select-label'
+                    form='form-service'
+                    id='priority'
+                    name='priority'
+                    defaultValue={1}
+                    label='Priority'
+                    onBlur={handleBlur}
+                    onChange={(e) => {
+                      setFieldValue('priority', e.target.value);
                     }}
                   >
-                    <TableCell component='th' scope='row'>
-                      {/* {row.service.name} */}
-                    </TableCell>
-                    <TableCell>{row.priority}</TableCell>
-                    <TableCell>
-                      {/* {moment(row?.applyDate[0]).format('DD /MM /YYYY')} */}
-                    </TableCell>
-                    <TableCell>
-                      {/* {moment(row?.applyDate[1]).format('DD /MM /YYYY')} */}
-                    </TableCell>
-
-                    <TableCell>
-                      <Box sx={{ display: 'flex' }}>
-                        <IconButton
-                          onClick={(e, i) => {
-                            e.stopPropagation();
-                            deleteServiceItem(row.id);
-                            // apiDeleteBoxType(row.id);
-                          }}
-                        >
-                          <DeleteForever sx={{ color: red[600] }} />
-                        </IconButton>
-                      </Box>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Box>
-      )}
-      {openRow ? (
-        <Box>
-          <Grid container spacing={2}>
-            <Grid item xs={4}>
-              <Box>
-                <Autocomplete
-                  disablePortal
-                  id='serviceType'
-                  autoFocus
-                  options={serviceTypeList}
-                  disableClearable
-                  getOptionLabel={(option) => option.name}
-                  //   value={selectService}
-                  onChange={(_, e) => {
-                    // setSelectService(e);
-                    formik.setFieldValue('serviceType', e);
-                  }}
-                  sx={{ width: '100%', margin: 'auto' }}
-                  renderInput={(params) => (
-                    <TextField {...params} label='Service' />
-                  )}
-                />
-              </Box>
-            </Grid>
-            <Grid item xs={4}>
-              <Box>
-                <TextField
-                  required
-                  fullWidth
-                  id='priority'
-                  label='Priority'
-                  value={formik.values.priority}
-                  onChange={formik.handleChange}
-                />
-              </Box>
-            </Grid>
-            <Grid item xs={4}>
+                    <MenuItem value={1}>
+                      Daily (Yearly)
+                    </MenuItem>
+                    <MenuItem value={2}>
+                      Seasonly (Quarterly)
+                    </MenuItem>
+                    <MenuItem value={3}>Monthly</MenuItem>
+                    <MenuItem value={4}>Weekly</MenuItem>
+                    <MenuItem value={5}>Holiday</MenuItem>
+                  </Select>
+                </Box> */}
+                </Grid>
+                <Grid item xs={4}>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <RangePicker
+                      // size='large'
+                      form='form-service'
+                      name='serviceDate'
+                      onChange={(val) => {
+                        setFieldValue('serviceDate', val);
+                      }}
+                      style={{
+                        padding: '1rem',
+                      }}
+                    />
+                  </Box>
+                </Grid>
+              </Grid>
               <Box
                 sx={{
                   display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'center',
+                  justifyContent: 'flex-end',
+                  gap: 1,
+                  padding: '1rem 0',
                 }}
               >
-                <RangePicker
-                  // size='large'
-                  id='dateRange'
-                  // value={formik.values.dateRange}
-                  onChange={(val) => {
-                    formik.setFieldValue('dateRange'), val;
-                  }}
-                  style={{
-                    padding: '1rem',
-                  }}
-                />
+                <IconButton
+                  //  onClick={addService}
+                  component='button'
+                  disabled={isSubmitting}
+                  form='form-service'
+                  type='submit'
+                >
+                  <Save sx={{ color: blue[500] }} />
+                </IconButton>
+                <IconButton onClick={cancelServiceItem}>
+                  <Close sx={{ color: red[500] }} />
+                </IconButton>
               </Box>
-            </Grid>
-          </Grid>
-          <Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'flex-end',
-              gap: 1,
-              padding: '1rem 0',
-            }}
-          >
-            <IconButton type='submit'>
-              <Save sx={{ color: blue[500] }} />
-            </IconButton>
-            <IconButton onClick={cancelServiceItem}>
-              <Close sx={{ color: red[500] }} />
-            </IconButton>
-          </Box>
-        </Box>
-      ) : (
-        <Box>
-          <Button variant='outlined' onClick={addServiceItem}>
-            + Add service type
-          </Button>
-        </Box>
+            </Box>
+          ) : (
+            <Box>
+              <Button variant='outlined' onClick={addServiceItem}>
+                + Add service type
+              </Button>
+            </Box>
+          )}
+        </Form>
       )}
-    </Box>
+    </Formik>
   );
 };
 
