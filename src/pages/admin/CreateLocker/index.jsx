@@ -849,18 +849,22 @@ const index = () => {
                 id='grid'
                 style={{
                   display: 'grid',
-                  gridTemplateColumns: `repeat(${data.col}, 1fr)`,
-                  gridTemplateRows: `repeat(${data.row}, 1fr)`,
+                  gridTemplateColumns: `repeat(${data?.col}, 1fr)`,
+                  gridTemplateRows: `repeat(${data?.row}, 1fr)`,
                   gridGap: '8px',
                 }}
               >
-                {data.box &&
+                {data?.box &&
                   data.box?.map((e, i) => (
                     <Paper
                       className='grid-item'
                       sx={{
-                        gridRow: `span ${e.BoxSize.height}`,
-                        gridColumn: `span ${e.BoxSize.length}`,
+                        gridRow: e?.BoxSize?.height
+                          ? `span ${e?.BoxSize?.height}`
+                          : 'span 1',
+                        gridColumn: e?.BoxSize?.length
+                          ? `span ${e?.BoxSize?.length}`
+                          : 'span 1',
                         cursor: 'pointer',
                         backgroundColor: yellow[100],
                         textAlign: 'center',
@@ -870,8 +874,8 @@ const index = () => {
                       onClick={() => {
                         setBoxClick(true);
                         setBoxNum(e);
-                        setBoxSize(e.BoxSize);
-                        setBoxType(e.BoxType);
+                        setBoxSize(e?.BoxSize);
+                        setBoxType(e?.BoxType);
                       }}
                     >
                       {e.Code}
