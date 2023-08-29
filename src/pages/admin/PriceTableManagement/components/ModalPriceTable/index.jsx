@@ -23,6 +23,8 @@ const index = ({ open, setOpen, priceId }) => {
     const payloadPrice = {
       IsEnable: true,
       PriceTableId: priceId,
+      PageIndex: 1,
+      PageSize: 100,
     };
     getPriceTableItemList(payloadPrice)
       .then((res) => {
@@ -33,6 +35,7 @@ const index = ({ open, setOpen, priceId }) => {
         console.log(err);
       });
   }, [priceId]);
+  console.log(priceTable);
   const handleClose = () => {
     setOpen(false);
   };
@@ -46,7 +49,8 @@ const index = ({ open, setOpen, priceId }) => {
     border: 'none',
     borderRadius: '12px',
     boxShadow: 24,
-    p: 4,
+    // overflow: 'scroll',
+    p: '2rem',
   };
   return (
     <Modal
@@ -66,7 +70,7 @@ const index = ({ open, setOpen, priceId }) => {
         >
           PRICE TABLE
         </Typography>
-        <Box sx={{ padding: '1rem 2rem 0 2rem' }}>
+        <Box sx={{ padding: '1rem 0 0 0' }}>
           <TableContainer>
             <Table
               sx={{ minWidth: 350 }}

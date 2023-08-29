@@ -261,7 +261,7 @@ const index = () => {
                         <Typography variant='body1' sx={{ fontWeight: '600' }}>
                           {box?.openCode}
                         </Typography>
-                        <Typography variant='body1' sx={{ fontWeight: '600' }}>
+                        {/* <Typography variant='body1' sx={{ fontWeight: '600' }}>
                           {box?.isOpen ? (
                             <Chip
                               size='small'
@@ -281,42 +281,7 @@ const index = () => {
                               label='Closed'
                             />
                           )}
-                          {/* 
-                          {
-                            {
-                              1: (
-                                <Chip
-                                  size='small'
-                                  sx={{
-                                    color: '#1bcd7a',
-                                    bgcolor: '#e5fceb',
-                                  }}
-                                  label='Open'
-                                />
-                              ),
-                              2: (
-                                <Chip
-                                  size='small'
-                                  sx={{
-                                    color: '#ffeb3b',
-                                    bgcolor: '#fff9c4',
-                                  }}
-                                  label='Close'
-                                />
-                              ),
-                              3: (
-                                <Chip
-                                  size='small'
-                                  sx={{
-                                    color: '#ff5722',
-                                    bgcolor: '#ffccbc',
-                                  }}
-                                  label='Lock'
-                                />
-                              ),
-                            }[box.isOpen]
-                          } */}
-                        </Typography>
+                        </Typography> */}
                         <Typography variant='body1' sx={{ fontWeight: '600' }}>
                           {box?.boxSize.length} x {box?.boxSize.height}
                         </Typography>

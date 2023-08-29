@@ -296,6 +296,7 @@ const index = () => {
           let boxOversizeIndex = 0;
           let left = 0;
           let top = 1;
+          let checkSize = [];
           const fakeGrid = gridData.box.map((e, i) => {
             if (left == colNum) {
               left = 1;
@@ -303,34 +304,54 @@ const index = () => {
             } else left++;
             const index1 = i + 1;
 
-            if (boxOversize[boxOversizeIndex] === undefined) {
+            if (
+              boxOversize.length > 0 &&
+              boxOversize[boxOversizeIndex] === undefined
+            ) {
               boxOversize[boxOversizeIndex]--;
             }
 
             if (
+              boxOversize.length > 0 &&
               boxOversize[boxOversizeIndex].FromTop == e.FromTop &&
               boxOversize[boxOversizeIndex].FromLeft == e.FromLeft
             ) {
-              boxOversizeIndex++;
-              if (!undefined) {
-                return boxOversize[boxOversizeIndex - 1];
+              if (e.BoxSize.length > 1 || e.BoxSize.height > 1) {
+                setNotify((preState) => ({
+                  ...preState,
+                  isOpen: true,
+                  msg: 'Box is bigger than cabinet',
+                  type: 'warning',
+                }));
+                boxOversizeIndex++;
+                checkSize.push({ id: 1, check: 1 });
+                return e;
+              } else {
+                boxOversizeIndex++;
+                if (!undefined) {
+                  return boxOversize[boxOversizeIndex - 1];
+                }
               }
             } else if (
               boxNum.FromTop == e.FromTop &&
               boxNum.FromLeft == e.FromLeft
             ) {
-              return {
-                id: boxNum.id,
-                key: boxNum.key,
-                Description: boxNum.Description,
-                LockerId: boxNum.LockerId,
-                BoxType: boxNum.BoxType,
-                Code: boxNum.Code,
-                IsFake: boxNum.IsFake,
-                BoxSize: boxSize,
-                FromTop: boxNum.FromTop,
-                FromLeft: boxNum.FromLeft,
-              };
+              if (checkSize.length > 0) {
+                return boxNum;
+              } else {
+                return {
+                  id: boxNum.id,
+                  key: boxNum.key,
+                  Description: boxNum.Description,
+                  LockerId: boxNum.LockerId,
+                  BoxType: boxNum.BoxType,
+                  Code: boxNum.Code,
+                  IsFake: boxNum.IsFake,
+                  BoxSize: boxSize,
+                  FromTop: boxNum.FromTop,
+                  FromLeft: boxNum.FromLeft,
+                };
+              }
             } else {
               if (e.Code === boxNum.Code) {
                 let checkOversize = false;
@@ -375,6 +396,7 @@ const index = () => {
               newBoxList.push(e);
             }
           });
+          // console.log(newBoxList);
 
           setData((preState) => ({
             ...preState,
@@ -468,6 +490,7 @@ const index = () => {
     handleClickOpen();
     setCreateButton(false);
   }
+
   function createNewLocker() {
     createLocker(data)
       .then((res) => {
@@ -710,6 +733,7 @@ const index = () => {
                         onChange={(e, value) => {
                           setBoxType(value);
                           if (boxNum.BoxType.id != value.id) {
+                            // setBoxNum((obj) => ({ ...obj, BoxType: value }));
                             const newData = data.box.map((e, i) => {
                               if (e.id == boxNum.id) {
                                 return {
@@ -732,6 +756,30 @@ const index = () => {
                             setData((preState) => ({
                               ...preState,
                               box: newData ?? [],
+                            }));
+
+                            const newGridData = gridData.box.map((e, i) => {
+                              if (e.id == boxNum.id) {
+                                return {
+                                  id: e.id,
+                                  key: e.key,
+                                  Description: e.Description,
+                                  LockerId: e.LockerId,
+                                  BoxType: value,
+                                  Code: e.Code,
+                                  IsFake: e.IsFake,
+                                  BoxSize: e.BoxSize,
+                                  FromTop: e.FromTop,
+                                  FromLeft: e.FromLeft,
+                                };
+                              } else {
+                                return e;
+                              }
+                            });
+
+                            setGridData((preState) => ({
+                              ...preState,
+                              box: newGridData ?? [],
                             }));
                           }
                         }}

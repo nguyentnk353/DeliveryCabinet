@@ -224,7 +224,7 @@ const UpdateAccount = () => {
                 >
                   <Grid item xs={6}>
                     <TextField
-                      label='Full Name'
+                      label='Full Name *'
                       id='full_name'
                       variant='outlined'
                       value={formik.values.full_name}
@@ -243,7 +243,7 @@ const UpdateAccount = () => {
                   </Grid>
                   <Grid item xs={6}>
                     <TextField
-                      label='Email'
+                      label='Email *'
                       id='email'
                       variant='outlined'
                       value={formik.values.email}
@@ -260,7 +260,7 @@ const UpdateAccount = () => {
                   </Grid>
                   <Grid item xs={6}>
                     <TextField
-                      label='Phone'
+                      label='Phone *'
                       id='phone'
                       variant='outlined'
                       value={formik.values.phone}
