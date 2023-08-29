@@ -360,7 +360,9 @@ const PriceTableTable = ({ searchText, createSuccess, isEnable }) => {
                     // onChange={(value) => {
                     //   setPicker(value);
                     // }}
-                    value={formik.values.rangePicker}
+                    value={formik?.values?.rangePicker}
+                    // defaultValue={field?.rangePicker}
+                    // defaultPickerValue={formik?.values.rangePicker}
                     onChange={(value) => {
                       formik.setFieldValue('rangePicker', value);
                     }}

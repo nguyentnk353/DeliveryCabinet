@@ -452,7 +452,7 @@ const index = ({ ...others }) => {
               variant='h5'
               sx={{ fontWeight: '600', marginBottom: '0.25rem' }}
             >
-              New Store
+              New Price table
             </Typography>
             <Box>
               <CustomBreadcrumb list={bcList} />

@@ -33,7 +33,6 @@ const UpdateAccount = () => {
   const navigate = useNavigate();
   const [getFlie, setFile] = useState(null);
 
-
   const [userInfo, setUserInfo] = useState({
     id: '',
     fullName: '',
@@ -78,9 +77,7 @@ const UpdateAccount = () => {
         .min(2, 'Full Name mininum 2 characters')
         .max(30, 'Full Name maximum 30 characters')
         .required('Required!'),
-      email: Yup.string()
-        .email('Invalid email format')
-        .required('Required!'),
+      email: Yup.string().email('Invalid email format').required('Required!'),
       phone: Yup.string()
         .required('Required!')
         .matches(phoneRegExp, 'Phone number is not valid'),
@@ -101,7 +98,7 @@ const UpdateAccount = () => {
                 dob: dayjs(date.$d).format('YYYY-MM-DDTHH:mm[Z]'),
                 isEnable: userInfo?.isEnable,
                 imgUrl: res.data.url,
-              };;
+              };
               updateAccount(api)
                 .then((res) => {
                   if (res.status == 200) {
@@ -111,7 +108,10 @@ const UpdateAccount = () => {
                       variant: 'success',
                     });
                   } else {
-                    sendNotification({ msg: 'Account update fail', variant: 'error' });
+                    sendNotification({
+                      msg: 'Account update fail',
+                      variant: 'error',
+                    });
                   }
                 })
                 .catch((err) => {
@@ -142,14 +142,16 @@ const UpdateAccount = () => {
                 variant: 'success',
               });
             } else {
-              sendNotification({ msg: 'Account update fail', variant: 'error' });
+              sendNotification({
+                msg: 'Account update fail',
+                variant: 'error',
+              });
             }
           })
           .catch((err) => {
             sendNotification({ msg: err, variant: 'error' });
           });
       }
-
     },
   });
 
@@ -222,7 +224,7 @@ const UpdateAccount = () => {
                 >
                   <Grid item xs={6}>
                     <TextField
-                      label='Full Name'
+                      label='Full Name *'
                       id='full_name'
                       variant='outlined'
                       value={formik.values.full_name}
@@ -230,7 +232,10 @@ const UpdateAccount = () => {
                       fullWidth
                       autoFocus
                       margin='normal'
-                      error={formik.touched.full_name && Boolean(formik.errors.full_name)}
+                      error={
+                        formik.touched.full_name &&
+                        Boolean(formik.errors.full_name)
+                      }
                     />
                     {formik.errors.full_name && formik.touched.full_name && (
                       <p className='text-red-500'>{formik.errors.full_name}</p>
@@ -238,15 +243,16 @@ const UpdateAccount = () => {
                   </Grid>
                   <Grid item xs={6}>
                     <TextField
-                      label='Email'
+                      label='Email *'
                       id='email'
                       variant='outlined'
                       value={formik.values.email}
                       onChange={formik.handleChange}
                       fullWidth
                       margin='normal'
-                      error={formik.touched.email && Boolean(formik.errors.email)}
-
+                      error={
+                        formik.touched.email && Boolean(formik.errors.email)
+                      }
                     />
                     {formik.errors.email && formik.touched.email && (
                       <p className='text-red-500'>{formik.errors.email}</p>
@@ -254,14 +260,16 @@ const UpdateAccount = () => {
                   </Grid>
                   <Grid item xs={6}>
                     <TextField
-                      label='Phone'
+                      label='Phone *'
                       id='phone'
                       variant='outlined'
                       value={formik.values.phone}
                       onChange={formik.handleChange}
                       fullWidth
                       margin='normal'
-                      error={formik.touched.phone && Boolean(formik.errors.phone)}
+                      error={
+                        formik.touched.phone && Boolean(formik.errors.phone)
+                      }
                     />
                     {formik.errors.phone && formik.touched.phone && (
                       <p className='text-red-500'>{formik.errors.phone}</p>
@@ -310,7 +318,7 @@ const UpdateAccount = () => {
                           label='Date of birth'
                           // id='dob'
                           // name='dob'
-                          required
+
                           sx={{ width: '100%' }}
                           // defaultValue={dayjs(userInfo?.dob)}
                           // defaultValue={dayjs('2022-04-17')}
