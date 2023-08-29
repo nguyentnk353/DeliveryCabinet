@@ -183,7 +183,7 @@ const PriceTableTable = ({ searchText, createSuccess, isEnable }) => {
         applyFrom: dayjs(val.rangePicker[0].$d).format('YYYY-MM-DDTHH:mm[Z]'),
         applyTo: dayjs(val.rangePicker[1].$d).format('YYYY-MM-DDTHH:mm[Z]'),
         dateFilter: bi.join(''),
-        isEnable: field.status,
+        isEnable: val.status,
       };
 
       updatePriceTable(api)
@@ -360,7 +360,11 @@ const PriceTableTable = ({ searchText, createSuccess, isEnable }) => {
                     // onChange={(value) => {
                     //   setPicker(value);
                     // }}
-                    value={formik?.values?.rangePicker}
+                    value={
+                      formik?.values?.rangePicker
+                        ? formik?.values?.rangePicker
+                        : [dayjs('2023/08/29'), dayjs('2023/08/29')]
+                    }
                     // defaultValue={field?.rangePicker}
                     // defaultPickerValue={formik?.values.rangePicker}
                     onChange={(value) => {
