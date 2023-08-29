@@ -41,7 +41,7 @@ import updatePriceTable from './../../../../services/updatePriceTable';
 import { useNavigate } from 'react-router-dom';
 import { DatePicker, Space, Modal, Empty } from 'antd';
 const { RangePicker } = DatePicker;
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 import ModalPriceTable from './ModalPriceTable';
 
 const validationSchema = yup.object({
