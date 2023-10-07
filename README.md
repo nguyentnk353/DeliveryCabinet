@@ -11,9 +11,9 @@ Our mentor is Mr.Lâm Hữu Khánh Phương
 		- [Tôn Trọng Nghĩa](https://github.com/keru01)
 	- Back-end
 		- [Lê Minh Khoa](https://github.com/lmk-kuroshi)
-		- [Nguyễn Thế Hiển]
+		- Nguyễn Thế Hiển
 	- Mobile
-		- [Nguyễn Thành Trung]
+		- Nguyễn Thành Trung
 
 ## Technology
 - Front-end : ReactJS
